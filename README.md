@@ -10,3 +10,4 @@
 To run the project:
 - npm install or yarn to install dependencies
 - yarn dev
+- switch to Sepolia Testnet
