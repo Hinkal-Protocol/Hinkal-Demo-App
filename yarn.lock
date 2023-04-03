@@ -865,11 +865,20 @@
   dependencies:
     client-only "^0.0.1"
 
-"@hinkal/react-hooks@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@hinkal/react-hooks/-/react-hooks-0.0.3.tgz#6d9f5fe53f9d3603dfb66e23ade759e3b8a512f6"
-  integrity sha512-uaAcBJbd9/soCy4YK2+2UDhDiiT/+lz1Qp+fP/tvL9iJ5gY2EIwicPKfQc5BAiRYdhmxbCI6eu7BuJj7kRRTjQ==
+"@hinkal/common@0.0.x":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@hinkal/common/-/common-0.0.1.tgz#8c8150252e704fa6550acd2bd7154b3ca69651a9"
+  integrity sha512-YCu/NEldhG/HBxHUzucbEOv5zCgRR22aSWTToIYWVxvymVD3AyRI3/3rO38ga82NEtuXjtHHd92d3+bveskd2A==
   dependencies:
+    circomlibjs "0.1.7"
+    ethers "5.7.2"
+
+"@hinkal/react-hooks@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@hinkal/react-hooks/-/react-hooks-0.0.4.tgz#3e5a8948365351454f702d985f0670e063931639"
+  integrity sha512-FiKYuspHttpOnJ6YqYE2ljKYXP6gOYf08jrMChw7IG90XmGQSbksVT86irSeAENOZjEMFPhSYz5P6cAJb0UDjw==
+  dependencies:
+    "@hinkal/common" "0.0.x"
     async-mutex "^0.4.0"
     circomlibjs "^0.1.7"
     libsodium-wrappers "^0.7.10"
@@ -2746,7 +2755,7 @@ circom_runtime@0.1.21:
   dependencies:
     ffjavascript "0.2.56"
 
-circomlibjs@^0.1.7:
+circomlibjs@0.1.7, circomlibjs@^0.1.7:
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/circomlibjs/-/circomlibjs-0.1.7.tgz#9f5a7d9a23323744b11ee456b05b0cd81f48b554"
   integrity sha512-GRAUoAlKAsiiTa+PA725G9RmEmJJRc8tRFxw/zKktUxlQISGznT4hH4ESvW8FNTsrGg/nNd06sGP/Wlx0LUHVg==
@@ -3657,7 +3666,7 @@ eth-rpc-errors@^4.0.2:
   dependencies:
     fast-safe-stringify "^2.0.6"
 
-ethers@^5.5.1, ethers@^5.7.2:
+ethers@5.7.2, ethers@^5.5.1, ethers@^5.7.2:
   version "5.7.2"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-5.7.2.tgz#3a7deeabbb8c030d4126b24f84e525466145872e"
   integrity sha512-wswUsmWo1aOK8rR7DIKiWSw9DbLWe6x98Jrn8wcTflTVvaXhAMaB5zGAXy0GYQEQp9iO1iSHWVyARQm11zUtyg==
