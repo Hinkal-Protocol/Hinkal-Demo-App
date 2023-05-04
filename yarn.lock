@@ -866,17 +866,17 @@
     client-only "^0.0.1"
 
 "@hinkal/common@0.0.x":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@hinkal/common/-/common-0.0.1.tgz#8c8150252e704fa6550acd2bd7154b3ca69651a9"
-  integrity sha512-YCu/NEldhG/HBxHUzucbEOv5zCgRR22aSWTToIYWVxvymVD3AyRI3/3rO38ga82NEtuXjtHHd92d3+bveskd2A==
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@hinkal/common/-/common-0.0.2.tgz#8abd63cdb406d08080c286bdedb03b96c72c8778"
+  integrity sha512-UdyAuKJSeOXZ2wtnrHoCVsPeOov1jHH5FPqDv8S8rabjH1HNHB/kNGJSGrcUGceVttb5oBQxLDKXsL7p8TUcbQ==
   dependencies:
     circomlibjs "0.1.7"
     ethers "5.7.2"
 
-"@hinkal/react-hooks@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@hinkal/react-hooks/-/react-hooks-0.0.4.tgz#3e5a8948365351454f702d985f0670e063931639"
-  integrity sha512-FiKYuspHttpOnJ6YqYE2ljKYXP6gOYf08jrMChw7IG90XmGQSbksVT86irSeAENOZjEMFPhSYz5P6cAJb0UDjw==
+"@hinkal/react-hooks@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@hinkal/react-hooks/-/react-hooks-0.0.5.tgz#d5082d342790c6bd4c365013f2cee748162090a0"
+  integrity sha512-1XNthOGAO3+VC3nnnnBgMCRnMdUI5L9OozmL5jYJ07TWKrtET9gF+Pvf1pCnBgxfsa/UczKcrvH9FUww/EEquQ==
   dependencies:
     "@hinkal/common" "0.0.x"
     async-mutex "^0.4.0"
