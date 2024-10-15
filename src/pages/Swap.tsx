@@ -1,4 +1,3 @@
-import { ERC20Token, getAmountInToken, useSwap, useUniswapPrice } from '@hinkal/react-hooks';
 import { SetStateAction, SyntheticEvent, useCallback, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { InfoPanel } from '../components/InfoPanel';

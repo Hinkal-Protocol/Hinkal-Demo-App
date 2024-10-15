@@ -1,4 +1,3 @@
-import { chainIds } from '@hinkal/react-hooks';
 import ethLogo from './assets/ethLogo.png';
 import polygonLogo from './assets/PolygonLogo.png';
 

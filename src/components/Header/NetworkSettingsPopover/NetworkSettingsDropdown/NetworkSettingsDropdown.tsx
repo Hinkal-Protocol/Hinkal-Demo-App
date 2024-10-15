@@ -1,4 +1,3 @@
-import { useNetworkState } from '@hinkal/react-hooks';
 import toast from 'react-hot-toast';
 import { networkLogos } from '../../../../constants';
 import { NetworkDropdownItem } from './NetworkDropdownItem';

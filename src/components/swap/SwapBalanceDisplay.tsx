@@ -1,4 +1,4 @@
-import { ERC20Token, getAmountInToken, useHinkalBalances } from '@hinkal/react-hooks';
+import { ERC20Token, getAmountInToken } from '@hinkal/react-hooks';
 import { useEffect, useState } from 'react';
 
 interface SwapBalanceDisplayProps {

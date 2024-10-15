@@ -1,4 +1,3 @@
-import { chainIds, useHinkalContext } from '@hinkal/react-hooks';
 
 import { mediaUrls } from '../../constants';
 import { Spinner } from '../Spinner';

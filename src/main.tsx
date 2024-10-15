@@ -1,4 +1,3 @@
-import { HinkalContextProvider, HinkalTransactionContextProvider } from '@hinkal/react-hooks';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { WagmiConfig } from 'wagmi';

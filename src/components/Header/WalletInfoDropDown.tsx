@@ -1,17 +1,21 @@
-import { TokenBalance, useHinkalBalances, useHinkalContext, zeroAddress } from '@hinkal/react-hooks';
-import toast from 'react-hot-toast';
-import Copy from '../../assets/Copy.svg';
-import Disconnect from '../../assets/Disconnect.svg';
-import { copyToClipboard } from '../../utils/copyToClipboard';
-import { reloadPage } from '../../utils/pageReload';
-import { WalletInfoBalance } from './WalletInfoBalance';
+import { TokenBalance, zeroAddress } from "@hinkal/react-hooks";
+import toast from "react-hot-toast";
+import Copy from "../../assets/Copy.svg";
+import Disconnect from "../../assets/Disconnect.svg";
+import { copyToClipboard } from "../../utils/copyToClipboard";
+import { reloadPage } from "../../utils/pageReload";
+import { WalletInfoBalance } from "./WalletInfoBalance";
 
 const filterTokenBalances = (tokenBalances: TokenBalance[]) => {
   const nonZeroBalances = [...tokenBalances] // we make a clone here so that sort doesn't change the original array
-    .sort((a, b) => (a.token.erc20TokenAddress < b.token.erc20TokenAddress ? -1 : 1))
+    .sort((a, b) =>
+      a.token.erc20TokenAddress < b.token.erc20TokenAddress ? -1 : 1
+    )
     .filter((tokenBalance) => tokenBalance.balance !== 0n);
   if (nonZeroBalances.length === 0)
-    return tokenBalances.filter((tokenBalance) => tokenBalance.token.erc20TokenAddress === zeroAddress);
+    return tokenBalances.filter(
+      (tokenBalance) => tokenBalance.token.erc20TokenAddress === zeroAddress
+    );
   return nonZeroBalances;
 };
 
@@ -27,7 +31,10 @@ export const WalletInfoDropDown = () => {
       </div>
       <div className="flex flex-col justify-center gap-4 mb-[10%]">
         {filterTokenBalances(tokenBalances).map((tokenBalance) => (
-          <WalletInfoBalance tokenBalance={tokenBalance} key={tokenBalance.token.erc20TokenAddress} />
+          <WalletInfoBalance
+            tokenBalance={tokenBalance}
+            key={tokenBalance.token.erc20TokenAddress}
+          />
         ))}
       </div>
 
@@ -35,8 +42,8 @@ export const WalletInfoDropDown = () => {
         <button
           type="button"
           onClick={() => {
-            copyToClipboard(shieldedAddress ?? '');
-            toast.success('Shielded address copied to clipboard');
+            copyToClipboard(shieldedAddress ?? "");
+            toast.success("Shielded address copied to clipboard");
           }}
         >
           <div className="flex items-center mt-2 text-white text-[14px] md:w-[9.5rem]">
@@ -47,7 +54,11 @@ export const WalletInfoDropDown = () => {
           </div>
         </button>
         <div>
-          <button type="button" className="cursor-pointer" onClick={() => reloadPage()}>
+          <button
+            type="button"
+            className="cursor-pointer"
+            onClick={() => reloadPage()}
+          >
             <div className="flex flex-row items-center text-white text-[14px] mt-2 w-[9.5rem]">
               <div className="flex justify-center items-center w-[25px] h-[25px]">
                 <Disconnect />

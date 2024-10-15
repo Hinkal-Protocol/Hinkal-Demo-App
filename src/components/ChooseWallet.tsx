@@ -1,4 +1,3 @@
-import { useSignIn } from '@hinkal/react-hooks';
 import { providers } from 'ethers';
 import { useCallback } from 'react';
 import { isMobile } from 'react-device-detect';

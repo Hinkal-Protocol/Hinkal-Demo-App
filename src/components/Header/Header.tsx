@@ -1,4 +1,3 @@
-import { useHinkalContext } from '@hinkal/react-hooks';
 import { useState } from 'react';
 import HinkalLogo from '../../assets/HinkalLogo.png';
 import { ChooseWallet } from '../ChooseWallet';

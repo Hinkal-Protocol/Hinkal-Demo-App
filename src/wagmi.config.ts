@@ -1,4 +1,3 @@
-import { chainIds } from '@hinkal/react-hooks';
 import { Chain, chain, configureChains, createClient, defaultChains } from 'wagmi';
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';

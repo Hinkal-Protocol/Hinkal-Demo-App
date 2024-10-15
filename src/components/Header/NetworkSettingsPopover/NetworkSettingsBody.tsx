@@ -1,5 +1,4 @@
 import { Popover } from '@headlessui/react';
-import { useHinkalContext } from '@hinkal/react-hooks';
 import { useEffect } from 'react';
 import VectorDown from '../../../assets/VectorDown.svg';
 import { networkLogos } from '../../../constants';

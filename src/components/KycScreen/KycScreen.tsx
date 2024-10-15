@@ -1,4 +1,4 @@
-import { KycStatus, useKyc } from '@hinkal/react-hooks';
+import { KycStatus } from '@hinkal/react-hooks';
 import { useCallback, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { getErrorMessage } from '../../utils/getErrorMessage';

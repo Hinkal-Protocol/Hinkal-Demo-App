@@ -1,4 +1,3 @@
-import { chainIds, getShortERC20Registry, useWithdraw } from '@hinkal/react-hooks';
 import { SyntheticEvent, useCallback, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { InfoPanel } from '../components/InfoPanel';

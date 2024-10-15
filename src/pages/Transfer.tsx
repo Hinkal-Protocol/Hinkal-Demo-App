@@ -1,4 +1,3 @@
-import { chainIds, getShortERC20Registry, useTransfer } from '@hinkal/react-hooks';
 import { SyntheticEvent, useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Spinner } from '../components/Spinner';

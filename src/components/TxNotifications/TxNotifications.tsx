@@ -1,4 +1,3 @@
-import { TransactionStatus, useHinkalTransaction } from '@hinkal/react-hooks';
 import { useCallback, useEffect } from 'react';
 import { NotificationBar, NotificationBarMode } from './NotificationBar';
 
