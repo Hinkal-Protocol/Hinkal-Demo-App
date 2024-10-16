@@ -6,10 +6,8 @@ import {
   getAmountInWei,
 } from "@hinkal/common";
 import { Connector } from "wagmi";
-import toast from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
-import { getErrorMessage } from "../utils/getErrorMessage";
 
 export const Deposit = () => {
   // local states
