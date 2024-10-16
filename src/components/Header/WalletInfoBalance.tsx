@@ -1,4 +1,4 @@
-import { TokenBalance, getAmountInToken } from '@hinkal/react-hooks';
+import { TokenBalance, getAmountInToken } from '@hinkal/common';
 
 interface WalletInfoBalanceProps {
   tokenBalance: TokenBalance;

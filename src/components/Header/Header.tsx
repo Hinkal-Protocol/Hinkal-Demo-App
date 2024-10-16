@@ -4,7 +4,6 @@ import { ChooseWallet } from '../ChooseWallet';
 import { HinkalInfo } from './HinkalInfo';
 
 export const Header = () => {
-  const { shieldedAddress } = useHinkalContext();
 
   // local states
   const [chooseWalletShown, setChooseWalletShown] = useState(false);
@@ -14,7 +13,7 @@ export const Header = () => {
       <ChooseWallet isOpen={chooseWalletShown} onHide={() => setChooseWalletShown(false)} />
       <div
         className={`flex ${
-          shieldedAddress ? 'flex-col' : ''
+          "shieldedAddress" ? 'flex-col' : ''
         } md:flex-row justify-between w-[87%] md:w-[81.5%] mx-auto pt-[1%] relative md:static`}
       >
         <div className="flex items-center justify-between gap-2.5">
@@ -22,7 +21,7 @@ export const Header = () => {
           <p className="text-[20px] md:text-2xl font-bold text-white font-libFranklin">HINKAL</p>
         </div>
 
-        {shieldedAddress ? (
+        {"shieldedAddress" ? (
           <HinkalInfo />
         ) : (
           <button

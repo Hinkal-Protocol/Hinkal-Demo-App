@@ -1,4 +1,4 @@
-import { TokenBalance, zeroAddress } from "@hinkal/react-hooks";
+import { TokenBalance, zeroAddress } from "@hinkal/common";
 import toast from "react-hot-toast";
 import Copy from "../../assets/Copy.svg";
 import Disconnect from "../../assets/Disconnect.svg";
@@ -20,9 +20,6 @@ const filterTokenBalances = (tokenBalances: TokenBalance[]) => {
 };
 
 export const WalletInfoDropDown = () => {
-  const { shieldedAddress } = useHinkalContext();
-  const { tokenBalances } = useHinkalBalances();
-
   return (
     <div className="absolute min-w-max top-20 md:top-2 left-0 md:left-auto right-0 bg-[#272B30] rounded-xl shadow-metamask font-pubsans p-4 items-center max-content">
       <div className="flex items-center space-x-4">
@@ -30,19 +27,19 @@ export const WalletInfoDropDown = () => {
         <p className="text-[#abaeaf] text-[12px] text-left">Balance</p>
       </div>
       <div className="flex flex-col justify-center gap-4 mb-[10%]">
-        {filterTokenBalances(tokenBalances).map((tokenBalance) => (
+        {/* {filterTokenBalances(tokenBalances).map((tokenBalance) => (
           <WalletInfoBalance
             tokenBalance={tokenBalance}
             key={tokenBalance.token.erc20TokenAddress}
           />
-        ))}
+        ))} */}
       </div>
 
       <div className="border-t-2 md:text-[15px] border-[#36393D]">
         <button
           type="button"
           onClick={() => {
-            copyToClipboard(shieldedAddress ?? "");
+            copyToClipboard("shieldedAddress ");
             toast.success("Shielded address copied to clipboard");
           }}
         >

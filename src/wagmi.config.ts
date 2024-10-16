@@ -1,50 +1,27 @@
-import { Chain, chain, configureChains, createClient, defaultChains } from 'wagmi';
-import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
+import { arbitrum, avalanche, bsc, hardhat, mainnet, optimism, polygon } from 'wagmi/chains';
+import { configureChains, createConfig } from 'wagmi';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
+import { networkRegistry } from '@hinkal/common';
 
-// Configure chains for connectors to support
+const CHAINS = [mainnet, polygon, bsc, arbitrum, optimism, avalanche, hardhat];
 
-export const localNode: Chain = {
-  id: chainIds.localhost,
-  name: 'Localhost 8545',
-  network: 'Localhost 8545',
-  nativeCurrency: {
-    decimals: 18,
-    name: 'ETH',
-    symbol: 'ETH',
-  },
-  rpcUrls: {
-    default: 'http://127.0.0.1:8545/',
-  },
-  testnet: true,
+export const getWagmiConfig = () => {
+  const { chains, publicClient } = configureChains(CHAINS, [
+    jsonRpcProvider({
+      rpc: (chain) => {
+        const networkData = networkRegistry[chain.id];
+        return { http: networkData ? networkData.fetchRpcUrl! : '' };
+      },
+    }),
+    publicProvider(),
+  ]);
+  const metaMaskConnector = new MetaMaskConnector({ chains, options: {} });
+
+  return createConfig({
+    autoConnect: false,
+    connectors: [metaMaskConnector],
+    publicClient,
+  });
 };
-
-const { provider, webSocketProvider } = configureChains(defaultChains, [publicProvider()]);
-
-const chains = [chain.sepolia, chain.polygon, localNode];
-
-// configuration for wagmi
-// configs supported chains and wallets
-export const wagmiClient = createClient({
-  connectors: [
-    new MetaMaskConnector({
-      chains,
-    }),
-    new CoinbaseWalletConnector({
-      chains,
-      options: {
-        appName: 'wagmi',
-      },
-    }),
-    new WalletConnectConnector({
-      chains,
-      options: {
-        qrcode: true,
-      },
-    }),
-  ],
-  provider,
-  webSocketProvider,
-});

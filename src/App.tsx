@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Toaster } from "react-hot-toast";
-import "./App.css";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
 import { KycScreen } from "./components/KycScreen";
@@ -8,11 +7,8 @@ import { NavigationBar } from "./components/NavigationBar";
 import { TxNotifications } from "./components/TxNotifications";
 import { useTxNotifications } from "./hooks";
 import { Deposit } from "./pages/Deposit";
-import { Swap } from "./pages/Swap";
-import { Transfer } from "./pages/Transfer";
-import { Withdraw } from "./pages/Withdraw";
-import { PopoverDimProvider } from "./popover/PopoverDimProvider";
 import { AppTab } from "./types";
+import "./App.css";
 
 const App = () => {
   useTxNotifications();
@@ -21,7 +17,6 @@ const App = () => {
     <div className="bg-bgColor h-screen font-pubsans">
       <div className="bg-bgColor flex flex-col min-h-screen">
         <Header />
-        <PopoverDimProvider />
         <TxNotifications />
         <KycScreen />
         <div className={"flex flex-col justify-between grow"}>

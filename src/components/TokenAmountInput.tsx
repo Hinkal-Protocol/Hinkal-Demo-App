@@ -1,5 +1,5 @@
 import { Listbox } from "@headlessui/react";
-import { ERC20Token, useErc20List } from "@hinkal/react-hooks";
+import { ERC20Token } from "@hinkal/common";
 import { SetStateAction, useEffect } from "react";
 import VectorDown from "../assets/VectorDown.svg";
 
@@ -18,12 +18,10 @@ export const TokenAmountInput = ({
   selectedToken,
   setSelectedToken,
 }: TokenAmountInputInterface) => {
-  const { shieldedAddress } = useHinkalContext();
-  const { erc20List } = useErc20List();
 
-  useEffect(() => {
-    setSelectedToken(erc20List[0]);
-  }, [setSelectedToken, erc20List]);
+  // useEffect(() => {
+  //   setSelectedToken(erc20List[0]);
+  // }, [setSelectedToken, erc20List]);
 
   /**
    * deposit amount onChange handler
@@ -39,7 +37,7 @@ export const TokenAmountInput = ({
   };
   return (
     <div className="flex flex-col item-center justify-center">
-      <label className="text-white pl-[5%] text-[14px] font-[300]">Token</label>
+      {/* <label className="text-white pl-[5%] text-[14px] font-[300]">Token</label>
       <div
         className={`flex justify-center mt-1 mb-8 ${buttonWrapperStyles} w-[90%] mx-auto relative`}
       >
@@ -108,7 +106,7 @@ export const TokenAmountInput = ({
           onChange={(event) => setTokenAmountHandler(event)}
           value={tokenAmount}
         />
-      </div>
+      </div> */}
     </div>
   );
 };

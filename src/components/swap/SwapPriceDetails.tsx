@@ -1,4 +1,4 @@
-import { ERC20Token, relayerPercentage } from '@hinkal/react-hooks';
+import { ERC20Token, relayerPercentage } from '@hinkal/common';
 import { SetStateAction } from 'react';
 
 interface SwapSettingsInterface {

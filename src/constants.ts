@@ -1,9 +1,9 @@
+import { chainIds } from '@hinkal/common';
 import ethLogo from './assets/ethLogo.png';
 import polygonLogo from './assets/PolygonLogo.png';
 
 export const networkLogos = {
   [chainIds.polygon]: polygonLogo,
-  [chainIds.sepolia]: ethLogo,
   [chainIds.localhost]: ethLogo,
 };
 
