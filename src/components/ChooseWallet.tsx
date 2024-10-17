@@ -8,7 +8,7 @@ import walletconnectLogo from "../assets/walletconnectWalletLogo.png";
 import { Modal } from "./Modal";
 import { Spinner } from "./Spinner";
 import { ProviderAdapter } from "../data-structures";
-import { hinkal } from "../constants";
+import { useAppContext } from "../AppContext";
 
 interface ChooseWalletProps {
   isOpen: boolean;
@@ -23,11 +23,15 @@ export const ChooseWallet = ({
 }: ChooseWalletProps) => {
   const { connectors, pendingConnector } = useConnect();
 
+  const {hinkal} = useAppContext();
+
   const handleSelectConnector = useCallback(
     async (connector: Connector<providers.Provider>) => {
       const providerAdapter = new ProviderAdapter(connector);
       await hinkal.initProviderAdapter(connector, providerAdapter);
       await hinkal.initUserKeys();
+      console.log("new chain id", hinkal.getSelectedNetwork());
+      console.log("new hinkal", { hinkal });
       setShieldedAddress(hinkal.userKeys.getShieldedPublicKey());
       onHide();
     },
