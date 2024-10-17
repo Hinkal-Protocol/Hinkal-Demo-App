@@ -13,11 +13,15 @@ export const Deposit = () => {
   );
   const [depositAmount, setDepositAmount] = useState<string>("");
 
-  const handleDeposit = useCallback(() => {
+  const handleDeposit = useCallback(async () => {
     const erc20addresses = [selectedToken.erc20TokenAddress];
     const amountChanges = [getAmountInWei(selectedToken, depositAmount)];
-    hinkal.deposit?.(erc20addresses, amountChanges);
-  }, [hinkal?.deposit, depositAmount, selectedToken]);
+    try {
+      await hinkal.deposit?.(erc20addresses, amountChanges);
+    } catch (err) {
+      console.log("deposit error", { err });
+    }
+  }, [hinkal.deposit, depositAmount, selectedToken]);
 
   const handleSubmit = (event: SyntheticEvent) => {
     event.preventDefault();

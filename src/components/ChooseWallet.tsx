@@ -23,16 +23,19 @@ export const ChooseWallet = ({
 }: ChooseWalletProps) => {
   const { connectors, pendingConnector } = useConnect();
 
-  const {hinkal} = useAppContext();
+  const { hinkal } = useAppContext();
 
   const handleSelectConnector = useCallback(
     async (connector: Connector<providers.Provider>) => {
       const providerAdapter = new ProviderAdapter(connector);
       await hinkal.initProviderAdapter(connector, providerAdapter);
       await hinkal.initUserKeys();
+
+      setShieldedAddress(hinkal.userKeys.getShieldedPublicKey());
+      await hinkal.resetMerkle();
+
       console.log("new chain id", hinkal.getSelectedNetwork());
       console.log("new hinkal", { hinkal });
-      setShieldedAddress(hinkal.userKeys.getShieldedPublicKey());
       onHide();
     },
     []
