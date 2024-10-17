@@ -1,5 +1,5 @@
 import { providers } from "ethers";
-import { useCallback } from "react";
+import { Dispatch, SetStateAction, useCallback } from "react";
 import { isMobile } from "react-device-detect";
 import { Connector, useConnect } from "wagmi";
 import coinbaseLogo from "../assets/coinbaseWalletLogo.png";
@@ -7,17 +7,30 @@ import metamaskLogo from "../assets/metamaskWalletLogo.png";
 import walletconnectLogo from "../assets/walletconnectWalletLogo.png";
 import { Modal } from "./Modal";
 import { Spinner } from "./Spinner";
+import { ProviderAdapter } from "../data-structures";
+import { hinkal } from "../constants";
 
 interface ChooseWalletProps {
   isOpen: boolean;
   onHide: () => void;
+  setShieldedAddress: Dispatch<SetStateAction<string | undefined>>;
 }
 
-export const ChooseWallet = ({ isOpen, onHide }: ChooseWalletProps) => {
+export const ChooseWallet = ({
+  isOpen,
+  onHide,
+  setShieldedAddress,
+}: ChooseWalletProps) => {
   const { connectors, pendingConnector } = useConnect();
 
   const handleSelectConnector = useCallback(
-    async (connector: Connector<providers.Provider>) => {},
+    async (connector: Connector<providers.Provider>) => {
+      const providerAdapter = new ProviderAdapter(connector);
+      await hinkal.initProviderAdapter(connector, providerAdapter);
+      await hinkal.initUserKeys();
+      setShieldedAddress(hinkal.userKeys.getShieldedPublicKey());
+      onHide();
+    },
     []
   );
 

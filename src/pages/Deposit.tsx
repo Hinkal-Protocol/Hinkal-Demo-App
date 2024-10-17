@@ -1,31 +1,22 @@
 import { SyntheticEvent, useCallback, useEffect, useState } from "react";
-import {
-  Hinkal,
-  chainIds,
-  getERC20Registry,
-  getAmountInWei,
-} from "@hinkal/common";
-import { Connector } from "wagmi";
+import { chainIds, getERC20Registry, getAmountInWei } from "@hinkal/common";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
+import { useAppContext } from "../AppContext";
 
 export const Deposit = () => {
   // local states
+  const { hinkal } = useAppContext();
+
   const [selectedToken, setSelectedToken] = useState(
     getERC20Registry(chainIds.polygon)[0]
   );
   const [depositAmount, setDepositAmount] = useState<string>("");
 
-  const [hinkal, setHinkal] = useState<Hinkal<Connector>>();
-
-  useEffect(() => {
-    setHinkal(new Hinkal<Connector>());
-  }, []);
-
   const handleDeposit = useCallback(() => {
     const erc20addresses = [selectedToken.erc20TokenAddress];
     const amountChanges = [getAmountInWei(selectedToken, depositAmount)];
-    hinkal?.deposit?.(erc20addresses, amountChanges);
+    hinkal.deposit?.(erc20addresses, amountChanges);
   }, [hinkal?.deposit, depositAmount, selectedToken]);
 
   const handleSubmit = (event: SyntheticEvent) => {
@@ -49,7 +40,7 @@ export const Deposit = () => {
             disabled={!hinkal?.deposit || false}
             onClick={handleDeposit}
             className={`w-[90%] ml-[5%] mb-3 md:mx-[5%] rounded-lg h-10 text-sm font-semibold outline-none ${
-              hinkal?.deposit
+              true
                 ? "bg-primary text-white hover:bg-[#4d32fa] duration-200"
                 : "bg-[#37363d] text-[#848688] cursor-not-allowed"
             } `}

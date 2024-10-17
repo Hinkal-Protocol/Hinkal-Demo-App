@@ -1,6 +1,10 @@
 import { chainIds } from '@hinkal/common';
 import ethLogo from './assets/ethLogo.png';
 import polygonLogo from './assets/PolygonLogo.png';
+import { Connector } from "wagmi";
+import { Hinkal } from "@hinkal/common";
+
+export const hinkal = new Hinkal<Connector>();
 
 export const networkLogos = {
   [chainIds.polygon]: polygonLogo,
@@ -13,3 +17,5 @@ export const mediaUrls = {
   POLY_SCAN: 'https://polygonscan.com/',
   SEPOLIA_SCAN: 'https://sepolia.etherscan.io/',
 };
+
+export const fakeRun = () => {}
