@@ -1,4 +1,10 @@
-import { SetStateAction, SyntheticEvent, useCallback, useState } from "react";
+import {
+  SetStateAction,
+  SyntheticEvent,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
 import { toast } from "react-hot-toast";
 import { InfoPanel } from "../components/InfoPanel";
 import { Spinner } from "../components/Spinner";
@@ -24,7 +30,7 @@ export const Swap = () => {
 
   const {
     isPriceLoading,
-    price: outSwapAmount,
+    price: outSwapAmountWei,
     swapData: fee,
   } = useUniswapPrice({
     inSwapAmount,
@@ -32,12 +38,23 @@ export const Swap = () => {
     outSwapToken,
   });
 
-  const isReadyForSwap =
-    inSwapAmount.length > 0 &&
-    outSwapAmount &&
-    outSwapAmount > 0n &&
-    inSwapToken &&
-    outSwapToken;
+  const isReadyForSwap = useMemo(
+    () =>
+      inSwapAmount.length > 0 &&
+      outSwapAmountWei &&
+      outSwapAmountWei > 0n &&
+      inSwapToken &&
+      outSwapToken,
+    [inSwapAmount, inSwapToken, outSwapToken]
+  );
+
+  const outSwapAmount = useMemo(
+    () =>
+      outSwapToken && outSwapAmountWei
+        ? getAmountInToken(outSwapToken, outSwapAmountWei)
+        : "",
+    [outSwapAmountWei]
+  );
 
   // const handleSwap = useCallback(() => {
   //   if (inSwapToken && outSwapToken)
@@ -132,7 +149,7 @@ export const Swap = () => {
             className="w-full grow bg-transparent rounded-lg ml-[5%] text-[16px] pl-2 outline-none placeholder:text-[13.5px] text-white text-4xl placeholder:text-4xl "
             disabled
             value={
-              outSwapAmount === undefined || outSwapAmount === 0n
+              outSwapAmount === undefined || outSwapAmount.length === 0
                 ? "0"
                 : Number(outSwapAmount).toFixed(4)
             }
@@ -180,7 +197,7 @@ export const Swap = () => {
             </div>
             {priceDetailsShown && !isPriceLoading && (
               <SwapPriceDetails
-                outSwapAmount={'0'}
+                outSwapAmount={"0"}
                 outSwapToken={outSwapToken}
                 setPriceDetailsShown={setPriceDetailsShown}
               />

@@ -28,6 +28,7 @@ export const useUniswapPrice = ({ inSwapAmount, inSwapToken, outSwapToken }: Use
                 }
                 setIsPriceLoading(true);
                 const priceDict = await getUniswapPrice(hinkal, inSwapAmount, inSwapToken, outSwapToken);
+                console.log({ priceDict })
                 setPrice(priceDict.tokenPrice);
                 setSwapData(priceDict.poolFee);
             } catch (err: unknown) {
@@ -38,6 +39,6 @@ export const useUniswapPrice = ({ inSwapAmount, inSwapToken, outSwapToken }: Use
             }
         }
         run();
-    }, [])
+    }, [inSwapToken, outSwapToken, inSwapAmount])
     return { isPriceLoading, price, swapData };
 }
