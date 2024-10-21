@@ -23,7 +23,7 @@ export const ChooseWallet = ({
 }: ChooseWalletProps) => {
   const { connectors, pendingConnector } = useConnect();
 
-  const { hinkal } = useAppContext();
+  const { hinkal, setChainId } = useAppContext();
 
   const handleSelectConnector = useCallback(
     async (connector: Connector<providers.Provider>) => {
@@ -32,6 +32,7 @@ export const ChooseWallet = ({
       await hinkal.initUserKeys();
 
       setShieldedAddress(hinkal.userKeys.getShieldedPublicKey());
+      setChainId(hinkal.getCurrentChainId());
       await hinkal.resetMerkle();
 
       console.log("new chain id", hinkal.getSelectedNetwork());

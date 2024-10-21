@@ -1,30 +1,13 @@
 import { Popover } from "@headlessui/react";
-import { useEffect, useState } from "react";
 import VectorDown from "../../../assets/VectorDown.svg";
-import { networkLogos } from "../../../constants";
 import { NetworkSettingsDropdown } from "./NetworkSettingsDropdown";
-import { EthereumNetwork } from "@hinkal/common";
 import { useAppContext } from "../../../AppContext";
 
 type NetworkSettingsBodyProps = {
   open: boolean;
 };
 export const NetworkSettingsBody = ({ open }: NetworkSettingsBodyProps) => {
-  const { hinkal } = useAppContext();
-  const currentNetwork = hinkal.getSelectedNetwork();
-
-  const [selectedNetwork, setSelectedNetwork] = useState<
-    EthereumNetwork | undefined
-  >(currentNetwork);
-
-  useEffect(() => {
-    setSelectedNetwork(currentNetwork);
-  }, [currentNetwork]);
-
-  const logoPath =
-    selectedNetwork && selectedNetwork.chainId in networkLogos
-      ? networkLogos[selectedNetwork.chainId as keyof typeof networkLogos]
-      : "";
+  const { selectedNetwork } = useAppContext();
 
   return (
     <>
@@ -37,22 +20,13 @@ export const NetworkSettingsBody = ({ open }: NetworkSettingsBodyProps) => {
           <i className="bi bi-exclamation-triangle text-white" />
         )}
 
-        {logoPath && (
-          <img src={logoPath} alt="Logo" className="w-[20px] h-[20px]" />
-        )}
-
         <div>{selectedNetwork?.name || "Unsupported"}</div>
         <div className={`hidden min-[375px]:block ${open ? "rotate-180" : ""}`}>
           <VectorDown />
         </div>
       </Popover.Button>
       <Popover.Panel className="md:relative z-20">
-        {({ close }) => (
-          <NetworkSettingsDropdown
-            close={close}
-            setSelectedNetwork={setSelectedNetwork}
-          />
-        )}
+        {({ close }) => <NetworkSettingsDropdown close={close} />}
       </Popover.Panel>
     </>
   );

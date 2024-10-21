@@ -1,27 +1,25 @@
-import { networkLogos } from "../../../../constants";
 import { NetworkDropdownItem } from "./NetworkDropdownItem";
-import { Dispatch, SetStateAction, useCallback, useMemo } from "react";
-import { EthereumNetwork, networkRegistry } from "@hinkal/common";
+import { useCallback, useMemo } from "react";
+import { networkRegistry } from "@hinkal/common";
 import { useAppContext } from "../../../../AppContext";
 
 interface NetworkSettingsDropdownProps {
   close: () => void;
-  setSelectedNetwork: Dispatch<SetStateAction<EthereumNetwork | undefined>>;
 }
 
 export const NetworkSettingsDropdown = ({
   close,
-  setSelectedNetwork,
 }: NetworkSettingsDropdownProps) => {
-  const { hinkal } = useAppContext();
+  const { hinkal, setChainId } = useAppContext();
   const networkList = useMemo(() => Object.values(networkRegistry), []);
 
   const switchNetwork = useCallback(
-    (chainId: number) => {
+    async (chainId: number) => {
       const network = networkList.find((net) => net.chainId === chainId);
       if (network) {
-        hinkal.switchNetwork(network);
-        setSelectedNetwork(network);
+        await hinkal.switchNetwork(network);
+        setChainId(network.chainId);
+        close();
       }
     },
     [networkList]
@@ -33,11 +31,7 @@ export const NetworkSettingsDropdown = ({
         <div key={chainId} className="w-full">
           <NetworkDropdownItem
             chainId={chainId}
-            logoPath={
-              chainId in networkLogos
-                ? networkLogos[chainId as keyof typeof networkLogos]
-                : ""
-            }
+            logoPath={""}
             networkName={name}
             onSelect={() => switchNetwork?.(chainId)}
           />

@@ -2,6 +2,7 @@ import { Listbox } from "@headlessui/react";
 import { ERC20Token, chainIds, getERC20Registry } from "@hinkal/common";
 import { SetStateAction, useEffect, useMemo } from "react";
 import VectorDown from "../assets/VectorDown.svg";
+import { useAppContext } from "../AppContext";
 
 interface TokenAmountInputInterface {
   buttonWrapperStyles?: string;
@@ -18,7 +19,7 @@ export const TokenAmountInput = ({
   selectedToken,
   setSelectedToken,
 }: TokenAmountInputInterface) => {
-  const erc20List = useMemo(() => getERC20Registry(chainIds.polygon), []);
+  const { erc20List } = useAppContext();
 
   useEffect(() => {
     setSelectedToken(erc20List[0]);
@@ -59,11 +60,11 @@ export const TokenAmountInput = ({
                 } `}
               >
                 <img
-                  src={selectedToken.logoURI}
+                  src={selectedToken?.logoURI}
                   alt="tokenIcon"
                   className="w-[26px]"
                 />
-                <span>{selectedToken.symbol}</span>
+                <span>{selectedToken?.symbol}</span>
                 {!open ? (
                   <VectorDown />
                 ) : (
@@ -78,17 +79,17 @@ export const TokenAmountInput = ({
                     key={token.name + token.erc20TokenAddress}
                     value={token}
                     className={`cursor-pointer py-2 flex items-center gap-x-2 pl-[8px] ${
-                      token.name === selectedToken.name ? "bg-[#64717d]" : ""
+                      token?.name === selectedToken?.name ? "bg-[#64717d]" : ""
                     } ${
                       index === erc20List.length - 1 ? " rounded-b-lg" : ""
                     }  `}
                   >
                     <img
-                      src={token.logoURI}
+                      src={token?.logoURI}
                       alt="tokenIcon"
                       className="w-[26px]"
                     />{" "}
-                    <span>{token.symbol}</span>
+                    <span>{token?.symbol}</span>
                   </Listbox.Option>
                 ))}
               </Listbox.Options>

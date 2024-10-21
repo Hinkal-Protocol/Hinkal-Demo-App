@@ -9,6 +9,7 @@ import { useTxNotifications } from "./hooks";
 import { Deposit } from "./pages/Deposit";
 import { AppTab } from "./types";
 import "./App.css";
+import { Swap } from "./pages/Swap";
 
 const App = () => {
   useTxNotifications();
@@ -30,8 +31,8 @@ const App = () => {
               />
               {activeTab === AppTab.Deposit && <Deposit />}
               {/* {activeTab === AppTab.Transfer && <Transfer />}
-              {activeTab === AppTab.Withdraw && <Withdraw />}
-              {activeTab === AppTab.Swap && <Swap />} */}
+              {activeTab === AppTab.Withdraw && <Withdraw />} */}
+              {activeTab === AppTab.Swap && <Swap />}
             </section>
           </main>
           <Footer />

@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.5",
-    "@hinkal/common": "^0.0.33",
+    "@hinkal/common": "^0.0.40",
     "@rollup/plugin-commonjs": "^28.0.1",
     "@vitejs/plugin-react": "^3.0.0",
     "axios": "^1.3.1",

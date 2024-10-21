@@ -1,17 +1,23 @@
-import { SetStateAction, SyntheticEvent, useCallback, useState } from 'react';
-import { toast } from 'react-hot-toast';
-import { InfoPanel } from '../components/InfoPanel';
-import { Spinner } from '../components/Spinner';
-import { SelectToken } from '../components/swap/SelectToken';
-import { SwapBalanceDisplay } from '../components/swap/SwapBalanceDisplay';
-import { SwapInputTokensButton } from '../components/swap/SwapInputTokensButton';
-import { SwapPriceDetails } from '../components/swap/SwapPriceDetails';
-import { getErrorMessage } from '../utils/getErrorMessage';
+import { SetStateAction, SyntheticEvent, useCallback, useState } from "react";
+import { toast } from "react-hot-toast";
+import { InfoPanel } from "../components/InfoPanel";
+import { Spinner } from "../components/Spinner";
+import { SelectToken } from "../components/swap/SelectToken";
+import { SwapBalanceDisplay } from "../components/swap/SwapBalanceDisplay";
+import { SwapInputTokensButton } from "../components/swap/SwapInputTokensButton";
+import { SwapPriceDetails } from "../components/swap/SwapPriceDetails";
+import { getErrorMessage } from "../utils/getErrorMessage";
+import { ERC20Token, getAmountInToken } from "@hinkal/common";
+import { useUniswapPrice } from "../hooks/useUniswapPrice";
 
 export const Swap = () => {
-  const [inSwapAmount, setInSwapAmount] = useState('');
-  const [inSwapToken, setInSwapToken] = useState<ERC20Token | undefined>(undefined);
-  const [outSwapToken, setOutSwapToken] = useState<ERC20Token | undefined>(undefined);
+  const [inSwapAmount, setInSwapAmount] = useState("");
+  const [inSwapToken, setInSwapToken] = useState<ERC20Token | undefined>(
+    undefined
+  );
+  const [outSwapToken, setOutSwapToken] = useState<ERC20Token | undefined>(
+    undefined
+  );
   const [inSwapTokenBalance, setInSwapTokenBalance] = useState(0n);
   const [priceDetailsShown, setPriceDetailsShown] = useState(false);
   const [relayerInfoShown, setrelayerInfoShown] = useState(false);
@@ -19,35 +25,28 @@ export const Swap = () => {
   const {
     isPriceLoading,
     price: outSwapAmount,
-    fee,
+    swapData: fee,
   } = useUniswapPrice({
     inSwapAmount,
     inSwapToken,
     outSwapToken,
   });
 
-  const isReadyForSwap = inSwapAmount.length > 0 && outSwapAmount.length > 0 && inSwapToken && outSwapToken;
+  const isReadyForSwap =
+    inSwapAmount.length > 0 &&
+    outSwapAmount &&
+    outSwapAmount > 0n &&
+    inSwapToken &&
+    outSwapToken;
 
-  const { swap, isProcessing } = useSwap({
-    onError: (err) => {
-      const message = getErrorMessage(err);
-      if (message !== 'Transaction failed') {
-        toast.error(message, { id: message });
-      }
-    },
-    onSuccess: () => {
-      toast.success('You have successfully swapped. Balance will update in several seconds');
-      setInSwapAmount('');
-    },
-  });
-
-  const handleSwap = useCallback(() => {
-    if (inSwapToken && outSwapToken) swap?.(inSwapAmount, inSwapToken, outSwapAmount, outSwapToken, fee);
-  }, [swap, inSwapAmount, outSwapAmount, inSwapToken, outSwapToken, fee]);
+  // const handleSwap = useCallback(() => {
+  //   if (inSwapToken && outSwapToken)
+  //     swap?.(inSwapAmount, inSwapToken, outSwapAmount, outSwapToken, fee);
+  // }, [swap, inSwapAmount, outSwapAmount, inSwapToken, outSwapToken, fee]);
 
   const setTokenAmountHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
-    setValue: (param: SetStateAction<string>) => void,
+    setValue: (param: SetStateAction<string>) => void
   ) => {
     const regExp = /^[0-9]*[.]?[0-9]*$/;
     if (regExp.test(event.target.value)) {
@@ -56,10 +55,11 @@ export const Swap = () => {
   };
 
   const swapButtonText = () => {
-    if (!swap) return 'Connect Wallet';
-    if (!inSwapToken || !outSwapToken) return 'Select a token';
-    if (Number(inSwapAmount) === 0 || Number(outSwapAmount) === 0) return 'Enter an amount';
-    return 'Swap';
+    // if (!swap) return "Connect Wallet";
+    if (!inSwapToken || !outSwapToken) return "Select a token";
+    if (Number(inSwapAmount) === 0 || Number(outSwapAmount) === 0)
+      return "Enter an amount";
+    return "Swap";
   };
 
   const handleSubmit = (event: SyntheticEvent) => {
@@ -77,7 +77,7 @@ export const Swap = () => {
             type="text"
             placeholder="0"
             className="w-[96%] grow bg-transparent rounded-lg ml-[5%] text-[16px] pl-2 outline-none placeholder:text-[13.5px] text-white text-4xl placeholder:text-4xl "
-            disabled={!swap}
+            disabled={false}
             onChange={(event) => {
               setTokenAmountHandler(event, setInSwapAmount);
             }}
@@ -88,7 +88,11 @@ export const Swap = () => {
               type="button"
               onClick={() =>
                 setInSwapAmount(
-                  `${Number(inSwapToken ? getAmountInToken(inSwapToken, inSwapTokenBalance) : 0).toFixed(4)}`,
+                  `${Number(
+                    inSwapToken
+                      ? getAmountInToken(inSwapToken, inSwapTokenBalance)
+                      : 0
+                  ).toFixed(4)}`
                 )
               }
             >
@@ -99,13 +103,18 @@ export const Swap = () => {
                 swapToken={inSwapToken}
                 onTokenChange={(prev, cur) => {
                   setInSwapToken(cur);
-                  if (outSwapToken?.erc20TokenAddress === cur?.erc20TokenAddress) setOutSwapToken(prev);
+                  if (
+                    outSwapToken?.erc20TokenAddress === cur?.erc20TokenAddress
+                  )
+                    setOutSwapToken(prev);
                 }}
-                disabled={!swap}
+                disabled={false}
               />
               <SwapBalanceDisplay
                 token={inSwapToken}
-                onBalanceChange={(balance: bigint) => setInSwapTokenBalance(balance)}
+                onBalanceChange={(balance: bigint) =>
+                  setInSwapTokenBalance(balance)
+                }
               />
             </div>
           </div>
@@ -122,7 +131,11 @@ export const Swap = () => {
             placeholder="0"
             className="w-full grow bg-transparent rounded-lg ml-[5%] text-[16px] pl-2 outline-none placeholder:text-[13.5px] text-white text-4xl placeholder:text-4xl "
             disabled
-            value={outSwapAmount === '0' || outSwapAmount.length === 0 ? '0' : Number(outSwapAmount).toFixed(4)}
+            value={
+              outSwapAmount === undefined || outSwapAmount === 0n
+                ? "0"
+                : Number(outSwapAmount).toFixed(4)
+            }
           />
 
           <div className="flex flex-col gap-2 items-end justify-end grow min-w-fit">
@@ -130,9 +143,10 @@ export const Swap = () => {
               swapToken={outSwapToken}
               onTokenChange={(prev, cur) => {
                 setOutSwapToken(cur);
-                if (inSwapToken?.erc20TokenAddress === cur?.erc20TokenAddress) setInSwapToken(prev);
+                if (inSwapToken?.erc20TokenAddress === cur?.erc20TokenAddress)
+                  setInSwapToken(prev);
               }}
-              disabled={!swap}
+              disabled={false}
             />
             <SwapBalanceDisplay token={outSwapToken} />
           </div>
@@ -146,23 +160,27 @@ export const Swap = () => {
               <div className="mx-[6%] flex items-center gap-x-2">
                 {isPriceLoading ? (
                   <div className="flex items-center gap-x-2">
-                    <Spinner /> <span>Fetching best price</span>{' '}
+                    <Spinner /> <span>Fetching best price</span>{" "}
                   </div>
                 ) : (
                   <span>
-                    {' '}
-                    1 {outSwapToken?.symbol} ={'   '}
+                    {" "}
+                    1 {outSwapToken?.symbol} ={"   "}
                     {(Number(inSwapAmount) / Number(outSwapAmount)).toFixed(4)}
-                    {'   '}
+                    {"   "}
                     {inSwapToken?.symbol}
                   </span>
                 )}
               </div>
-              <i className={`bi bi-chevron-${priceDetailsShown ? 'up' : 'down'} font-bold`} />
+              <i
+                className={`bi bi-chevron-${
+                  priceDetailsShown ? "up" : "down"
+                } font-bold`}
+              />
             </div>
             {priceDetailsShown && !isPriceLoading && (
               <SwapPriceDetails
-                outSwapAmount={outSwapAmount}
+                outSwapAmount={'0'}
                 outSwapToken={outSwapToken}
                 setPriceDetailsShown={setPriceDetailsShown}
               />
@@ -184,14 +202,14 @@ export const Swap = () => {
       </div>
       <div className="w-[90%] mx-auto mb-4 mt-[20px] h-[1px] bg-[#272B30]" />
       <div className="border-solid">
-        <button
+        {/* <button
           type="button"
-          disabled={swapButtonText() !== 'Swap' || isProcessing}
+          disabled={swapButtonText() !== "Swap" || isProcessing}
           onClick={handleSwap}
           className={`w-[90%] ml-[5%] mb-3 md:mx-[5%] rounded-lg h-10 mt-3 text-sm font-semibold outline-none ${
-            swapButtonText() === 'Swap'
-              ? 'bg-primary text-white hover:bg-[#4d32fa] duration-200'
-              : 'bg-[#37363d] text-[#848688] cursor-not-allowed'
+            swapButtonText() === "Swap"
+              ? "bg-primary text-white hover:bg-[#4d32fa] duration-200"
+              : "bg-[#37363d] text-[#848688] cursor-not-allowed"
           } `}
         >
           {isProcessing ? (
@@ -201,7 +219,7 @@ export const Swap = () => {
           ) : (
             <span>{swapButtonText()}</span>
           )}
-        </button>
+        </button> */}
       </div>
     </form>
   );

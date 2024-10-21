@@ -1,7 +1,8 @@
-import { ERC20Token } from '@hinkal/common';
-import { ReactNode, SetStateAction, useEffect, useState } from 'react';
-import { Modal } from '../Modal';
-import { TokenDropdownButton } from './TokenDropdownButton';
+import { ERC20Token } from "@hinkal/common";
+import { ReactNode, SetStateAction, useEffect, useState } from "react";
+import { Modal } from "../Modal";
+import { TokenDropdownButton } from "./TokenDropdownButton";
+import { useAppContext } from "../../AppContext";
 
 interface TokenDropdownProps {
   isTokenSelectShown: boolean;
@@ -11,11 +12,16 @@ interface TokenDropdownProps {
   tokenFilter?: (arg: ERC20Token) => boolean;
 }
 
-const splitTokenButtonsIntoRows = (tokenButtons: ReactNode[], itemsPerRow: number) =>
+const splitTokenButtonsIntoRows = (
+  tokenButtons: ReactNode[],
+  itemsPerRow: number
+) =>
   tokenButtons.reduce(
     (arr: ReactNode[][], button, index) =>
-      index % itemsPerRow ? [...arr.slice(0, -1), [...arr[arr.length - 1], button]] : [...arr, [button]],
-    [[]],
+      index % itemsPerRow
+        ? [...arr.slice(0, -1), [...arr[arr.length - 1], button]]
+        : [...arr, [button]],
+    [[]]
   );
 
 export const TokenDropdown = ({
@@ -25,12 +31,15 @@ export const TokenDropdown = ({
   onTokenChange,
   tokenFilter = () => true,
 }: TokenDropdownProps) => {
-  const { erc20List } = useErc20List();
-  const [itemsPerRow, setItemsPerRow] = useState(window.innerWidth <= 500 ? 2 : 3);
+  const { erc20List } = useAppContext();
+  const [itemsPerRow, setItemsPerRow] = useState(
+    window.innerWidth <= 500 ? 2 : 3
+  );
   useEffect(() => {
-    const onWindowSizeUpdate = () => setItemsPerRow(window.innerWidth <= 500 ? 2 : 3);
-    window.addEventListener('resize', onWindowSizeUpdate);
-    return () => window.removeEventListener('resize', onWindowSizeUpdate);
+    const onWindowSizeUpdate = () =>
+      setItemsPerRow(window.innerWidth <= 500 ? 2 : 3);
+    window.addEventListener("resize", onWindowSizeUpdate);
+    return () => window.removeEventListener("resize", onWindowSizeUpdate);
   }, []);
 
   return (
@@ -59,9 +68,12 @@ export const TokenDropdown = ({
                       setIsTokenSelectShown={setIsTokenSelectShown}
                     />
                   )),
-                itemsPerRow,
+                itemsPerRow
               ).map((buttons, index) => (
-                <div key={index} className="flex flex-row items-center justify-center gap-2">
+                <div
+                  key={index}
+                  className="flex flex-row items-center justify-center gap-2"
+                >
                   {buttons}
                 </div>
               ))}
