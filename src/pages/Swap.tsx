@@ -5,18 +5,26 @@ import {
   useMemo,
   useState,
 } from "react";
-import { toast } from "react-hot-toast";
 import { InfoPanel } from "../components/InfoPanel";
 import { Spinner } from "../components/Spinner";
 import { SelectToken } from "../components/swap/SelectToken";
 import { SwapBalanceDisplay } from "../components/swap/SwapBalanceDisplay";
 import { SwapInputTokensButton } from "../components/swap/SwapInputTokensButton";
 import { SwapPriceDetails } from "../components/swap/SwapPriceDetails";
-import { getErrorMessage } from "../utils/getErrorMessage";
-import { ERC20Token, getAmountInToken } from "@hinkal/common";
+import {
+  ERC20Token,
+  OpType,
+  getAmountInToken,
+  getAmountInWei,
+  networkRegistry,
+  produceOp,
+} from "@hinkal/common";
 import { useUniswapPrice } from "../hooks/useUniswapPrice";
+import { useAppContext } from "../AppContext";
 
 export const Swap = () => {
+  const { hinkal, chainId } = useAppContext();
+
   const [inSwapAmount, setInSwapAmount] = useState("");
   const [inSwapToken, setInSwapToken] = useState<ERC20Token | undefined>(
     undefined
@@ -56,10 +64,44 @@ export const Swap = () => {
     [outSwapAmountWei]
   );
 
-  // const handleSwap = useCallback(() => {
-  //   if (inSwapToken && outSwapToken)
-  //     swap?.(inSwapAmount, inSwapToken, outSwapAmount, outSwapToken, fee);
-  // }, [swap, inSwapAmount, outSwapAmount, inSwapToken, outSwapToken, fee]);
+  const handleSwap = useCallback(() => {
+    if (inSwapToken && outSwapToken && chainId) {
+      const erc20Addresses = [
+        inSwapToken.erc20TokenAddress,
+        outSwapToken.erc20TokenAddress,
+      ];
+      const inSwapAmountInWei = getAmountInWei(inSwapToken, inSwapAmount) ?? 0n;
+      const amountChanges = [inSwapAmountInWei, outSwapAmountWei ?? 0n];
+      const { emporiumAddress } = networkRegistry[chainId].contractData;
+
+      const swapSingleParams = {
+        tokenIn: inSwapToken.erc20TokenAddress,
+        tokenOut: outSwapToken.erc20TokenAddress,
+        fee,
+        recipient: emporiumAddress ?? "",
+        amountIn: inSwapAmountInWei,
+        amountOutMinimum: 0,
+        sqrtPriceLimitX96: 0,
+        deadline: 100000000000000,
+      };
+
+      const ops = [
+        produceOp(OpType.Erc20Token, "approve", [
+          inSwapToken.erc20TokenAddress,
+          inSwapAmountInWei,
+        ]),
+        produceOp(OpType.Uniswap, "exactInputSingle", [swapSingleParams]),
+      ];
+
+      const walletNonce = 0n;
+      hinkal.actionPrivateWallet(
+        erc20Addresses,
+        amountChanges,
+        ops,
+        walletNonce
+      );
+    }
+  }, [inSwapAmount, outSwapAmount, inSwapToken, outSwapToken, fee, chainId]);
 
   const setTokenAmountHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -219,9 +261,9 @@ export const Swap = () => {
       </div>
       <div className="w-[90%] mx-auto mb-4 mt-[20px] h-[1px] bg-[#272B30]" />
       <div className="border-solid">
-        {/* <button
+        <button
           type="button"
-          disabled={swapButtonText() !== "Swap" || isProcessing}
+          disabled={swapButtonText() !== "Swap"}
           onClick={handleSwap}
           className={`w-[90%] ml-[5%] mb-3 md:mx-[5%] rounded-lg h-10 mt-3 text-sm font-semibold outline-none ${
             swapButtonText() === "Swap"
@@ -229,14 +271,14 @@ export const Swap = () => {
               : "bg-[#37363d] text-[#848688] cursor-not-allowed"
           } `}
         >
-          {isProcessing ? (
+          {true ? (
             <div className="mx-[5%] flex items-center justify-center gap-x-2">
               <span>Swapping</span> <Spinner />
             </div>
           ) : (
             <span>{swapButtonText()}</span>
           )}
-        </button> */}
+        </button>
       </div>
     </form>
   );

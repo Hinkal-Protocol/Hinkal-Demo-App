@@ -1195,10 +1195,10 @@
     "@tanstack/react-virtual" "^3.0.0-beta.60"
     client-only "^0.0.1"
 
-"@hinkal/common@^0.0.40":
-  version "0.0.40"
-  resolved "https://registry.yarnpkg.com/@hinkal/common/-/common-0.0.40.tgz#17fc517f58dc9251f0ce0dd5dadd9828ceb4c177"
-  integrity sha512-U0MvQIfuQyk6o40QK3+teMW3PXIqa7QUyDj7Rp19bb6QMIYyVuj+m5qdlXC1qjJpMl+OYfWH97COxuT1IA1vtw==
+"@hinkal/common@^0.0.42":
+  version "0.0.42"
+  resolved "https://registry.yarnpkg.com/@hinkal/common/-/common-0.0.42.tgz#38143bfc682a4f540c5cb7bc9107080fe335bb46"
+  integrity sha512-2l9DDeRajG24uWCsuKXjR5pO3+UQ3HSWMINX1mIQhL/xqSPDdmArBm0PH2OKnsXG1UkNRTbe/AqW74/RhkVLog==
   dependencies:
     "@apollo/client" "^3.8.10"
     "@axelar-network/axelarjs-sdk" "0.16.0"
