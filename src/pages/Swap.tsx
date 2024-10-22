@@ -74,6 +74,8 @@ export const Swap = () => {
       const amountChanges = [inSwapAmountInWei, outSwapAmountWei ?? 0n];
       const { emporiumAddress } = networkRegistry[chainId].contractData;
 
+      const uniswapRouterAddress = "0xE592427A0AEce92De3Edee1F18E0157C05861564";
+
       const swapSingleParams = {
         tokenIn: inSwapToken.erc20TokenAddress,
         tokenOut: outSwapToken.erc20TokenAddress,
@@ -86,20 +88,16 @@ export const Swap = () => {
       };
 
       const ops = [
-        produceOp(OpType.Erc20Token, "approve", [
+        produceOp(OpType.Erc20Token, inSwapToken.erc20TokenAddress, "approve", [
           inSwapToken.erc20TokenAddress,
           inSwapAmountInWei,
         ]),
-        produceOp(OpType.Uniswap, "exactInputSingle", [swapSingleParams]),
+        produceOp(OpType.Uniswap, uniswapRouterAddress, "exactInputSingle", [
+          swapSingleParams,
+        ]),
       ];
 
-      const walletNonce = 0n;
-      hinkal.actionPrivateWallet(
-        erc20Addresses,
-        amountChanges,
-        ops,
-        walletNonce
-      );
+      hinkal.actionPrivateWallet(erc20Addresses, amountChanges, ops);
     }
   }, [inSwapAmount, outSwapAmount, inSwapToken, outSwapToken, fee, chainId]);
 
@@ -271,7 +269,7 @@ export const Swap = () => {
               : "bg-[#37363d] text-[#848688] cursor-not-allowed"
           } `}
         >
-          {true ? (
+          {false ? (
             <div className="mx-[5%] flex items-center justify-center gap-x-2">
               <span>Swapping</span> <Spinner />
             </div>
