@@ -5,6 +5,7 @@ import Disconnect from "../../assets/Disconnect.svg";
 import { copyToClipboard } from "../../utils/copyToClipboard";
 import { reloadPage } from "../../utils/pageReload";
 import { WalletInfoBalance } from "./WalletInfoBalance";
+import { useAppContext } from "../../AppContext";
 
 const filterTokenBalances = (tokenBalances: TokenBalance[]) => {
   const nonZeroBalances = [...tokenBalances] // we make a clone here so that sort doesn't change the original array
@@ -20,6 +21,8 @@ const filterTokenBalances = (tokenBalances: TokenBalance[]) => {
 };
 
 export const WalletInfoDropDown = () => {
+  const { balances } = useAppContext();
+
   return (
     <div className="absolute min-w-max top-20 md:top-2 left-0 md:left-auto right-0 bg-[#272B30] rounded-xl shadow-metamask font-pubsans p-4 items-center max-content">
       <div className="flex items-center space-x-4">
@@ -27,12 +30,12 @@ export const WalletInfoDropDown = () => {
         <p className="text-[#abaeaf] text-[12px] text-left">Balance</p>
       </div>
       <div className="flex flex-col justify-center gap-4 mb-[10%]">
-        {/* {filterTokenBalances(tokenBalances).map((tokenBalance) => (
+        {filterTokenBalances(balances).map((tokenBalance) => (
           <WalletInfoBalance
             tokenBalance={tokenBalance}
             key={tokenBalance.token.erc20TokenAddress}
           />
-        ))} */}
+        ))}
       </div>
 
       <div className="border-t-2 md:text-[15px] border-[#36393D]">

@@ -2,6 +2,7 @@ import {
   ERC20Token,
   EthereumNetwork,
   Hinkal,
+  TokenBalance,
   getERC20Registry,
   networkRegistry,
 } from "@hinkal/common";
@@ -22,7 +23,10 @@ type AppContextArgumnets = {
   setChainId: (num: number) => void;
   selectedNetwork: EthereumNetwork | undefined;
   setSelectedNetwork: (net: EthereumNetwork) => void;
+  dataLoaded: boolean;
+  setDataLoaded: (val: boolean) => void;
   erc20List: ERC20Token[];
+  balances: TokenBalance[];
 };
 
 const hinkalInstance = new Hinkal<Connector>();
@@ -33,7 +37,10 @@ const AppContext = createContext<AppContextArgumnets>({
   setChainId: (num: number) => {},
   selectedNetwork: undefined,
   setSelectedNetwork: (net: EthereumNetwork) => {},
+  dataLoaded: false,
+  setDataLoaded: (val: boolean) => {},
   erc20List: [],
+  balances: [],
 });
 
 type AppContextProps = { children: ReactNode };
@@ -43,10 +50,13 @@ export const AppContextProvider: FC<AppContextProps> = ({
 }: AppContextProps) => {
   const [hinkal, setHinkal] = useState<Hinkal<Connector>>(hinkalInstance);
   const [chainId, setChainId] = useState<number | undefined>();
+  const [dataLoaded, setDataLoaded] = useState<boolean>(false);
 
   const [selectedNetwork, setSelectedNetwork] = useState<
     EthereumNetwork | undefined
   >(undefined);
+
+  const [balances, setBalances] = useState<TokenBalance[]>([]);
 
   const networkList = useMemo(() => Object.values(networkRegistry), []);
 
@@ -60,6 +70,17 @@ export const AppContextProvider: FC<AppContextProps> = ({
     [chainId]
   );
 
+  useEffect(() => {
+    const run = async () => {
+      if (dataLoaded) {
+        const bals = await hinkal.getBalances();
+        console.log({ bals });
+        setBalances(bals);
+      }
+    };
+    run();
+  }, [dataLoaded]);
+
   return (
     <AppContext.Provider
       value={{
@@ -68,7 +89,10 @@ export const AppContextProvider: FC<AppContextProps> = ({
         setChainId,
         selectedNetwork,
         setSelectedNetwork,
+        dataLoaded,
+        setDataLoaded,
         erc20List,
+        balances,
       }}
     >
       {children}
