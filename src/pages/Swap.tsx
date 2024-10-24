@@ -64,17 +64,32 @@ export const Swap = () => {
     [outSwapAmountWei]
   );
 
-  const handleSwap = useCallback(() => {
+  const handleSwap = useCallback(async () => {
     if (inSwapToken && outSwapToken && chainId) {
       const erc20Addresses = [
         inSwapToken.erc20TokenAddress,
         outSwapToken.erc20TokenAddress,
       ];
       const inSwapAmountInWei = getAmountInWei(inSwapToken, inSwapAmount) ?? 0n;
-      const amountChanges = [inSwapAmountInWei, outSwapAmountWei ?? 0n];
+      const amountChanges = [-inSwapAmountInWei, outSwapAmountWei ?? 0n];
       const { emporiumAddress } = networkRegistry[chainId].contractData;
+      console.log({
+        emporiumAddress,
+        chainId,
+        contractData: networkRegistry[chainId].contractData,
+        fee,
+      });
 
       const uniswapRouterAddress = "0xE592427A0AEce92De3Edee1F18E0157C05861564";
+
+      // tokenIn: inputToken,
+      // tokenOut: outputToken,
+      // fee: fee,
+      // recipient: address(this),
+      // deadline: block.timestamp,
+      // amountIn: inputAmount,
+      // amountOutMinimum: outputAmount,
+      // sqrtPriceLimitX96: 0
 
       const swapSingleParams = {
         tokenIn: inSwapToken.erc20TokenAddress,
@@ -84,20 +99,21 @@ export const Swap = () => {
         amountIn: inSwapAmountInWei,
         amountOutMinimum: 0,
         sqrtPriceLimitX96: 0,
-        deadline: 100000000000000,
+        deadline: 127069672,
       };
+      console.log({ swapSingleParams });
 
       const ops = [
         produceOp(OpType.Erc20Token, inSwapToken.erc20TokenAddress, "approve", [
-          inSwapToken.erc20TokenAddress,
+          uniswapRouterAddress,
           inSwapAmountInWei,
         ]),
-        produceOp(OpType.Uniswap, uniswapRouterAddress, "exactInputSingle", [
-          swapSingleParams,
-        ]),
+        // produceOp(OpType.Uniswap, uniswapRouterAddress, "exactInputSingle", [
+        //   swapSingleParams,
+        // ]),
       ];
-
-      hinkal.actionPrivateWallet(erc20Addresses, amountChanges, ops);
+      console.log({ ops });
+      await hinkal.actionPrivateWallet(erc20Addresses, amountChanges, ops);
     }
   }, [inSwapAmount, outSwapAmount, inSwapToken, outSwapToken, fee, chainId]);
 
