@@ -71,9 +71,13 @@ export const Swap = () => {
         outSwapToken.erc20TokenAddress,
       ];
       const inSwapAmountInWei = getAmountInWei(inSwapToken, inSwapAmount) ?? 0n;
-      const amountChanges = [-inSwapAmountInWei, outSwapAmountWei ?? 0n];
+      const amountChanges = [-inSwapAmountInWei, 0n];
+      const onChainCreation = [false, true];
       const { emporiumAddress } = networkRegistry[chainId].contractData;
       console.log({
+        amountChanges,
+        erc20Addresses,
+        onChainCreation,
         emporiumAddress,
         chainId,
         contractData: networkRegistry[chainId].contractData,
@@ -81,15 +85,6 @@ export const Swap = () => {
       });
 
       const uniswapRouterAddress = "0xE592427A0AEce92De3Edee1F18E0157C05861564";
-
-      // tokenIn: inputToken,
-      // tokenOut: outputToken,
-      // fee: fee,
-      // recipient: address(this),
-      // deadline: block.timestamp,
-      // amountIn: inputAmount,
-      // amountOutMinimum: outputAmount,
-      // sqrtPriceLimitX96: 0
 
       const swapSingleParams = {
         tokenIn: inSwapToken.erc20TokenAddress,
@@ -99,7 +94,7 @@ export const Swap = () => {
         amountIn: inSwapAmountInWei,
         amountOutMinimum: 0,
         sqrtPriceLimitX96: 0,
-        deadline: 127069672,
+        deadline: 1829797637, // timestamp here, not block
       };
       console.log({ swapSingleParams });
 
@@ -108,12 +103,16 @@ export const Swap = () => {
           uniswapRouterAddress,
           inSwapAmountInWei,
         ]),
-        // produceOp(OpType.Uniswap, uniswapRouterAddress, "exactInputSingle", [
-        //   swapSingleParams,
-        // ]),
+        produceOp(OpType.Uniswap, uniswapRouterAddress, "exactInputSingle", [
+          swapSingleParams,
+        ]),
       ];
-      console.log({ ops });
-      await hinkal.actionPrivateWallet(erc20Addresses, amountChanges, ops);
+      await hinkal.actionPrivateWallet(
+        erc20Addresses,
+        amountChanges,
+        onChainCreation,
+        ops
+      );
     }
   }, [inSwapAmount, outSwapAmount, inSwapToken, outSwapToken, fee, chainId]);
 
