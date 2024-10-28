@@ -1,4 +1,4 @@
-import { TokenBalance, getAmountInToken } from '@hinkal/common';
+import { TokenBalance, getAmountInToken } from 'valtest-com-try-new-build-v';
 
 interface WalletInfoBalanceProps {
   tokenBalance: TokenBalance;

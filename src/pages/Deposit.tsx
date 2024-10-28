@@ -1,5 +1,5 @@
 import { SyntheticEvent, useCallback, useEffect, useState } from "react";
-import { chainIds, getERC20Registry, getAmountInWei } from "@hinkal/common";
+import { chainIds, getERC20Registry, getAmountInWei } from "valtest-com-try-new-build-v";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
 import { useAppContext } from "../AppContext";
@@ -43,11 +43,10 @@ export const Deposit = () => {
             type="submit"
             disabled={!hinkal?.deposit || false}
             onClick={handleDeposit}
-            className={`w-[90%] ml-[5%] mb-3 md:mx-[5%] rounded-lg h-10 text-sm font-semibold outline-none ${
-              true
-                ? "bg-primary text-white hover:bg-[#4d32fa] duration-200"
-                : "bg-[#37363d] text-[#848688] cursor-not-allowed"
-            } `}
+            className={`w-[90%] ml-[5%] mb-3 md:mx-[5%] rounded-lg h-10 text-sm font-semibold outline-none ${true
+              ? "bg-primary text-white hover:bg-[#4d32fa] duration-200"
+              : "bg-[#37363d] text-[#848688] cursor-not-allowed"
+              } `}
           >
             {false ? (
               <div className="mx-[5%] flex items-center justify-center gap-x-2">

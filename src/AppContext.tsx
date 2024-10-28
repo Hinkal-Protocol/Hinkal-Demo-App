@@ -4,7 +4,7 @@ import {
   Hinkal,
   getERC20Registry,
   networkRegistry,
-} from "@hinkal/common";
+} from "valtest-com-try-new-build-v";
 import {
   FC,
   ReactNode,
@@ -30,9 +30,9 @@ const hinkalInstance = new Hinkal<Connector>();
 const AppContext = createContext<AppContextArgumnets>({
   hinkal: hinkalInstance,
   chainId: undefined,
-  setChainId: (num: number) => {},
+  setChainId: (num: number) => { },
   selectedNetwork: undefined,
-  setSelectedNetwork: (net: EthereumNetwork) => {},
+  setSelectedNetwork: (net: EthereumNetwork) => { },
   erc20List: [],
 });
 

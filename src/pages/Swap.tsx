@@ -18,7 +18,7 @@ import {
   getAmountInWei,
   networkRegistry,
   produceOp,
-} from "@hinkal/common";
+} from "valtest-com-try-new-build-v";
 import { useUniswapPrice } from "../hooks/useUniswapPrice";
 import { useAppContext } from "../AppContext";
 
@@ -230,9 +230,8 @@ export const Swap = () => {
                 )}
               </div>
               <i
-                className={`bi bi-chevron-${
-                  priceDetailsShown ? "up" : "down"
-                } font-bold`}
+                className={`bi bi-chevron-${priceDetailsShown ? "up" : "down"
+                  } font-bold`}
               />
             </div>
             {priceDetailsShown && !isPriceLoading && (
@@ -263,11 +262,10 @@ export const Swap = () => {
           type="button"
           disabled={swapButtonText() !== "Swap"}
           onClick={handleSwap}
-          className={`w-[90%] ml-[5%] mb-3 md:mx-[5%] rounded-lg h-10 mt-3 text-sm font-semibold outline-none ${
-            swapButtonText() === "Swap"
-              ? "bg-primary text-white hover:bg-[#4d32fa] duration-200"
-              : "bg-[#37363d] text-[#848688] cursor-not-allowed"
-          } `}
+          className={`w-[90%] ml-[5%] mb-3 md:mx-[5%] rounded-lg h-10 mt-3 text-sm font-semibold outline-none ${swapButtonText() === "Swap"
+            ? "bg-primary text-white hover:bg-[#4d32fa] duration-200"
+            : "bg-[#37363d] text-[#848688] cursor-not-allowed"
+            } `}
         >
           {false ? (
             <div className="mx-[5%] flex items-center justify-center gap-x-2">

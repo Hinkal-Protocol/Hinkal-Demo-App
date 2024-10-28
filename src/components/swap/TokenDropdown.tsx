@@ -1,4 +1,4 @@
-import { ERC20Token } from "@hinkal/common";
+import { ERC20Token } from "valtest-com-try-new-build-v";
 import { ReactNode, SetStateAction, useEffect, useState } from "react";
 import { Modal } from "../Modal";
 import { TokenDropdownButton } from "./TokenDropdownButton";

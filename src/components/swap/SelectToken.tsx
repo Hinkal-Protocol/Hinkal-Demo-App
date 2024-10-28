@@ -1,4 +1,4 @@
-import { ERC20Token } from '@hinkal/common';
+import { ERC20Token } from 'valtest-com-try-new-build-v';
 import { useState } from 'react';
 import VectorDown from '../../assets/VectorDown.svg';
 import { TokenDropdown } from './TokenDropdown';
@@ -18,9 +18,8 @@ export const SelectToken = ({ swapToken, onTokenChange, disabled, tokenFilter }:
         type="button"
         disabled={disabled}
         onClick={() => setIsTokenSelectShown((prev) => !prev)}
-        className={`rounded-lg ${
-          swapToken ? 'bg-modalBgColor' : 'bg-primary'
-        } px-3 py-2 w-fit mr-[15px] flex items-center justify-center`}
+        className={`rounded-lg ${swapToken ? 'bg-modalBgColor' : 'bg-primary'
+          } px-3 py-2 w-fit mr-[15px] flex items-center justify-center`}
       >
         <span className="text-xl font-[600]">
           {swapToken ? (

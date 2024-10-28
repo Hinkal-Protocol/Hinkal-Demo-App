@@ -10,11 +10,13 @@ import {
   localhostNetwork,
   networkRegistry,
   transactionErrorCodes,
-} from '@hinkal/common';
+} from 'valtest-com-try-new-build-v';
 import { ethers, providers, Signer, utils } from 'ethers';
 import { Connector } from 'wagmi';
 import { type WalletClient } from '@wagmi/core';
 import { connect, disconnect, getAccount, signMessage, switchNetwork, watchAccount, watchNetwork } from 'wagmi/actions';
+
+
 
 export class ProviderAdapter implements IProviderAdapter {
   private connector: Connector;

@@ -1,4 +1,4 @@
-import { ERC20Token } from '@hinkal/common';
+import { ERC20Token } from 'valtest-com-try-new-build-v';
 import { SetStateAction } from 'react';
 
 interface SwapSettingsInterface {

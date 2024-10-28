@@ -1,9 +1,9 @@
 import { arbitrum, avalanche, bsc, hardhat, mainnet, optimism, polygon } from 'wagmi/chains';
-import { configureChains, createConfig } from 'wagmi';
+import { configureChains, createConfig, http } from 'wagmi';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
-import { networkRegistry } from '@hinkal/common';
+import { networkRegistry } from 'valtest-com-try-new-build-v';
 
 const CHAINS = [mainnet, polygon, bsc, arbitrum, optimism, avalanche, hardhat];
 

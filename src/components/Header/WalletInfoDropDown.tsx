@@ -1,4 +1,4 @@
-import { TokenBalance, zeroAddress } from "@hinkal/common";
+import { TokenBalance, zeroAddress } from "valtest-com-try-new-build-v";
 import toast from "react-hot-toast";
 import Copy from "../../assets/Copy.svg";
 import Disconnect from "../../assets/Disconnect.svg";
