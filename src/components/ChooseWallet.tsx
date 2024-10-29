@@ -28,6 +28,7 @@ export const ChooseWallet = ({
   const handleSelectConnector = useCallback(
     async (connector: Connector<providers.Provider>) => {
       const providerAdapter = new ProviderAdapter(connector);
+      console.log({ providerAdapter, connector });
       await hinkal.initProviderAdapter(connector, providerAdapter);
       await hinkal.initUserKeys();
 
