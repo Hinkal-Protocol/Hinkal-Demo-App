@@ -7,8 +7,8 @@ import metamaskLogo from "../assets/metamaskWalletLogo.png";
 import walletconnectLogo from "../assets/walletconnectWalletLogo.png";
 import { Modal } from "./Modal";
 import { Spinner } from "./Spinner";
-import { ProviderAdapter } from "../data-structures";
 import { useAppContext } from "../AppContext";
+import { exportProvider, IProviderAdapter } from "@hinkal/common";
 
 interface ChooseWalletProps {
   isOpen: boolean;
@@ -25,9 +25,10 @@ export const ChooseWallet = ({
 
   const { hinkal, setChainId, setDataLoaded } = useAppContext();
 
+  console.log("baba", { connectors });
   const handleSelectConnector = useCallback(
     async (connector: Connector<providers.Provider>) => {
-      const providerAdapter = new ProviderAdapter(connector);
+      const providerAdapter = await exportProvider<Connector>();
       console.log({ providerAdapter, connector });
       await hinkal.initProviderAdapter(connector, providerAdapter);
       await hinkal.initUserKeys();

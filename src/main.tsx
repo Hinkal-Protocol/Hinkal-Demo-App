@@ -10,10 +10,10 @@ preProcessing();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <AppContextProvider>
-      <WagmiConfig config={getWagmiConfig()}>
+    <WagmiConfig config={getWagmiConfig()}>
+      <AppContextProvider>
         <App />
-      </WagmiConfig>
-    </AppContextProvider>
+      </AppContextProvider>
+    </WagmiConfig>
   </React.StrictMode>
 );
