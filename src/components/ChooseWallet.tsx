@@ -8,7 +8,7 @@ import walletconnectLogo from "../assets/walletconnectWalletLogo.png";
 import { Modal } from "./Modal";
 import { Spinner } from "./Spinner";
 import { useAppContext } from "../AppContext";
-import { exportProvider, IProviderAdapter } from "@hinkal/common";
+import exportProvider from "@hinkal/common/providers/Wagmiv1ProviderAdapter";
 
 interface ChooseWalletProps {
   isOpen: boolean;
@@ -92,7 +92,7 @@ export const ChooseWallet = ({
               )}
               <span>{connector.name}</span>
               {!connector.ready && "(not installed)"}
-              {"isSigningIn" && connector.id === pendingConnector?.id && (
+              {connector.id === pendingConnector?.id && (
                 <span>
                   {" "}
                   <Spinner />
