@@ -8,7 +8,7 @@ import walletconnectLogo from "../assets/walletconnectWalletLogo.png";
 import { Modal } from "./Modal";
 import { Spinner } from "./Spinner";
 import { useAppContext } from "../AppContext";
-import { exportProvider, IProviderAdapter } from "@hinkal/common";
+import { exportWagmiv1Provider } from "@hinkal/common";
 
 interface ChooseWalletProps {
   isOpen: boolean;
@@ -28,7 +28,7 @@ export const ChooseWallet = ({
   console.log("baba", { connectors });
   const handleSelectConnector = useCallback(
     async (connector: Connector<providers.Provider>) => {
-      const providerAdapter = await exportProvider<Connector>();
+      const providerAdapter = await exportWagmiv1Provider<Connector>();
       console.log({ providerAdapter, connector });
       await hinkal.initProviderAdapter(connector, providerAdapter);
       await hinkal.initUserKeys();
@@ -92,7 +92,7 @@ export const ChooseWallet = ({
               )}
               <span>{connector.name}</span>
               {!connector.ready && "(not installed)"}
-              {"isSigningIn" && connector.id === pendingConnector?.id && (
+              {true && connector.id === pendingConnector?.id && (
                 <span>
                   {" "}
                   <Spinner />
