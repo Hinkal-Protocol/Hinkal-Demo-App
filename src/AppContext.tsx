@@ -7,8 +7,10 @@ import {
   networkRegistry,
 } from "@hinkal/common";
 import {
+  Dispatch,
   FC,
   ReactNode,
+  SetStateAction,
   createContext,
   useContext,
   useEffect,
@@ -19,6 +21,7 @@ import { Connector } from "wagmi";
 
 type AppContextArgumnets = {
   hinkal: Hinkal<Connector>;
+  setHinkal: Dispatch<SetStateAction<Hinkal<Connector>>>
   chainId?: number;
   setChainId: (num: number) => void;
   selectedNetwork: EthereumNetwork | undefined;
@@ -33,6 +36,7 @@ const hinkalInstance = new Hinkal<Connector>();
 
 const AppContext = createContext<AppContextArgumnets>({
   hinkal: hinkalInstance,
+  setHinkal:(hinkal:SetStateAction<Hinkal<Connector>>) => {},
   chainId: undefined,
   setChainId: (num: number) => {},
   selectedNetwork: undefined,
@@ -85,6 +89,7 @@ export const AppContextProvider: FC<AppContextProps> = ({
     <AppContext.Provider
       value={{
         hinkal,
+        setHinkal,
         chainId,
         setChainId,
         selectedNetwork,

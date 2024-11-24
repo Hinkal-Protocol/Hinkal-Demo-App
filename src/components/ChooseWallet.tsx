@@ -8,7 +8,7 @@ import walletconnectLogo from "../assets/walletconnectWalletLogo.png";
 import { Modal } from "./Modal";
 import { Spinner } from "./Spinner";
 import { useAppContext } from "../AppContext";
-import { exportWagmiv1Provider } from "@hinkal/common";
+import { prepareWagmiv1Hinkal } from "@hinkal/common/providers/prepareWagmiv1Hinkal";
 
 interface ChooseWalletProps {
   isOpen: boolean;
@@ -23,19 +23,16 @@ export const ChooseWallet = ({
 }: ChooseWalletProps) => {
   const { connectors, pendingConnector } = useConnect();
 
-  const { hinkal, setChainId, setDataLoaded } = useAppContext();
+  const { setHinkal, setChainId, setDataLoaded } = useAppContext();
 
-  console.log("baba", { connectors });
   const handleSelectConnector = useCallback(
     async (connector: Connector<providers.Provider>) => {
-      const providerAdapter = await exportWagmiv1Provider<Connector>();
-      console.log({ providerAdapter, connector });
-      await hinkal.initProviderAdapter(connector, providerAdapter);
-      await hinkal.initUserKeys();
 
+      const hinkal = await prepareWagmiv1Hinkal(connector);
+      console.log({hinkal})
+      setHinkal(hinkal);
       setShieldedAddress(hinkal.userKeys.getShieldedPublicKey());
       setChainId(hinkal.getCurrentChainId());
-      await hinkal.resetMerkle();
 
       console.log("new chain id", hinkal.getSelectedNetwork());
       console.log("new hinkal", { hinkal });
