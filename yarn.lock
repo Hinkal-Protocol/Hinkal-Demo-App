@@ -1505,19 +1505,21 @@
     "@tanstack/react-virtual" "^3.0.0-beta.60"
     client-only "^0.0.1"
 
-"@hinkal/common@^0.1.6":
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/@hinkal/common/-/common-0.1.6.tgz#92c28a97ca37f2e5a869a310a8e87180f0a1c0cb"
-  integrity sha512-JkDZnXdsb2b/JvFR0wkDyRKkITCG0Rwpq7MMZtK6ZzU/KlHqKF9EWcLfW5rL1t/Zey2Se2GHXombyjbuh54pZQ==
+"@hinkal/common@^0.1.28":
+  version "0.1.28"
+  resolved "https://registry.yarnpkg.com/@hinkal/common/-/common-0.1.28.tgz#3105051f9753c7566fe7abdc6d5912dcadc18c76"
+  integrity sha512-lk/MT4yAGPvX49RspJlICRJnt/6rvdrdHJ3+F92RmgDg6QPy5F40x00d1Mwx8dWBBpywrcwvuldYUpEEhTElMQ==
   dependencies:
     "@axelar-network/axelarjs-sdk" "0.16.0"
     async-mutex "^0.4.0"
     axios "^1.6.8"
+    buffer "6.0.3"
     circomlibjs "^0.1.7"
     dotenv "^16.4.5"
     ethers "5.5.1"
     idb-keyval "6.2.1"
     libsodium-wrappers "^0.7.10"
+    process "0.11.10"
     snarkjs "0.7.5"
     ua-parser-js "^1.0.37"
     uuid "^9.0.1"
@@ -3969,7 +3971,7 @@ buffer-from@^1.0.0:
   resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.2.tgz#2b146a6fd72e80b4f55d255f35ed59a3a9a41bd5"
   integrity sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==
 
-buffer@^6.0.3:
+buffer@6.0.3, buffer@^6.0.3:
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/buffer/-/buffer-6.0.3.tgz#2ace578459cc8fbe2a70aaa8f52ee63b6a74c6c6"
   integrity sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==
@@ -7671,7 +7673,7 @@ process-warning@^1.0.0:
   resolved "https://registry.yarnpkg.com/process-warning/-/process-warning-1.0.0.tgz#980a0b25dc38cd6034181be4b7726d89066b4616"
   integrity sha512-du4wfLyj4yCZq1VupnVSZmRsPJsNuxoDQFdCFHLaYiEbFBD7QE0a+I4D7hOxrVnh78QE/YipFAj9lXHiXocV+Q==
 
-process@^0.11.10:
+process@0.11.10, process@^0.11.10:
   version "0.11.10"
   resolved "https://registry.yarnpkg.com/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
   integrity sha512-cdGef/drWFoydD1JsMzuFf8100nZl+GT+yacc2bEced5f9Rjk4z+WtFUTBu9PhOi9j/jfmBPu0mMEY4wIdAF8A==

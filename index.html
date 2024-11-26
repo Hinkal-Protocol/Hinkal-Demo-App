@@ -9,15 +9,6 @@
   </head>
   <body>
     <div id="root"></div>
-    <script type="module">
-      import process from "process";
-      import { Buffer } from "buffer";
-      if (typeof window.global === "undefined") window.global = window;
-      globalThis.Buffer = Buffer;
-      globalThis.process = process;
-
-      export default {};
-    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
