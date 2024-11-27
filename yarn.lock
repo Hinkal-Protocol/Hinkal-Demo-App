@@ -1505,16 +1505,17 @@
     "@tanstack/react-virtual" "^3.0.0-beta.60"
     client-only "^0.0.1"
 
-"@hinkal/common@^0.1.29":
-  version "0.1.29"
-  resolved "https://registry.yarnpkg.com/@hinkal/common/-/common-0.1.29.tgz#ea438b58934214d23c4e09605164b855e7dcb950"
-  integrity sha512-rxO0B5jGfDCQCH4mVrZ2xfsQTVABiBIFMRS171GMeXj/pzOWvKqrFOXkaynpyD8b0Sw18XVdiYQIx7/7vQpvkg==
+"@hinkal/common@^0.1.31":
+  version "0.1.31"
+  resolved "https://registry.yarnpkg.com/@hinkal/common/-/common-0.1.31.tgz#e6dd028b52652dac214ec6666d647c76b5952f83"
+  integrity sha512-Pm0X/AzH/zpbHnA0UDfO22/GbF+xZPxeEbKzrQJ3dx8zvaZDldD2T5JD+U+QI/V8iTTuHCbi4PBLXQ3NbSDSmQ==
   dependencies:
     "@axelar-network/axelarjs-sdk" "0.16.0"
     async-mutex "^0.4.0"
     axios "^1.6.8"
     buffer "6.0.3"
     circomlibjs "^0.1.7"
+    circomlibjs-hinkal-fork "^0.0.3"
     dotenv "^16.4.5"
     ethers "5.5.1"
     idb-keyval "6.2.1"
@@ -4106,6 +4107,13 @@ circom_runtime@0.1.28:
   integrity sha512-ACagpQ7zBRLKDl5xRZ4KpmYIcZDUjOiNRuxvXLqhnnlLSVY1Dbvh73TI853nqoR0oEbihtWmMSjgc5f+pXf/jQ==
   dependencies:
     ffjavascript "0.3.1"
+
+circomlibjs-hinkal-fork@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/circomlibjs-hinkal-fork/-/circomlibjs-hinkal-fork-0.0.3.tgz#4315276dbcd79b8d720093a72a4028cbcc509077"
+  integrity sha512-yj8eVrWpbmAQLD+MLwHZ+rhLoSgGT5vhnV3j0Ih7+uclCp3kouXKj1H+/PwbWnIC/ykhTy53dLi0QoChsACXtA==
+  dependencies:
+    ffjavascript "^0.3.0"
 
 circomlibjs@^0.1.7:
   version "0.1.7"
