@@ -4,7 +4,7 @@
   "type": "commonjs",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.5",
-    "@hinkal/common": "^0.1.28",
+    "@hinkal/common": "^0.1.29",
     "@vitejs/plugin-react": "^3.0.0",
     "axios": "^1.3.1",
     "bootstrap-icons": "^1.10.2",
