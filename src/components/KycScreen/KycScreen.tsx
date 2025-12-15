@@ -1,4 +1,4 @@
-import { KycVerificationStatus } from "@hinkal/common";
+import { KycVerificationStatus } from "@sabaaa1/common";
 import { useCallback, useState } from "react";
 import { toast } from "react-hot-toast";
 import { getErrorMessage } from "../../utils/getErrorMessage";

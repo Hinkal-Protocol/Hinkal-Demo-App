@@ -1,6 +1,6 @@
 import { NetworkDropdownItem } from "./NetworkDropdownItem";
 import { useCallback, useMemo } from "react";
-import { networkRegistry } from "@hinkal/common";
+import { networkRegistry } from "@sabaaa1/common";
 import { useAppContext } from "../../../../AppContext";
 
 interface NetworkSettingsDropdownProps {

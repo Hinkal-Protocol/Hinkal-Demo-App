@@ -1,14 +1,14 @@
 import { providers } from "ethers";
 import { Dispatch, SetStateAction, useCallback } from "react";
 import { isMobile } from "react-device-detect";
-import { Connector, useConnect } from "wagmi";
+import { Connector, useConfig, useConnect } from "wagmi";
 import coinbaseLogo from "../assets/coinbaseWalletLogo.png";
 import metamaskLogo from "../assets/metamaskWalletLogo.png";
 import walletconnectLogo from "../assets/walletconnectWalletLogo.png";
 import { Modal } from "./Modal";
 import { Spinner } from "./Spinner";
 import { useAppContext } from "../AppContext";
-import { prepareWagmiv1Hinkal } from "@hinkal/common/providers/prepareWagmiv1Hinkal";
+import { prepareWagmiHinkal } from "@sabaaa1/common/providers/prepareWagmiHinkal";
 
 interface ChooseWalletProps {
   isOpen: boolean;
@@ -22,14 +22,14 @@ export const ChooseWallet = ({
   setShieldedAddress,
 }: ChooseWalletProps) => {
   const { connectors, pendingConnector } = useConnect();
+  const config = useConfig();
 
   const { setHinkal, setChainId, setDataLoaded } = useAppContext();
 
   const handleSelectConnector = useCallback(
     async (connector: Connector<providers.Provider>) => {
-
-      const hinkal = await prepareWagmiv1Hinkal(connector);
-      console.log({hinkal})
+      const hinkal = await prepareWagmiHinkal(connector, config);
+      console.log({ hinkal });
       setHinkal(hinkal);
       setShieldedAddress(hinkal.userKeys.getShieldedPublicKey());
       setChainId(hinkal.getCurrentChainId());

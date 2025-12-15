@@ -1,5 +1,5 @@
-import { ERC20Token } from '@hinkal/common';
-import { SetStateAction } from 'react';
+import { ERC20Token } from "@sabaaa1/common";
+import { SetStateAction } from "react";
 
 interface SwapSettingsInterface {
   outSwapAmount: string;
@@ -7,8 +7,11 @@ interface SwapSettingsInterface {
   setPriceDetailsShown: (param: SetStateAction<boolean>) => void;
 }
 
-export const SwapPriceDetails = ({ outSwapAmount, outSwapToken, setPriceDetailsShown }: SwapSettingsInterface) => {
-
+export const SwapPriceDetails = ({
+  outSwapAmount,
+  outSwapToken,
+  setPriceDetailsShown,
+}: SwapSettingsInterface) => {
   return (
     <button
       type="button"
@@ -18,8 +21,7 @@ export const SwapPriceDetails = ({ outSwapAmount, outSwapToken, setPriceDetailsS
       className="w-[89%] mx-auto bg-[#202426] rounded-xl border-[0.1px] border-[#3b4145] flex flex-col p-3 py-4 mt-4 "
     >
       <p className="flex w-full justify-between items-center">
-        <span>
-        </span>
+        <span></span>
       </p>
     </button>
   );

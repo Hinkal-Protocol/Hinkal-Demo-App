@@ -5,7 +5,7 @@ import {
   TokenBalance,
   getERC20Registry,
   networkRegistry,
-} from "@hinkal/common";
+} from "@sabaaa1/common";
 import {
   Dispatch,
   FC,
@@ -21,7 +21,7 @@ import { Connector } from "wagmi";
 
 type AppContextArgumnets = {
   hinkal: Hinkal<Connector>;
-  setHinkal: Dispatch<SetStateAction<Hinkal<Connector>>>
+  setHinkal: Dispatch<SetStateAction<Hinkal<Connector>>>;
   chainId?: number;
   setChainId: (num: number) => void;
   selectedNetwork: EthereumNetwork | undefined;
@@ -36,7 +36,7 @@ const hinkalInstance = new Hinkal<Connector>();
 
 const AppContext = createContext<AppContextArgumnets>({
   hinkal: hinkalInstance,
-  setHinkal:(hinkal:SetStateAction<Hinkal<Connector>>) => {},
+  setHinkal: (hinkal: SetStateAction<Hinkal<Connector>>) => {},
   chainId: undefined,
   setChainId: (num: number) => {},
   selectedNetwork: undefined,
@@ -77,9 +77,19 @@ export const AppContextProvider: FC<AppContextProps> = ({
   useEffect(() => {
     const run = async () => {
       if (dataLoaded) {
-        const bals = await hinkal.getBalances();
-        console.log({ bals });
-        setBalances(bals);
+        const ethAddress = await hinkal.getEthereumAddress();
+
+        const bals = await hinkal.getBalances(
+          hinkal.getCurrentChainId(),
+          hinkal.userKeys.getShieldedPrivateKey(),
+          hinkal.userKeys.getShieldedPublicKey(),
+          ethAddress,
+          false,
+          true
+        );
+        const balancesArray = Array.from(bals.values());
+        console.log({ balancesArray });
+        setBalances(balancesArray);
       }
     };
     run();

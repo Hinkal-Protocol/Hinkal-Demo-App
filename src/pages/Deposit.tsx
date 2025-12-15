@@ -1,5 +1,5 @@
-import { SyntheticEvent, useCallback, useEffect, useState } from "react";
-import { chainIds, getERC20Registry, getAmountInWei } from "@hinkal/common";
+import { SyntheticEvent, useCallback, useState } from "react";
+import { chainIds, getERC20Registry, getAmountInWei } from "@sabaaa1/common";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
 import { useAppContext } from "../AppContext";
@@ -14,10 +14,9 @@ export const Deposit = () => {
   const [depositAmount, setDepositAmount] = useState<string>("");
 
   const handleDeposit = useCallback(async () => {
-    const erc20addresses = [selectedToken.erc20TokenAddress];
     const amountChanges = [getAmountInWei(selectedToken, depositAmount)];
     try {
-      await hinkal.deposit?.(erc20addresses, amountChanges);
+      await hinkal.deposit?.([selectedToken], amountChanges);
     } catch (err) {
       console.log("deposit error", { err });
     }

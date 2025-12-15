@@ -1,44 +1,54 @@
-import { ERC20Token, getUniswapPrice } from "@hinkal/common";
+import { ERC20Token, getUniswapPrice } from "@sabaaa1/common";
 import { useEffect, useState } from "react";
 import { useAppContext } from "../AppContext";
 
 type UseSwapPriceParams = {
-    inSwapAmount: string;
-    inSwapToken?: ERC20Token;
-    outSwapToken?: ERC20Token;
-    enabled?: boolean;
+  inSwapAmount: string;
+  inSwapToken?: ERC20Token;
+  outSwapToken?: ERC20Token;
+  enabled?: boolean;
 };
 
-export const useUniswapPrice = ({ inSwapAmount, inSwapToken, outSwapToken }: UseSwapPriceParams) => {
-    const { hinkal } = useAppContext();
-    const [price, setPrice] = useState<bigint | undefined>(undefined);
-    const [isPriceLoading, setIsPriceLoading] = useState<boolean>(false);
-    const [swapData, setSwapData] = useState<string>('');
+export const useUniswapPrice = ({
+  inSwapAmount,
+  inSwapToken,
+  outSwapToken,
+}: UseSwapPriceParams) => {
+  const { hinkal, chainId } = useAppContext();
+  const [price, setPrice] = useState<bigint | undefined>(undefined);
+  const [isPriceLoading, setIsPriceLoading] = useState<boolean>(false);
+  const [swapData, setSwapData] = useState<string>("");
 
-    useEffect(() => {
-        setPrice(undefined);
+  useEffect(() => {
+    setPrice(undefined);
 
-        const run = async () => {
-            try {
-                if (!hinkal || !inSwapToken || !outSwapToken) return;
-                if (inSwapAmount.length === 0 || !inSwapAmount) {
-                    setPrice(undefined);
-                    setSwapData('');
-                    return;
-                }
-                setIsPriceLoading(true);
-                const priceDict = await getUniswapPrice(hinkal, inSwapAmount, inSwapToken, outSwapToken);
-                console.log({ priceDict })
-                setPrice(priceDict.tokenPrice);
-                setSwapData(priceDict.poolFee);
-            } catch (err: unknown) {
-                setPrice(undefined);
-                setSwapData('');
-            } finally {
-                setIsPriceLoading(false);
-            }
+    const run = async () => {
+      try {
+        if (!hinkal || !inSwapToken || !outSwapToken || !chainId) return;
+        if (inSwapAmount.length === 0 || !inSwapAmount) {
+          setPrice(undefined);
+          setSwapData("");
+          return;
         }
-        run();
-    }, [inSwapToken, outSwapToken, inSwapAmount])
-    return { isPriceLoading, price, swapData };
-}
+        setIsPriceLoading(true);
+        const priceDict = await getUniswapPrice(
+          hinkal,
+          chainId,
+          inSwapAmount,
+          inSwapToken,
+          outSwapToken
+        );
+        console.log({ priceDict });
+        setPrice(priceDict.tokenPrice);
+        setSwapData(priceDict.poolFee);
+      } catch (err: unknown) {
+        setPrice(undefined);
+        setSwapData("");
+      } finally {
+        setIsPriceLoading(false);
+      }
+    };
+    run();
+  }, [inSwapToken, outSwapToken, inSwapAmount]);
+  return { isPriceLoading, price, swapData };
+};

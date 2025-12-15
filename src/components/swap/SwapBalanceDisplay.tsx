@@ -1,4 +1,4 @@
-import { ERC20Token, getAmountInToken } from "@hinkal/common";
+import { ERC20Token, getAmountInToken } from "@sabaaa1/common";
 import { useEffect, useState } from "react";
 
 interface SwapBalanceDisplayProps {

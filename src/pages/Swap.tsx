@@ -14,11 +14,13 @@ import { SwapPriceDetails } from "../components/swap/SwapPriceDetails";
 import {
   ERC20Token,
   OpType,
+  SubAccount,
+  UserKeys,
   getAmountInToken,
   getAmountInWei,
   networkRegistry,
   produceOp,
-} from "@hinkal/common";
+} from "@sabaaa1/common";
 import { useUniswapPrice } from "../hooks/useUniswapPrice";
 import { useAppContext } from "../AppContext";
 
@@ -107,11 +109,26 @@ export const Swap = () => {
           swapSingleParams,
         ]),
       ];
+
+      const signer = UserKeys.deriveSignerFromNonce(hinkal.userKeys, 1n);
+
+      const activeSubAccount: SubAccount = {
+        name: "Public 1",
+        index: 1,
+        isHidden: false,
+        isImported: false,
+        createdAt: new Date().toISOString(),
+        ethAddress: await hinkal.getEthereumAddress(),
+        privateKey: signer.privateKey,
+      };
+
       await hinkal.actionPrivateWallet(
         erc20Addresses,
         amountChanges,
         onChainCreation,
-        ops
+        ops,
+        [],
+        activeSubAccount
       );
     }
   }, [inSwapAmount, outSwapAmount, inSwapToken, outSwapToken, fee, chainId]);

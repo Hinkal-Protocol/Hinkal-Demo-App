@@ -1,10 +1,17 @@
-import { arbitrum, avalanche, bsc, hardhat, mainnet, optimism, polygon } from 'wagmi/chains';
-import { configureChains, createConfig } from 'wagmi';
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
-import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
-import { publicProvider } from 'wagmi/providers/public';
-import { networkRegistry } from '@hinkal/common';
-
+import {
+  arbitrum,
+  avalanche,
+  bsc,
+  hardhat,
+  mainnet,
+  optimism,
+  polygon,
+} from "wagmi/chains";
+import { configureChains, createConfig } from "wagmi";
+import { MetaMaskConnector } from "wagmi/connectors/metaMask";
+import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
+import { publicProvider } from "wagmi/providers/public";
+import { networkRegistry } from "@sabaaa1/common";
 const CHAINS = [mainnet, polygon, bsc, arbitrum, optimism, avalanche, hardhat];
 
 export const getWagmiConfig = () => {
@@ -12,7 +19,7 @@ export const getWagmiConfig = () => {
     jsonRpcProvider({
       rpc: (chain) => {
         const networkData = networkRegistry[chain.id];
-        return { http: networkData ? networkData.fetchRpcUrl! : '' };
+        return { http: networkData ? networkData.fetchRpcUrl! : "" };
       },
     }),
     publicProvider(),
