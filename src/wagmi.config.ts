@@ -7,28 +7,30 @@ import {
   optimism,
   polygon,
 } from "wagmi/chains";
-import { configureChains, createConfig } from "wagmi";
-import { MetaMaskConnector } from "wagmi/connectors/metaMask";
-import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
-import { publicProvider } from "wagmi/providers/public";
+import { http, createConfig } from "wagmi";
+import { metaMask } from "wagmi/connectors";
 import { networkRegistry } from "@sabaaa1/common";
-const CHAINS = [mainnet, polygon, bsc, arbitrum, optimism, avalanche, hardhat];
+
+const CHAINS = [
+  mainnet,
+  polygon,
+  bsc,
+  arbitrum,
+  optimism,
+  avalanche,
+  hardhat,
+] as const;
 
 export const getWagmiConfig = () => {
-  const { chains, publicClient } = configureChains(CHAINS, [
-    jsonRpcProvider({
-      rpc: (chain) => {
-        const networkData = networkRegistry[chain.id];
-        return { http: networkData ? networkData.fetchRpcUrl! : "" };
-      },
-    }),
-    publicProvider(),
-  ]);
-  const metaMaskConnector = new MetaMaskConnector({ chains, options: {} });
+  const transports = CHAINS.reduce((acc, chain) => {
+    const networkData = networkRegistry[chain.id];
+    acc[chain.id] = http(networkData?.fetchRpcUrl || undefined);
+    return acc;
+  }, {} as Record<number, ReturnType<typeof http>>);
 
   return createConfig({
-    autoConnect: false,
-    connectors: [metaMaskConnector],
-    publicClient,
+    chains: CHAINS,
+    connectors: [metaMask()],
+    transports,
   });
 };

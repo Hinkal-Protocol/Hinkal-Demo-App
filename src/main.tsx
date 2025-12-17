@@ -1,19 +1,24 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { WagmiConfig } from "wagmi";
+import { WagmiProvider } from "wagmi";
 import App from "./App";
 import { getWagmiConfig } from "./wagmi.config";
 import { AppContextProvider } from "./AppContext";
 import { preProcessing } from "@sabaaa1/common";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 preProcessing();
 
+const queryClient = new QueryClient();
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <WagmiConfig config={getWagmiConfig()}>
-      <AppContextProvider>
-        <App />
-      </AppContextProvider>
-    </WagmiConfig>
+    <WagmiProvider config={getWagmiConfig()}>
+      <QueryClientProvider client={queryClient}>
+        <AppContextProvider>
+          <App />
+        </AppContextProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
   </React.StrictMode>
 );
