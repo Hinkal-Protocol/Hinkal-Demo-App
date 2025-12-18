@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useCallback } from "react";
+import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { isMobile } from "react-device-detect";
 import { useConfig, useConnect, useConnectors } from "wagmi";
 import type { Connector } from "wagmi";
@@ -27,18 +27,21 @@ export const ChooseWallet = ({
 
   const { setHinkal, setChainId, setDataLoaded } = useAppContext();
 
-  const handleSelectConnector = useCallback(async (connector: Connector) => {
-    const hinkal = await prepareWagmiHinkal(connector, config);
-    console.log({ hinkal });
-    setHinkal(hinkal);
-    setShieldedAddress(hinkal.userKeys.getShieldedPublicKey());
-    setChainId(hinkal.getCurrentChainId());
+  const handleSelectConnector = useCallback(
+    async (connector: Connector) => {
+      const hinkal = await prepareWagmiHinkal(connector, config);
+      console.log({ hinkal });
+      setHinkal(hinkal);
+      setShieldedAddress(hinkal.userKeys.getShieldedPublicKey());
+      setChainId(hinkal.getCurrentChainId());
 
-    console.log("new chain id", hinkal.getSelectedNetwork());
-    console.log("new hinkal", { hinkal });
-    setDataLoaded(true);
-    onHide();
-  }, []);
+      console.log("new chain id", hinkal.getSelectedNetwork());
+      console.log("new hinkal", { hinkal });
+      setDataLoaded(true);
+      onHide();
+    },
+    [config, setHinkal, setChainId, setShieldedAddress, setDataLoaded, onHide]
+  );
 
   return (
     <Modal
@@ -50,17 +53,16 @@ export const ChooseWallet = ({
       xBtnStyleProps="text-black font-black"
     >
       <h1 className="font-[500] text-2xl p-5">Select Wallet</h1>
-      <div className="p-5 pb-10 flex flex-col items-center gap-y-5 ">
+      <div className="p-5 pb-10 flex flex-col items-center gap-y-5">
         {connectors
-          .filter((connector) => {
-            if (isMobile) return connector.name === "WalletConnect";
-            return true;
-          })
+          .filter((connector) =>
+            isMobile ? connector.name === "WalletConnect" : true
+          )
           .map((connector) => (
             <button
               className="bg-modal px-4 py-2 min-w-[180px] w-[80%] rounded-lg border-[2.5px] border-[#f0f0f0] hover:border-[#9c9c9c] font-bold duration-150 flex items-center justify-center gap-x-3"
               type="button"
-              disabled={!connector.ready}
+              disabled={isPending}
               key={connector.id}
               onClick={() => handleSelectConnector(connector)}
             >
@@ -86,11 +88,7 @@ export const ChooseWallet = ({
                 />
               )}
               <span>{connector.name}</span>
-              {isPending && (
-                <span>
-                  <Spinner />
-                </span>
-              )}
+              {isPending && <Spinner />}
             </button>
           ))}
       </div>

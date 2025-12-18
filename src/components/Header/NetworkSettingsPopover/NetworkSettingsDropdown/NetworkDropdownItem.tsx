@@ -17,7 +17,6 @@ export const NetworkDropdownItem = ({
   const { isPending, variables } = useSwitchChain({
     mutation: {
       onError(err) {
-        // eslint-disable-next-line no-console
         console.error(err);
       },
     },

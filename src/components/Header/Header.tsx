@@ -1,12 +1,11 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import HinkalLogo from "../../assets/HinkalLogo.png";
 import { ChooseWallet } from "../ChooseWallet";
 import { HinkalInfo } from "./HinkalInfo";
-import { useAppContext } from "../../AppContext";
 
 export const Header = () => {
   // local states
-  const [chooseWalletShown, setChooseWalletShown] = useState(false);
+  const [chooseWalletShown, setChooseWalletShown] = useState<boolean>(false);
 
   const [shieldedAddress, setShieldedAddress] = useState<string | undefined>();
 
@@ -30,7 +29,7 @@ export const Header = () => {
         </div>
 
         {shieldedAddress ? (
-          <HinkalInfo shieldedAddress = {shieldedAddress}/>
+          <HinkalInfo shieldedAddress={shieldedAddress} />
         ) : (
           <button
             type="button"

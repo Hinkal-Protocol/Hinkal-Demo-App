@@ -11,18 +11,16 @@ import { SelectToken } from "../components/swap/SelectToken";
 import { SwapBalanceDisplay } from "../components/swap/SwapBalanceDisplay";
 import { SwapInputTokensButton } from "../components/swap/SwapInputTokensButton";
 import { SwapPriceDetails } from "../components/swap/SwapPriceDetails";
-import {
-  ERC20Token,
-  OpType,
-  SubAccount,
-  UserKeys,
-  getAmountInToken,
-  getAmountInWei,
-  networkRegistry,
-  produceOp,
-} from "@sabaaa1/common";
+import { ERC20Token, getAmountInToken, getAmountInWei } from "@sabaaa1/common";
 import { useUniswapPrice } from "../hooks/useUniswapPrice";
 import { useAppContext } from "../AppContext";
+import { useWalletClient } from "wagmi";
+import { ethers } from "ethers";
+import {
+  ERC20_ABI,
+  UNISWAP_V3_ROUTER,
+  UNISWAP_V3_ROUTER_ABI,
+} from "../constants/swap.constants";
 
 export const Swap = () => {
   const { hinkal, chainId } = useAppContext();
@@ -66,72 +64,58 @@ export const Swap = () => {
     [outSwapAmountWei]
   );
 
+  const { data: walletClient } = useWalletClient();
+
   const handleSwap = useCallback(async () => {
-    if (inSwapToken && outSwapToken && chainId) {
-      const erc20Addresses = [
+    try {
+      if (!walletClient) return;
+
+      if (!inSwapToken || !outSwapToken || !chainId) return;
+
+      const provider = new ethers.providers.Web3Provider(
+        walletClient.transport as any
+      );
+      const signer = provider.getSigner();
+
+      const userAddress = await signer.getAddress();
+
+      const amountIn = getAmountInWei(inSwapToken, inSwapAmount) ?? 0n;
+
+      if (amountIn === 0n) return;
+
+      const erc20 = new ethers.Contract(
         inSwapToken.erc20TokenAddress,
-        outSwapToken.erc20TokenAddress,
-      ];
-      const inSwapAmountInWei = getAmountInWei(inSwapToken, inSwapAmount) ?? 0n;
-      const amountChanges = [-inSwapAmountInWei, 0n];
-      const onChainCreation = [false, true];
-      const { emporiumAddress } = networkRegistry[chainId].contractData;
-      console.log({
-        amountChanges,
-        erc20Addresses,
-        onChainCreation,
-        emporiumAddress,
-        chainId,
-        contractData: networkRegistry[chainId].contractData,
-        fee,
-      });
+        ERC20_ABI,
+        signer
+      );
 
-      const uniswapRouterAddress = "0xE592427A0AEce92De3Edee1F18E0157C05861564";
+      const approveTx = await erc20.approve(UNISWAP_V3_ROUTER, amountIn);
+      await approveTx.wait();
 
-      const swapSingleParams = {
+      const router = new ethers.Contract(
+        UNISWAP_V3_ROUTER,
+        UNISWAP_V3_ROUTER_ABI,
+        signer
+      );
+
+      const params = {
         tokenIn: inSwapToken.erc20TokenAddress,
         tokenOut: outSwapToken.erc20TokenAddress,
-        fee,
-        recipient: emporiumAddress ?? "",
-        amountIn: inSwapAmountInWei,
-        amountOutMinimum: 0,
-        sqrtPriceLimitX96: 0,
-        deadline: 1829797637, // timestamp here, not block
-      };
-      console.log({ swapSingleParams });
-
-      const ops = [
-        produceOp(OpType.Erc20Token, inSwapToken.erc20TokenAddress, "approve", [
-          uniswapRouterAddress,
-          inSwapAmountInWei,
-        ]),
-        produceOp(OpType.Uniswap, uniswapRouterAddress, "exactInputSingle", [
-          swapSingleParams,
-        ]),
-      ];
-
-      const signer = UserKeys.deriveSignerFromNonce(hinkal.userKeys, 1n);
-
-      const activeSubAccount: SubAccount = {
-        name: "Public 1",
-        index: 1,
-        isHidden: false,
-        isImported: false,
-        createdAt: new Date().toISOString(),
-        ethAddress: await hinkal.getEthereumAddress(),
-        privateKey: signer.privateKey,
+        recipient: userAddress,
+        deadline: Math.floor(Date.now() / 1000) + 60 * 20,
+        amountIn,
+        amountOutMinimum: 1n,
+        sqrtPriceLimitX96: 0n,
       };
 
-      await hinkal.actionPrivateWallet(
-        erc20Addresses,
-        amountChanges,
-        onChainCreation,
-        ops,
-        [],
-        activeSubAccount
-      );
+      const swapTx = await router.exactInputSingle(params, {
+        value: 0,
+      });
+      await swapTx.wait();
+    } catch (err) {
+      console.error("ERROR", err);
     }
-  }, [inSwapAmount, outSwapAmount, inSwapToken, outSwapToken, fee, chainId]);
+  }, [walletClient, inSwapToken, outSwapToken, inSwapAmount, fee, chainId]);
 
   const setTokenAmountHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
