@@ -1,7 +1,7 @@
-import { providers } from "ethers";
 import { Dispatch, SetStateAction, useCallback } from "react";
 import { isMobile } from "react-device-detect";
-import { Connector, useConfig, useConnect } from "wagmi";
+import { useConfig, useConnect, useConnectors } from "wagmi";
+import type { Connector } from "wagmi";
 import coinbaseLogo from "../assets/coinbaseWalletLogo.png";
 import metamaskLogo from "../assets/metamaskWalletLogo.png";
 import walletconnectLogo from "../assets/walletconnectWalletLogo.png";
@@ -21,26 +21,24 @@ export const ChooseWallet = ({
   onHide,
   setShieldedAddress,
 }: ChooseWalletProps) => {
-  const { connectors, pendingConnector } = useConnect();
+  const { isPending } = useConnect();
+  const connectors = useConnectors();
   const config = useConfig();
 
   const { setHinkal, setChainId, setDataLoaded } = useAppContext();
 
-  const handleSelectConnector = useCallback(
-    async (connector: Connector<providers.Provider>) => {
-      const hinkal = await prepareWagmiHinkal(connector, config);
-      console.log({ hinkal });
-      setHinkal(hinkal);
-      setShieldedAddress(hinkal.userKeys.getShieldedPublicKey());
-      setChainId(hinkal.getCurrentChainId());
+  const handleSelectConnector = useCallback(async (connector: Connector) => {
+    const hinkal = await prepareWagmiHinkal(connector, config);
+    console.log({ hinkal });
+    setHinkal(hinkal);
+    setShieldedAddress(hinkal.userKeys.getShieldedPublicKey());
+    setChainId(hinkal.getCurrentChainId());
 
-      console.log("new chain id", hinkal.getSelectedNetwork());
-      console.log("new hinkal", { hinkal });
-      setDataLoaded(true);
-      onHide();
-    },
-    []
-  );
+    console.log("new chain id", hinkal.getSelectedNetwork());
+    console.log("new hinkal", { hinkal });
+    setDataLoaded(true);
+    onHide();
+  }, []);
 
   return (
     <Modal
@@ -88,10 +86,8 @@ export const ChooseWallet = ({
                 />
               )}
               <span>{connector.name}</span>
-              {!connector.ready && "(not installed)"}
-              {true && connector.id === pendingConnector?.id && (
+              {isPending && (
                 <span>
-                  {" "}
                   <Spinner />
                 </span>
               )}
