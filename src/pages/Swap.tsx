@@ -1,40 +1,26 @@
-import {
-  SetStateAction,
-  SyntheticEvent,
-  useCallback,
-  useMemo,
-  useState,
-} from "react";
+import { SyntheticEvent, useCallback, useMemo, useState } from "react";
+import toast from "react-hot-toast";
 import { InfoPanel } from "../components/InfoPanel";
 import { Spinner } from "../components/Spinner";
 import { SelectToken } from "../components/swap/SelectToken";
 import { SwapBalanceDisplay } from "../components/swap/SwapBalanceDisplay";
 import { SwapInputTokensButton } from "../components/swap/SwapInputTokensButton";
 import { SwapPriceDetails } from "../components/swap/SwapPriceDetails";
-import { ERC20Token, getAmountInToken, getAmountInWei } from "@sabaaa1/common";
+import { ERC20Token, getAmountInToken } from "@sabaaa1/common";
 import { useUniswapPrice } from "../hooks/useUniswapPrice";
+import { useSwap } from "../hooks/useSwap";
 import { useAppContext } from "../AppContext";
-import { useWalletClient } from "wagmi";
-import { ethers } from "ethers";
-import {
-  ERC20_ABI,
-  UNISWAP_V3_ROUTER,
-  UNISWAP_V3_ROUTER_ABI,
-} from "../constants/swap.constants";
+import { getErrorMessage } from "../utils/getErrorMessage";
 
 export const Swap = () => {
-  const { hinkal, chainId } = useAppContext();
+  const { hinkal } = useAppContext();
 
   const [inSwapAmount, setInSwapAmount] = useState("");
-  const [inSwapToken, setInSwapToken] = useState<ERC20Token | undefined>(
-    undefined
-  );
-  const [outSwapToken, setOutSwapToken] = useState<ERC20Token | undefined>(
-    undefined
-  );
+  const [inSwapToken, setInSwapToken] = useState<ERC20Token | undefined>();
+  const [outSwapToken, setOutSwapToken] = useState<ERC20Token | undefined>();
   const [inSwapTokenBalance, setInSwapTokenBalance] = useState(0n);
   const [priceDetailsShown, setPriceDetailsShown] = useState(false);
-  const [relayerInfoShown, setrelayerInfoShown] = useState(false);
+  const [relayerInfoShown, setRelayerInfoShown] = useState(false);
 
   const {
     isPriceLoading,
@@ -46,98 +32,58 @@ export const Swap = () => {
     outSwapToken,
   });
 
-  const isReadyForSwap = useMemo(
-    () =>
-      inSwapAmount.length > 0 &&
-      outSwapAmountWei &&
-      outSwapAmountWei > 0n &&
-      inSwapToken &&
-      outSwapToken,
-    [inSwapAmount, inSwapToken, outSwapToken]
-  );
+  const { swap, isProcessing } = useSwap({
+    onError: (err) => {
+      const message = getErrorMessage(err);
+      if (message !== "Transaction failed") toast.error(message);
+    },
+    onSuccess: () => {
+      toast.success("Swap successful! Balance will update in several seconds");
+      setInSwapAmount("");
+    },
+  });
 
   const outSwapAmount = useMemo(
     () =>
       outSwapToken && outSwapAmountWei
         ? getAmountInToken(outSwapToken, outSwapAmountWei)
         : "",
-    [outSwapAmountWei]
+    [outSwapToken, outSwapAmountWei]
   );
 
-  const { data: walletClient } = useWalletClient();
+  const isReadyForSwap = useMemo(
+    () =>
+      inSwapAmount.length > 0 &&
+      outSwapAmountWei &&
+      outSwapAmountWei > 0n &&
+      inSwapToken &&
+      outSwapToken &&
+      fee,
+    [inSwapAmount, inSwapToken, outSwapToken, outSwapAmountWei, fee]
+  );
 
   const handleSwap = useCallback(async () => {
-    try {
-      if (!walletClient) return;
-
-      if (!inSwapToken || !outSwapToken || !chainId) return;
-
-      const provider = new ethers.providers.Web3Provider(
-        walletClient.transport as any
-      );
-      const signer = provider.getSigner();
-
-      const userAddress = await signer.getAddress();
-
-      const amountIn = getAmountInWei(inSwapToken, inSwapAmount) ?? 0n;
-
-      if (amountIn === 0n) return;
-
-      const erc20 = new ethers.Contract(
-        inSwapToken.erc20TokenAddress,
-        ERC20_ABI,
-        signer
-      );
-
-      const approveTx = await erc20.approve(UNISWAP_V3_ROUTER, amountIn);
-      await approveTx.wait();
-
-      const router = new ethers.Contract(
-        UNISWAP_V3_ROUTER,
-        UNISWAP_V3_ROUTER_ABI,
-        signer
-      );
-
-      const params = {
-        tokenIn: inSwapToken.erc20TokenAddress,
-        tokenOut: outSwapToken.erc20TokenAddress,
-        recipient: userAddress,
-        deadline: Math.floor(Date.now() / 1000) + 60 * 20,
-        amountIn,
-        amountOutMinimum: 1n,
-        sqrtPriceLimitX96: 0n,
-      };
-
-      const swapTx = await router.exactInputSingle(params, {
-        value: 0,
-      });
-      await swapTx.wait();
-    } catch (err) {
-      console.error("ERROR", err);
-    }
-  }, [walletClient, inSwapToken, outSwapToken, inSwapAmount, fee, chainId]);
+    if (!inSwapToken || !outSwapToken || !outSwapAmountWei || !fee) return;
+    await swap(inSwapToken, outSwapToken, inSwapAmount, outSwapAmountWei, fee);
+  }, [swap, inSwapToken, outSwapToken, inSwapAmount, outSwapAmountWei, fee]);
 
   const setTokenAmountHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
-    setValue: (param: SetStateAction<string>) => void
+    setValue: (value: string) => void
   ) => {
-    const regExp = /^[0-9]*[.]?[0-9]*$/;
-    if (regExp.test(event.target.value)) {
+    if (/^[0-9]*[.]?[0-9]*$/.test(event.target.value)) {
       setValue(event.target.value);
     }
   };
 
   const swapButtonText = () => {
-    // if (!swap) return "Connect Wallet";
+    if (!hinkal) return "Connect Wallet";
     if (!inSwapToken || !outSwapToken) return "Select a token";
-    if (Number(inSwapAmount) === 0 || Number(outSwapAmount) === 0)
-      return "Enter an amount";
+    if (!inSwapAmount || Number(inSwapAmount) === 0) return "Enter an amount";
     return "Swap";
   };
 
-  const handleSubmit = (event: SyntheticEvent) => {
-    event.preventDefault();
-  };
+  const handleSubmit = (e: SyntheticEvent) => e.preventDefault();
 
   return (
     <form onSubmit={handleSubmit} className="text-white">
@@ -149,11 +95,9 @@ export const Swap = () => {
           <input
             type="text"
             placeholder="0"
-            className="w-[96%] grow bg-transparent rounded-lg ml-[5%] text-[16px] pl-2 outline-none placeholder:text-[13.5px] text-white text-4xl placeholder:text-4xl "
-            disabled={false}
-            onChange={(event) => {
-              setTokenAmountHandler(event, setInSwapAmount);
-            }}
+            className="w-[96%] grow bg-transparent rounded-lg ml-[5%] text-[16px] pl-2 outline-none placeholder:text-[13.5px] text-white text-4xl placeholder:text-4xl"
+            disabled={isProcessing}
+            onChange={(event) => setTokenAmountHandler(event, setInSwapAmount)}
             value={inSwapAmount}
           />
           <div className="flex items-center grow gap-2 h-full min-w-fit">
@@ -181,7 +125,7 @@ export const Swap = () => {
                   )
                     setOutSwapToken(prev);
                 }}
-                disabled={false}
+                disabled={isProcessing}
               />
               <SwapBalanceDisplay
                 token={inSwapToken}
@@ -202,7 +146,7 @@ export const Swap = () => {
           <input
             type="text"
             placeholder="0"
-            className="w-full grow bg-transparent rounded-lg ml-[5%] text-[16px] pl-2 outline-none placeholder:text-[13.5px] text-white text-4xl placeholder:text-4xl "
+            className="w-full grow bg-transparent rounded-lg ml-[5%] text-[16px] pl-2 outline-none placeholder:text-[13.5px] text-white text-4xl placeholder:text-4xl"
             disabled
             value={
               outSwapAmount === undefined || outSwapAmount.length === 0
@@ -219,7 +163,7 @@ export const Swap = () => {
                 if (inSwapToken?.erc20TokenAddress === cur?.erc20TokenAddress)
                   setInSwapToken(prev);
               }}
-              disabled={false}
+              disabled={isProcessing}
             />
             <SwapBalanceDisplay token={outSwapToken} />
           </div>
@@ -233,14 +177,12 @@ export const Swap = () => {
               <div className="mx-[6%] flex items-center gap-x-2">
                 {isPriceLoading ? (
                   <div className="flex items-center gap-x-2">
-                    <Spinner /> <span>Fetching best price</span>{" "}
+                    <Spinner /> <span>Fetching best price</span>
                   </div>
                 ) : (
                   <span>
-                    {" "}
-                    1 {outSwapToken?.symbol} ={"   "}
-                    {(Number(inSwapAmount) / Number(outSwapAmount)).toFixed(4)}
-                    {"   "}
+                    1 {outSwapToken?.symbol} ={" "}
+                    {(Number(inSwapAmount) / Number(outSwapAmount)).toFixed(4)}{" "}
                     {inSwapToken?.symbol}
                   </span>
                 )}
@@ -262,7 +204,7 @@ export const Swap = () => {
         )}
       </div>
       <div
-        onClick={() => setPriceDetailsShown((prev) => !prev)}
+        onClick={() => setRelayerInfoShown((prev) => !prev)}
         className="bg-[#272b3000] w-[88%] mx-auto rounded-xl py-1 flex items-center justify-between"
       >
         <InfoPanel
@@ -270,22 +212,22 @@ export const Swap = () => {
             amount, however the relayer pays slippage and gas costs."
           addTextRight="Swap with relayer"
           showDetails={relayerInfoShown}
-          setShowDetails={setrelayerInfoShown}
+          setShowDetails={setRelayerInfoShown}
         />
       </div>
       <div className="w-[90%] mx-auto mb-4 mt-[20px] h-[1px] bg-[#272B30]" />
       <div className="border-solid">
         <button
           type="button"
-          disabled={swapButtonText() !== "Swap"}
+          disabled={swapButtonText() !== "Swap" || isProcessing}
           onClick={handleSwap}
           className={`w-[90%] ml-[5%] mb-3 md:mx-[5%] rounded-lg h-10 mt-3 text-sm font-semibold outline-none ${
-            swapButtonText() === "Swap"
+            swapButtonText() === "Swap" && !isProcessing
               ? "bg-primary text-white hover:bg-[#4d32fa] duration-200"
               : "bg-[#37363d] text-[#848688] cursor-not-allowed"
-          } `}
+          }`}
         >
-          {false ? (
+          {isProcessing ? (
             <div className="mx-[5%] flex items-center justify-center gap-x-2">
               <span>Swapping</span> <Spinner />
             </div>

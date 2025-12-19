@@ -32,7 +32,7 @@ export const useWithdraw = ({
 
         const tx = await hinkal.withdraw(
           [token],
-          [amountInWei],
+          [-amountInWei],
           recipientAddress,
           isRelayerOff,
           undefined,

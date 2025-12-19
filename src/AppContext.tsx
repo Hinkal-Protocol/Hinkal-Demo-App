@@ -66,6 +66,7 @@ export const AppContextProvider: FC<AppContextProps> = ({
 
   useEffect(() => {
     const network = networkList.find((net) => net.chainId === chainId);
+    console.log("setting selected network", network);
     setSelectedNetwork(network);
   }, [chainId]);
 
@@ -77,8 +78,10 @@ export const AppContextProvider: FC<AppContextProps> = ({
   useEffect(() => {
     const run = async () => {
       if (dataLoaded) {
+        console.log("dataLoaded", dataLoaded);
         const ethAddress = await hinkal.getEthereumAddress();
 
+        console.log("ethAddress", ethAddress);
         const bals = await hinkal.getBalances(
           hinkal.getCurrentChainId(),
           hinkal.userKeys.getShieldedPrivateKey(),
@@ -87,8 +90,10 @@ export const AppContextProvider: FC<AppContextProps> = ({
           false,
           true
         );
+
+        console.log("fetched balances", bals);
         const balancesArray = Array.from(bals.values());
-        console.log({ balancesArray });
+        console.log("balances array", balancesArray);
         setBalances(balancesArray);
       }
     };
