@@ -1,5 +1,6 @@
-import { SyntheticEvent, useCallback, useState } from "react";
+import { SyntheticEvent, useCallback, useState, useEffect } from "react";
 import { chainIds, getERC20Registry, getAmountInWei } from "@sabaaa1/common";
+import { toast } from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
 import { useAppContext } from "../AppContext";
@@ -12,15 +13,23 @@ export const Deposit = () => {
     getERC20Registry(chainIds.polygon)[0]
   );
   const [depositAmount, setDepositAmount] = useState<string>("");
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleDeposit = useCallback(async () => {
-    const amountChanges = [getAmountInWei(selectedToken, depositAmount)];
     try {
-      await hinkal.deposit?.([selectedToken], amountChanges);
+      setIsProcessing(true);
+      const amountInWei = getAmountInWei(selectedToken, depositAmount);
+
+      const result = await hinkal.deposit([selectedToken], [amountInWei]);
+
+      if (result && typeof result === "object" && "hash" in result)
+        await hinkal.waitForTransaction(result.hash);
     } catch (err) {
-      console.log("deposit error", { err });
+      toast.error(err instanceof Error ? err.message : "Deposit failed");
+    } finally {
+      setIsProcessing(false);
     }
-  }, [hinkal.deposit, depositAmount, selectedToken]);
+  }, [hinkal, depositAmount, selectedToken]);
 
   const handleSubmit = (event: SyntheticEvent) => {
     event.preventDefault();
@@ -40,17 +49,17 @@ export const Deposit = () => {
         <div className="border-solid">
           <button
             type="submit"
-            disabled={!hinkal?.deposit || false}
+            disabled={!hinkal || isProcessing}
             onClick={handleDeposit}
             className={`w-[90%] ml-[5%] mb-3 md:mx-[5%] rounded-lg h-10 text-sm font-semibold outline-none ${
-              true
+              hinkal && !isProcessing
                 ? "bg-primary text-white hover:bg-[#4d32fa] duration-200"
                 : "bg-[#37363d] text-[#848688] cursor-not-allowed"
             } `}
           >
-            {false ? (
+            {isProcessing ? (
               <div className="mx-[5%] flex items-center justify-center gap-x-2">
-                <span>Depositing</span> <Spinner />{" "}
+                <span>Depositing</span> <Spinner />
               </div>
             ) : (
               <span>Deposit</span>
