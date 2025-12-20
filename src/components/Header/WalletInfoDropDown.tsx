@@ -21,7 +21,21 @@ const filterTokenBalances = (tokenBalances: TokenBalance[]) => {
 };
 
 export const WalletInfoDropDown = () => {
-  const { balances } = useAppContext();
+  const { balances, hinkal } = useAppContext();
+
+  const handleCopyShieldedAddress = () => {
+    try {
+      const shieldedAddress = hinkal.userKeys.getShieldedPublicKey();
+      if (!shieldedAddress) {
+        toast.error("No shielded address found");
+        return;
+      }
+      copyToClipboard(shieldedAddress);
+      toast.success("Shielded address copied to clipboard");
+    } catch (err: any) {
+      toast.error(err?.message || "Failed to copy shielded address");
+    }
+  };
 
   return (
     <div className="absolute min-w-max top-20 md:top-2 left-0 md:left-auto right-0 bg-[#272B30] rounded-xl shadow-metamask font-pubsans p-4 items-center max-content">
@@ -39,13 +53,7 @@ export const WalletInfoDropDown = () => {
       </div>
 
       <div className="border-t-2 md:text-[15px] border-[#36393D]">
-        <button
-          type="button"
-          onClick={() => {
-            copyToClipboard("shieldedAddress ");
-            toast.success("Shielded address copied to clipboard");
-          }}
-        >
+        <button type="button" onClick={handleCopyShieldedAddress}>
           <div className="flex items-center mt-2 text-white text-[14px] md:w-[9.5rem]">
             <div className="flex justify-center items-center w-[25px] h-[25px]">
               <Copy />
