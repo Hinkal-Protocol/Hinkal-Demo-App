@@ -9,36 +9,45 @@ import { Modal } from "./Modal";
 import { Spinner } from "./Spinner";
 import { useAppContext } from "../AppContext";
 import { prepareWagmiHinkal } from "@sabaaa1/common/providers/prepareWagmiHinkal";
+import toast from "react-hot-toast";
 
 interface ChooseWalletProps {
   isOpen: boolean;
   onHide: () => void;
   setShieldedAddress: Dispatch<SetStateAction<string | undefined>>;
+  setIsConnecting?: Dispatch<SetStateAction<boolean>>;
 }
 
 export const ChooseWallet = ({
   isOpen,
   onHide,
   setShieldedAddress,
+  setIsConnecting,
 }: ChooseWalletProps) => {
-  const { isPending } = useConnect();
   const connectors = useConnectors();
   const config = useConfig();
 
   const { setHinkal, setChainId, setDataLoaded } = useAppContext();
 
+  const [connectingId, setConnectingId] = useState<string | null>(null);
+
   const handleSelectConnector = useCallback(
     async (connector: Connector) => {
-      const hinkal = await prepareWagmiHinkal(connector, config);
-      console.log({ hinkal });
-      setHinkal(hinkal);
-      setShieldedAddress(hinkal.userKeys.getShieldedPublicKey());
-      setChainId(hinkal.getCurrentChainId());
-
-      console.log("new chain id", hinkal.getSelectedNetwork());
-      console.log("new hinkal", { hinkal });
-      setDataLoaded(true);
-      onHide();
+      try {
+        setIsConnecting?.(true);
+        setConnectingId(connector.id);
+        const hinkal = await prepareWagmiHinkal(connector, config);
+        setHinkal(hinkal);
+        setShieldedAddress(hinkal.userKeys.getShieldedPublicKey());
+        setChainId(hinkal.getCurrentChainId());
+        setDataLoaded(true);
+        onHide();
+      } catch (err) {
+        toast.error("Wallet connection failed");
+      } finally {
+        setConnectingId(null);
+        setIsConnecting?.(false);
+      }
     },
     [config, setHinkal, setChainId, setShieldedAddress, setDataLoaded, onHide]
   );
@@ -48,8 +57,8 @@ export const ChooseWallet = ({
       xBtn
       xBtnAction={onHide}
       isOpen={isOpen}
-      styleProps="md:w-[30%] md:ml-[5%] !bg-white rounded-[10px] "
-      stylePropsBg=" bg-[#000000b2] "
+      styleProps="md:w-[30%] md:ml-[5%] !bg-white rounded-[10px]"
+      stylePropsBg="bg-[#000000b2]"
       xBtnStyleProps="text-black font-black"
     >
       <h1 className="font-[500] text-2xl p-5">Select Wallet</h1>
@@ -62,7 +71,7 @@ export const ChooseWallet = ({
             <button
               className="bg-modal px-4 py-2 min-w-[180px] w-[80%] rounded-lg border-[2.5px] border-[#f0f0f0] hover:border-[#9c9c9c] font-bold duration-150 flex items-center justify-center gap-x-3"
               type="button"
-              disabled={isPending}
+              disabled={!!connectingId}
               key={connector.id}
               onClick={() => handleSelectConnector(connector)}
             >
@@ -88,7 +97,7 @@ export const ChooseWallet = ({
                 />
               )}
               <span>{connector.name}</span>
-              {isPending && <Spinner />}
+              {connectingId === connector.id && <Spinner />}
             </button>
           ))}
       </div>
