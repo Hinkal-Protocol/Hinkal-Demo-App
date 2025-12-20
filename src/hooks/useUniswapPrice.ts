@@ -49,6 +49,6 @@ export const useUniswapPrice = ({
       }
     };
     run();
-  }, [inSwapToken, outSwapToken, inSwapAmount]);
+  }, [inSwapToken, outSwapToken, inSwapAmount, hinkal, chainId]);
   return { isPriceLoading, price, swapData };
 };
