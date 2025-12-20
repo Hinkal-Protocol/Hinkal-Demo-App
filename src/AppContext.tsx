@@ -111,7 +111,7 @@ export const AppContextProvider: FC<AppContextProps> = ({
     } finally {
       setIsRefreshing(false);
     }
-  }, [dataLoaded, hinkal, isRefreshing]);
+  }, [dataLoaded, hinkal]);
 
   useEffect(() => {
     if (!dataLoaded) return;
