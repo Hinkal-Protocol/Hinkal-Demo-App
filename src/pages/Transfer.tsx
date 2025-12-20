@@ -33,8 +33,7 @@ export const Transfer = () => {
 
   const handleTransfer = useCallback(() => {
     if (!selectedToken) return;
-    transfer?.(selectedToken, transferAmount, transferAddress),
-      [transfer, selectedToken, transferAmount, transferAddress];
+    transfer?.(selectedToken, transferAmount, transferAddress);
   }, [selectedToken, transferAmount, transferAddress, transfer]);
 
   /**
