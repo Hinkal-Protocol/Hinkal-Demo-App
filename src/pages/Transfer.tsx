@@ -1,13 +1,8 @@
-import { SyntheticEvent, useCallback, useState } from "react";
+import { SyntheticEvent, useCallback, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
-import {
-  getErrorMessage,
-  getERC20Registry,
-  chainIds,
-  ERC20Token,
-} from "@sabaaa1/common";
+import { getErrorMessage, ERC20Token } from "@sabaaa1/common";
 import { useTransfer } from "../hooks/useTransfer";
 import { useAppContext } from "../AppContext";
 
@@ -55,6 +50,11 @@ export const Transfer = () => {
     event.preventDefault();
   };
 
+  const isDisabled = useMemo(
+    () => !selectedToken || !transferAmount || !transferAddress || isProcessing,
+    [selectedToken, transferAmount, transferAddress, isProcessing]
+  );
+
   return (
     <form className="rounded-lg" onSubmit={handleSubmit}>
       <TokenAmountInput
@@ -84,10 +84,10 @@ export const Transfer = () => {
       <div className=" border-solid ">
         <button
           type="submit"
-          disabled={isProcessing}
+          disabled={isDisabled}
           onClick={handleTransfer}
           className={`w-[90%] mb-3 mx-[5%] rounded-lg h-10 text-sm font-semibold outline-none ${
-            !isProcessing
+            !isDisabled
               ? "bg-primary text-white hover:bg-[#4d32fa] duration-200"
               : "bg-[#37363d] text-[#848688] cursor-not-allowed"
           } `}

@@ -1,4 +1,10 @@
-import { SyntheticEvent, useCallback, useState, useEffect } from "react";
+import {
+  SyntheticEvent,
+  useCallback,
+  useState,
+  useEffect,
+  useMemo,
+} from "react";
 import { toast } from "react-hot-toast";
 import { InfoPanel } from "../components/InfoPanel";
 import { Spinner } from "../components/Spinner";
@@ -54,6 +60,16 @@ export const Withdraw = () => {
     event.preventDefault();
   };
 
+  const isDisabled = useMemo(
+    () =>
+      !hinkal ||
+      !selectedToken ||
+      !withdrawAmount ||
+      !recipientAddress ||
+      isProcessing,
+    [hinkal, selectedToken, withdrawAmount, recipientAddress, isProcessing]
+  );
+
   return (
     <div>
       <form className="rounded-lg" onSubmit={handleSubmit}>
@@ -80,10 +96,10 @@ export const Withdraw = () => {
         <div className="border-solid">
           <button
             type="submit"
-            disabled={!hinkal || isProcessing || !recipientAddress}
+            disabled={isDisabled}
             onClick={handleWithdraw}
             className={`w-[90%] mb-3 mx-[5%] rounded-lg h-10 mt-3 text-sm font-semibold outline-none ${
-              hinkal
+              !isDisabled
                 ? "bg-primary text-white hover:bg-[#4d32fa] duration-200"
                 : "bg-[#37363d] text-[#848688] cursor-not-allowed"
             } `}

@@ -1,4 +1,4 @@
-import { SyntheticEvent, useCallback, useState, useEffect } from "react";
+import { SyntheticEvent, useCallback, useState, useMemo } from "react";
 import { getAmountInWei, ERC20Token } from "@sabaaa1/common";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
@@ -36,6 +36,11 @@ export const Deposit = () => {
     event.preventDefault();
   };
 
+  const isDisabled = useMemo(
+    () => !hinkal || !selectedToken || !depositAmount || isProcessing,
+    [hinkal, selectedToken, depositAmount, isProcessing]
+  );
+
   return (
     <div>
       <form className="rounded-lg" onSubmit={handleSubmit}>
@@ -50,10 +55,10 @@ export const Deposit = () => {
         <div className="border-solid">
           <button
             type="submit"
-            disabled={!hinkal || isProcessing}
+            disabled={isDisabled}
             onClick={handleDeposit}
             className={`w-[90%] ml-[5%] mb-3 md:mx-[5%] rounded-lg h-10 text-sm font-semibold outline-none ${
-              hinkal && !isProcessing
+              !isDisabled
                 ? "bg-primary text-white hover:bg-[#4d32fa] duration-200"
                 : "bg-[#37363d] text-[#848688] cursor-not-allowed"
             } `}
