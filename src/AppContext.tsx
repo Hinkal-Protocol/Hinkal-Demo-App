@@ -72,7 +72,6 @@ export const AppContextProvider: FC<AppContextProps> = ({
 
   useEffect(() => {
     const network = networkList.find((net) => net.chainId === chainId);
-    console.log("setting selected network", network);
     setSelectedNetwork(network);
   }, [chainId, networkList]);
 
