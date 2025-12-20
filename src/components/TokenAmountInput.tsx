@@ -1,6 +1,6 @@
 import { Listbox } from "@headlessui/react";
-import { ERC20Token, chainIds, getERC20Registry } from "@sabaaa1/common";
-import { SetStateAction, useEffect, useMemo } from "react";
+import { ERC20Token } from "@sabaaa1/common";
+import { SetStateAction, useEffect } from "react";
 import VectorDown from "../assets/VectorDown.svg";
 import { useAppContext } from "../AppContext";
 
