@@ -5,7 +5,6 @@ import { Spinner } from "../components/Spinner";
 import { SelectToken } from "../components/swap/SelectToken";
 import { SwapBalanceDisplay } from "../components/swap/SwapBalanceDisplay";
 import { SwapInputTokensButton } from "../components/swap/SwapInputTokensButton";
-import { SwapPriceDetails } from "../components/swap/SwapPriceDetails";
 import {
   ERC20Token,
   ErrorCategory,
@@ -198,9 +197,6 @@ export const Swap = () => {
                 } font-bold`}
               />
             </div>
-            {priceDetailsShown && !isPriceLoading && (
-              <SwapPriceDetails setPriceDetailsShown={setPriceDetailsShown} />
-            )}
           </div>
         )}
       </div>

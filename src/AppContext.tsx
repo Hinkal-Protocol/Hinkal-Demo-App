@@ -89,10 +89,8 @@ export const AppContextProvider: FC<AppContextProps> = ({
       await new Promise((resolve) =>
         setTimeout(resolve, BALANCE_REFRESH_DELAY)
       ); // Wait 3 seconds before refreshing
-      console.log("dataLoaded", dataLoaded);
       const ethAddress = await hinkal.getEthereumAddress();
 
-      console.log("ethAddress", ethAddress);
       const bals = await hinkal.getBalances(
         hinkal.getCurrentChainId(),
         hinkal.userKeys.getShieldedPrivateKey(),
@@ -102,9 +100,7 @@ export const AppContextProvider: FC<AppContextProps> = ({
         true
       );
 
-      console.log("fetched balances", bals);
       const balancesArray = Array.from(bals.values());
-      console.log("balances array", balancesArray);
       setBalances(balancesArray);
     } catch (error) {
       console.error("Error refreshing balances:", error);
