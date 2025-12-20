@@ -47,7 +47,7 @@ export const TokenDropdown = ({
       isOpen={isTokenSelectShown}
       xBtn
       xBtnAction={() => setIsTokenSelectShown(false)}
-      styleProps="md:!w-[50%] md:!left-[25%] !top-[30%] xl:!w-[34%] xl:!left-[33%]"
+      styleProps="md:!w-[50%] md:!left-[25%] !top-[10%] xl:!w-[34%] xl:!left-[33%]"
       stylePropsBg=" opacity-[0.5] "
     >
       <div className="text-white font-poppins bg-[#202426] ">
