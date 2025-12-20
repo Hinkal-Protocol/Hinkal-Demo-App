@@ -11,8 +11,7 @@ import { TokenAmountInput } from "../components/TokenAmountInput";
 import { useAppContext } from "../AppContext";
 
 export const Deposit = () => {
-  // local states
-  const { hinkal } = useAppContext();
+  const { hinkal, refreshBalances } = useAppContext();
 
   const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
     undefined
@@ -30,13 +29,14 @@ export const Deposit = () => {
 
       if (result && typeof result === "object" && "hash" in result)
         await hinkal.waitForTransaction(result.hash);
+      await refreshBalances();
     } catch (err) {
       const errorMessage = getErrorMessage(err, ErrorCategory.DEPOSIT);
       toast.error(errorMessage);
     } finally {
       setIsProcessing(false);
     }
-  }, [hinkal, depositAmount, selectedToken]);
+  }, [hinkal, depositAmount, selectedToken, refreshBalances]);
 
   const handleSubmit = (event: SyntheticEvent) => {
     event.preventDefault();

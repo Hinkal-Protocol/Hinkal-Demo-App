@@ -7,7 +7,7 @@ import { useTransfer } from "../hooks/useTransfer";
 import { useAppContext } from "../AppContext";
 
 export const Transfer = () => {
-  const { chainId } = useAppContext();
+  const { refreshBalances } = useAppContext();
 
   const { transfer, isProcessing } = useTransfer({
     onError: (err: Error) => {
@@ -16,10 +16,11 @@ export const Transfer = () => {
         toast.error(message);
       }
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success(
         "You have successfully transferred. Balance will update in several seconds"
       );
+      await refreshBalances();
     },
   });
 

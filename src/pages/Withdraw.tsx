@@ -15,7 +15,7 @@ import { useWithdraw } from "../hooks/useWithdraw";
 import { ERC20Token, ErrorCategory, getErrorMessage } from "@sabaaa1/common";
 
 export const Withdraw = () => {
-  const { hinkal } = useAppContext();
+  const { hinkal, refreshBalances } = useAppContext();
 
   const { withdraw, isProcessing } = useWithdraw({
     hinkal,
@@ -25,10 +25,11 @@ export const Withdraw = () => {
         toast.error(message, { id: message });
       }
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success(
         "You have successfully withdrawn. Balance will update in several seconds"
       );
+      await refreshBalances();
     },
   });
 

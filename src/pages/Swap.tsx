@@ -17,7 +17,7 @@ import { useSwap } from "../hooks/useSwap";
 import { useAppContext } from "../AppContext";
 
 export const Swap = () => {
-  const { hinkal } = useAppContext();
+  const { hinkal, refreshBalances } = useAppContext();
 
   const [inSwapAmount, setInSwapAmount] = useState("");
   const [inSwapToken, setInSwapToken] = useState<ERC20Token | undefined>();
@@ -41,9 +41,10 @@ export const Swap = () => {
       const message = getErrorMessage(err, ErrorCategory.SWAP);
       if (message !== "Swap failed") toast.error(message);
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Swap successful! Balance will update in several seconds");
       setInSwapAmount("");
+      await refreshBalances();
     },
   });
 
