@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { isMobile } from "react-device-detect";
-import { useConfig, useConnect, useConnectors } from "wagmi";
+import { useConfig, useConnectors } from "wagmi";
 import type { Connector } from "wagmi";
 import coinbaseLogo from "../assets/coinbaseWalletLogo.png";
 import metamaskLogo from "../assets/metamaskWalletLogo.png";
@@ -49,7 +49,15 @@ export const ChooseWallet = ({
         setIsConnecting?.(false);
       }
     },
-    [config, setHinkal, setChainId, setShieldedAddress, setDataLoaded, onHide]
+    [
+      setIsConnecting,
+      config,
+      setHinkal,
+      setShieldedAddress,
+      setChainId,
+      setDataLoaded,
+      onHide,
+    ]
   );
 
   return (

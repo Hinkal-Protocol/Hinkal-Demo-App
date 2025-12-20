@@ -28,7 +28,7 @@ export const SwapBalanceDisplay = ({
     const newBalance = tokenBalance?.balance ?? 0n;
     setBalance(newBalance);
     if (onBalanceChange) onBalanceChange(newBalance);
-  }, [token, balances]);
+  }, [token, balances, onBalanceChange]);
 
   const displayBalance = token
     ? Number(getAmountInToken(token, balance)).toFixed(6)
