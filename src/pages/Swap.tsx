@@ -109,7 +109,7 @@ export const Swap = () => {
                     inSwapToken
                       ? getAmountInToken(inSwapToken, inSwapTokenBalance)
                       : 0
-                  ).toFixed(4)}`
+                  ).toFixed(6)}`
                 )
               }
             >
@@ -182,7 +182,7 @@ export const Swap = () => {
                 ) : (
                   <span>
                     1 {outSwapToken?.symbol} ={" "}
-                    {(Number(inSwapAmount) / Number(outSwapAmount)).toFixed(4)}{" "}
+                    {(Number(inSwapAmount) / Number(outSwapAmount)).toFixed(6)}{" "}
                     {inSwapToken?.symbol}
                   </span>
                 )}
