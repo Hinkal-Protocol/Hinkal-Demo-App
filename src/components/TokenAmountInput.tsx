@@ -22,8 +22,8 @@ export const TokenAmountInput = ({
   const { erc20List } = useAppContext();
 
   useEffect(() => {
-    setSelectedToken(erc20List[0]);
-  }, [setSelectedToken, erc20List]);
+    if (erc20List.length > 0) setSelectedToken(erc20List[0]);
+  }, [erc20List, setSelectedToken]);
 
   /**
    * deposit amount onChange handler
@@ -59,12 +59,22 @@ export const TokenAmountInput = ({
                   true ? "cursor-pointer" : "cursor-not-allowed"
                 } `}
               >
-                <img
-                  src={selectedToken?.logoURI}
-                  alt="tokenIcon"
-                  className="w-[26px]"
-                />
-                <span>{selectedToken?.symbol}</span>
+                {selectedToken ? (
+                  <>
+                    {selectedToken.logoURI && (
+                      <img
+                        src={selectedToken.logoURI}
+                        alt={selectedToken.symbol}
+                        className="w-[26px]"
+                      />
+                    )}
+                    <span>{selectedToken.symbol}</span>
+                  </>
+                ) : (
+                  <span className="text-[#9ca3af] text-sm">
+                    Connect to select
+                  </span>
+                )}
                 {!open ? (
                   <VectorDown />
                 ) : (

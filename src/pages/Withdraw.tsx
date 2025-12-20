@@ -65,9 +65,6 @@ export const Withdraw = () => {
           selectedToken={selectedToken}
           setSelectedToken={setSelectedToken}
         />
-        <div className="mt-[-15px] text-white pl-[5%] text-[14px] font-[300]">
-          Recipient: {recipientAddress || "Fetching wallet address..."}
-        </div>
         <div className="flex justify-between items-center mt-2 w-[90%] mx-auto">
           <InfoPanel
             cloudText="Relayers are secure and trustworthy anonymous nodes that
