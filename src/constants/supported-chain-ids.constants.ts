@@ -1,0 +1,7 @@
+export const SUPPORTED_CHAIN_IDS = [
+  1, // ETHEREUM
+  42161, // ARBITRUM
+  10, // OPTIMISM
+  137, // POLYGON
+  8453, // BASE
+];

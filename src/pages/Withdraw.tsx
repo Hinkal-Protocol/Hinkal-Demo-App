@@ -10,10 +10,9 @@ import { InfoPanel } from "../components/InfoPanel";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
 import { ToggleSwitch } from "../components/withdraw/ToggleSwitch";
-import { getErrorMessage } from "../utils/getErrorMessage";
 import { useAppContext } from "../AppContext";
 import { useWithdraw } from "../hooks/useWithdraw";
-import { ERC20Token } from "@sabaaa1/common";
+import { ERC20Token, ErrorCategory, getErrorMessage } from "@sabaaa1/common";
 
 export const Withdraw = () => {
   const { hinkal } = useAppContext();
@@ -21,8 +20,8 @@ export const Withdraw = () => {
   const { withdraw, isProcessing } = useWithdraw({
     hinkal,
     onError: (err) => {
-      const message = getErrorMessage(err);
-      if (message !== "Transaction failed") {
+      const message = getErrorMessage(err, ErrorCategory.WITHDRAW);
+      if (message !== "Send failed") {
         toast.error(message, { id: message });
       }
     },

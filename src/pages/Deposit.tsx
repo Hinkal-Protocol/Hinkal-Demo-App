@@ -1,5 +1,10 @@
 import { SyntheticEvent, useCallback, useState, useMemo } from "react";
-import { getAmountInWei, ERC20Token } from "@sabaaa1/common";
+import {
+  getAmountInWei,
+  ERC20Token,
+  getErrorMessage,
+  ErrorCategory,
+} from "@sabaaa1/common";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
@@ -26,7 +31,8 @@ export const Deposit = () => {
       if (result && typeof result === "object" && "hash" in result)
         await hinkal.waitForTransaction(result.hash);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Deposit failed");
+      const errorMessage = getErrorMessage(err, ErrorCategory.DEPOSIT);
+      toast.error(errorMessage);
     } finally {
       setIsProcessing(false);
     }

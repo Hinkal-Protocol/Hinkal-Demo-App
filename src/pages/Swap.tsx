@@ -6,11 +6,15 @@ import { SelectToken } from "../components/swap/SelectToken";
 import { SwapBalanceDisplay } from "../components/swap/SwapBalanceDisplay";
 import { SwapInputTokensButton } from "../components/swap/SwapInputTokensButton";
 import { SwapPriceDetails } from "../components/swap/SwapPriceDetails";
-import { ERC20Token, getAmountInToken } from "@sabaaa1/common";
+import {
+  ERC20Token,
+  ErrorCategory,
+  getAmountInToken,
+  getErrorMessage,
+} from "@sabaaa1/common";
 import { useUniswapPrice } from "../hooks/useUniswapPrice";
 import { useSwap } from "../hooks/useSwap";
 import { useAppContext } from "../AppContext";
-import { getErrorMessage } from "../utils/getErrorMessage";
 
 export const Swap = () => {
   const { hinkal } = useAppContext();
@@ -34,8 +38,8 @@ export const Swap = () => {
 
   const { swap, isProcessing } = useSwap({
     onError: (err) => {
-      const message = getErrorMessage(err);
-      if (message !== "Transaction failed") toast.error(message);
+      const message = getErrorMessage(err, ErrorCategory.SWAP);
+      if (message !== "Swap failed") toast.error(message);
     },
     onSuccess: () => {
       toast.success("Swap successful! Balance will update in several seconds");

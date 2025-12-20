@@ -1,7 +1,6 @@
-import { KycVerificationStatus } from "@sabaaa1/common";
+import { getErrorMessage, KycVerificationStatus } from "@sabaaa1/common";
 import { useCallback, useState } from "react";
 import { toast } from "react-hot-toast";
-import { getErrorMessage } from "../../utils/getErrorMessage";
 import { ContinueWithAiPriseVerification } from "./ContinueWithAiPriseVerification";
 import { MintAccessToken } from "./MintAccessToken";
 import { PendingAiPriseVerification } from "./PendingAiPriseVerification";
