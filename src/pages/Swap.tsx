@@ -199,11 +199,7 @@ export const Swap = () => {
               />
             </div>
             {priceDetailsShown && !isPriceLoading && (
-              <SwapPriceDetails
-                outSwapAmount={"0"}
-                outSwapToken={outSwapToken}
-                setPriceDetailsShown={setPriceDetailsShown}
-              />
+              <SwapPriceDetails setPriceDetailsShown={setPriceDetailsShown} />
             )}
           </div>
         )}

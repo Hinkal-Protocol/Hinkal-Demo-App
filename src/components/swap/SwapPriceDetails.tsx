@@ -1,15 +1,10 @@
-import { ERC20Token } from "@sabaaa1/common";
 import { SetStateAction } from "react";
 
 interface SwapSettingsInterface {
-  outSwapAmount: string;
-  outSwapToken?: ERC20Token;
   setPriceDetailsShown: (param: SetStateAction<boolean>) => void;
 }
 
 export const SwapPriceDetails = ({
-  outSwapAmount,
-  outSwapToken,
   setPriceDetailsShown,
 }: SwapSettingsInterface) => {
   return (

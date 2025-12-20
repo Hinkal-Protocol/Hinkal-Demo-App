@@ -1,5 +1,6 @@
-import { NetworkSettingsPopover } from "./NetworkSettingsPopover/NetworkSettingsPopover";
+import { Popover } from "@headlessui/react";
 import { WalletSettingsPopover } from "./WalletSettingsPopover/WalletSettingsPopover";
+import { NetworkSettingsBody } from "./NetworkSettingsPopover/NetworkSettingsBody";
 
 export const HinkalInfo = ({
   shieldedAddress,
@@ -9,8 +10,8 @@ export const HinkalInfo = ({
   return (
     <div className="flex justify-center items-center mt-5 md:mt-0 font-pubsans font-medium">
       <div className="relative flex gap-4">
-        <NetworkSettingsPopover />
-        <WalletSettingsPopover shieldedAddress = {shieldedAddress}/>
+        <Popover>{NetworkSettingsBody}</Popover>
+        <WalletSettingsPopover shieldedAddress={shieldedAddress} />
       </div>
     </div>
   );

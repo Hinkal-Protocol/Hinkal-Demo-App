@@ -2,10 +2,7 @@ import { useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
-import { KycScreen } from "./components/KycScreen";
 import { NavigationBar } from "./components/NavigationBar";
-import { TxNotifications } from "./components/TxNotifications";
-import { useTxNotifications } from "./hooks";
 import { Deposit } from "./pages/Deposit";
 import { AppTab } from "./types";
 import "./App.css";
@@ -14,14 +11,11 @@ import { Withdraw } from "./pages/Withdraw";
 import { Transfer } from "./pages/Transfer";
 
 const App = () => {
-  useTxNotifications();
   const [activeTab, setActiveTab] = useState(AppTab.Deposit);
   return (
     <div className="bg-bgColor h-screen font-pubsans">
       <div className="bg-bgColor flex flex-col min-h-screen">
         <Header />
-        <TxNotifications />
-        <KycScreen />
         <div className={"flex flex-col justify-between grow"}>
           <main
             className={"flex justify-center md:gap-x-[9%] flex-col md:flex-row"}
