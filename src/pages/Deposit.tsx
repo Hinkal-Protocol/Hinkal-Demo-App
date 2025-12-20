@@ -1,5 +1,5 @@
 import { SyntheticEvent, useCallback, useState, useEffect } from "react";
-import { chainIds, getERC20Registry, getAmountInWei } from "@sabaaa1/common";
+import { getAmountInWei, ERC20Token } from "@sabaaa1/common";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
@@ -9,14 +9,15 @@ export const Deposit = () => {
   // local states
   const { hinkal } = useAppContext();
 
-  const [selectedToken, setSelectedToken] = useState(
-    getERC20Registry(chainIds.polygon)[0]
+  const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
+    undefined
   );
   const [depositAmount, setDepositAmount] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleDeposit = useCallback(async () => {
     try {
+      if (!selectedToken) return;
       setIsProcessing(true);
       const amountInWei = getAmountInWei(selectedToken, depositAmount);
 

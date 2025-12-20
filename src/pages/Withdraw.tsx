@@ -7,7 +7,7 @@ import { ToggleSwitch } from "../components/withdraw/ToggleSwitch";
 import { getErrorMessage } from "../utils/getErrorMessage";
 import { useAppContext } from "../AppContext";
 import { useWithdraw } from "../hooks/useWithdraw";
-import { chainIds, getERC20Registry } from "@sabaaa1/common";
+import { ERC20Token } from "@sabaaa1/common";
 
 export const Withdraw = () => {
   const { hinkal } = useAppContext();
@@ -27,9 +27,8 @@ export const Withdraw = () => {
     },
   });
 
-  // local states
-  const [selectedToken, setSelectedToken] = useState(
-    getERC20Registry(chainIds.polygon)[0]
+  const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
+    undefined
   );
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [recipientAddress, setRecipientAddress] = useState("");
@@ -46,11 +45,10 @@ export const Withdraw = () => {
     fetchAddress();
   }, [hinkal]);
 
-  const handleWithdraw = useCallback(
-    () =>
-      withdraw?.(selectedToken, withdrawAmount, recipientAddress, isRelayerOff),
-    [withdraw, selectedToken, withdrawAmount, recipientAddress, isRelayerOff]
-  );
+  const handleWithdraw = useCallback(() => {
+    if (!selectedToken) return;
+    withdraw?.(selectedToken, withdrawAmount, recipientAddress, isRelayerOff);
+  }, [withdraw, selectedToken, withdrawAmount, recipientAddress, isRelayerOff]);
 
   const handleSubmit = (event: SyntheticEvent) => {
     event.preventDefault();

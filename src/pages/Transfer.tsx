@@ -29,16 +29,17 @@ export const Transfer = () => {
   });
 
   // local states
-  const [selectedToken, setSelectedToken] = useState<ERC20Token>(
-    getERC20Registry(chainId || chainIds.polygon)[0]
+  const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
+    undefined
   );
   const [transferAmount, setTransferAmount] = useState<string>("");
   const [transferAddress, setTransferAddress] = useState<string>("");
 
-  const handleTransfer = useCallback(
-    () => transfer?.(selectedToken, transferAmount, transferAddress),
-    [transfer, selectedToken, transferAmount, transferAddress]
-  );
+  const handleTransfer = useCallback(() => {
+    if (!selectedToken) return;
+    transfer?.(selectedToken, transferAmount, transferAddress),
+      [transfer, selectedToken, transferAmount, transferAddress];
+  }, [selectedToken, transferAmount, transferAddress, transfer]);
 
   /**
    * recipient address onChange handler

@@ -8,8 +8,8 @@ interface TokenAmountInputInterface {
   buttonWrapperStyles?: string;
   tokenAmount: string;
   setTokenAmount: (param: SetStateAction<string>) => void;
-  selectedToken: ERC20Token;
-  setSelectedToken: (param: SetStateAction<ERC20Token>) => void;
+  selectedToken: ERC20Token | undefined;
+  setSelectedToken: (param: SetStateAction<ERC20Token | undefined>) => void;
 }
 
 export const TokenAmountInput = ({
