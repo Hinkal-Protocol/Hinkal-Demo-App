@@ -1,7 +1,13 @@
-export const SUPPORTED_CHAIN_IDS = [
-  1, // ETHEREUM
-  42161, // ARBITRUM
-  10, // OPTIMISM
-  137, // POLYGON
-  8453, // BASE
-];
+import { arbitrum, mainnet, optimism, polygon, base } from "wagmi/chains";
+
+export const SUPPORTED_CHAINS = [
+  mainnet, // 1
+  polygon, // 137
+  arbitrum, // 42161
+  optimism, // 10
+  base, // 8453
+] as const;
+
+export const SUPPORTED_CHAIN_IDS: number[] = SUPPORTED_CHAINS.map(
+  (chain) => chain.id
+);
