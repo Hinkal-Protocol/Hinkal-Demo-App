@@ -43,7 +43,7 @@ export const ChooseWallet = ({
         setDataLoaded(true);
         onHide();
       } catch (err) {
-        toast.error("Wallet connection failed");
+        toast.error(`Wallet connection failed: ${err || "Unknown error"}`);
       } finally {
         setConnectingId(null);
         setIsConnecting?.(false);
