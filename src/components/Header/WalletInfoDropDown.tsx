@@ -1,5 +1,6 @@
 import { TokenBalance, zeroAddress } from "@sabaaa1/common";
 import toast from "react-hot-toast";
+import { useEffect } from "react";
 import Copy from "../../assets/Copy.svg";
 import Disconnect from "../../assets/Disconnect.svg";
 import { copyToClipboard } from "../../utils/copyToClipboard";
@@ -8,7 +9,7 @@ import { WalletInfoBalance } from "./WalletInfoBalance";
 import { useAppContext } from "../../AppContext";
 
 const filterTokenBalances = (tokenBalances: TokenBalance[]) => {
-  const nonZeroBalances = [...tokenBalances] // we make a clone here so that sort doesn't change the original array
+  const nonZeroBalances = [...tokenBalances]
     .sort((a, b) =>
       a.token.erc20TokenAddress < b.token.erc20TokenAddress ? -1 : 1
     )
@@ -21,7 +22,11 @@ const filterTokenBalances = (tokenBalances: TokenBalance[]) => {
 };
 
 export const WalletInfoDropDown = () => {
-  const { balances, hinkal } = useAppContext();
+  const { balances, hinkal, chainId, refreshBalances } = useAppContext();
+
+  useEffect(() => {
+    if (chainId && refreshBalances) refreshBalances();
+  }, [chainId, refreshBalances]);
 
   const handleCopyShieldedAddress = () => {
     try {

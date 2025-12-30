@@ -3,4 +3,5 @@ export enum AppTab {
   Transfer,
   Withdraw,
   Swap,
+  MultiSend,
 }

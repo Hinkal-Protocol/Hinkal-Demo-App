@@ -33,7 +33,7 @@ export const TokenDropdown = ({
 }: TokenDropdownProps) => {
   const { erc20List } = useAppContext();
   const [itemsPerRow, setItemsPerRow] = useState(
-    window.innerWidth <= 500 ? 2 : 3
+    window.innerWidth <= 500 ? 2 : 4
   );
   useEffect(() => {
     const onWindowSizeUpdate = () =>
@@ -47,7 +47,7 @@ export const TokenDropdown = ({
       isOpen={isTokenSelectShown}
       xBtn
       xBtnAction={() => setIsTokenSelectShown(false)}
-      styleProps="md:!w-[50%] md:!left-[25%] !top-[10%] xl:!w-[34%] xl:!left-[33%]"
+      styleProps="md:!w-[70%] md:!left-[15%] !top-[10%] xl:!w-[50%] xl:!left-[25%]"
       stylePropsBg=" opacity-[0.5] "
     >
       <div className="text-white font-poppins bg-[#202426] ">
