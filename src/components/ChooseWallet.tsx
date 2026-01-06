@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { isMobile } from "react-device-detect";
 import { useConfig, useConnectors } from "wagmi";
 import type { Connector } from "wagmi";
+import { Hinkal } from "@sabaaa1/common";
 import coinbaseLogo from "../assets/coinbaseWalletLogo.png";
 import metamaskLogo from "../assets/metamaskWalletLogo.png";
 import walletconnectLogo from "../assets/walletconnectWalletLogo.png";
@@ -36,6 +37,12 @@ export const ChooseWallet = ({
       try {
         setIsConnecting?.(true);
         setConnectingId(connector.id);
+        try {
+          await connector.disconnect();
+        } catch (disconnectError) {
+          console.log("Disconnect cleanup:", disconnectError);
+        }
+        await new Promise((resolve) => setTimeout(resolve, 200));
         const hinkal = await prepareWagmiHinkal(connector, config);
         setHinkal(hinkal);
         setShieldedAddress(hinkal.userKeys.getShieldedPublicKey());

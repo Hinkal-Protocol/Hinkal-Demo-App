@@ -2,9 +2,20 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import svgr from "vite-plugin-svgr";
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 export default defineConfig({
-  plugins: [svgr({ exportAsDefault: true }), react()],
+  plugins: [
+    nodePolyfills({
+      globals: {
+        Buffer: true,
+        global: true,
+        process: true,
+      },
+    }),
+    svgr({ exportAsDefault: true }),
+    react(),
+  ],
 
   resolve: {
     alias: {},

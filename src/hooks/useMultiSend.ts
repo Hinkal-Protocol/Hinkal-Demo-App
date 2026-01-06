@@ -1,5 +1,11 @@
 import { useCallback, useState } from "react";
-import { ERC20Token, getAmountInWei, ExternalActionId } from "@sabaaa1/common";
+import {
+  ERC20Token,
+  getAmountInWei,
+  ExternalActionId,
+  FeeStructure,
+  processGasEstimates,
+} from "@sabaaa1/common";
 import { useAppContext } from "../AppContext";
 import {
   convertScheduleToMs,
@@ -16,6 +22,9 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [fee, setFee] = useState<bigint | null>(null);
   const [isFeeLoading, setIsFeeLoading] = useState<boolean>(false);
+  const [feeStructure, setFeeStructure] = useState<FeeStructure | undefined>(
+    undefined
+  );
 
   const calculateFee = useCallback(
     async (token: ERC20Token) => {
@@ -25,20 +34,29 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
         setIsFeeLoading(true);
         const chainId = hinkal.getCurrentChainId();
 
-        // const feeStructure = await getFeeStructure(
-        //   chainId,
-        //   token.erc20TokenAddress,
-        //   [token.erc20TokenAddress],
-        //   ExternalActionId.Transact,
-        //   [],
-        //   0n
-        // );
+        const { priceOfTransactionInToken } = await processGasEstimates(
+          chainId,
+          token,
+          ExternalActionId.Transact,
+          1,
+          undefined,
+          undefined
+        );
 
-        // const totalFee = feeStructure.fee * 2n;
-        // setFee(totalFee);
+        if (priceOfTransactionInToken !== undefined) {
+          const totalFee = priceOfTransactionInToken * 2n;
+          setFee(totalFee);
+
+          setFeeStructure({
+            variableRate: 0n,
+            feeToken: token.erc20TokenAddress,
+            flatFee: priceOfTransactionInToken,
+          });
+        }
       } catch (err) {
         console.error("Error calculating fee:", err);
         setFee(null);
+        setFeeStructure(undefined);
       } finally {
         setIsFeeLoading(false);
       }
@@ -72,27 +90,19 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
         };
 
         const txScheduleTime = Date.now() + convertScheduleToMs(schedule);
-        const txMakingIntervalTime = convertScheduleToMs(intervalBetweenTxs);
 
         console.log("token:", token);
         console.log("recipientAmounts:", recipientAmounts);
         console.log("txScheduleTime:", txScheduleTime);
-        console.log("txMakingIntervalTime:", txMakingIntervalTime);
 
-        // const result = await hinkal.depositAndWithdraw(
-        //   token,
-        //   recipientAmounts,
-        //   txScheduleTime,
-        //   txMakingIntervalTime
-        // );
+        const result = await hinkal.depositAndWithdraw(
+          token,
+          recipientAmounts,
+          txScheduleTime,
+          feeStructure
+        );
 
-        // if (Array.isArray(result)) {
-        //   for (const tx of result) {
-        //     if (tx.hash) {
-        //       await hinkal.waitForTransaction(tx.hash);
-        //     }
-        //   }
-        // }
+        if (result) await hinkal.waitForTransaction(result);
 
         onSuccess();
       } catch (err) {

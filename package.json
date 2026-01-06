@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.5",
-    "@sabaaa1/common": "0.1.6",
+    "@sabaaa1/common": "file:../../hinkal/dist/libs/shared/common",
     "@tanstack/react-query": "^5.0.0",
     "@vitejs/plugin-react": "^3.0.0",
     "axios": "^1.3.1",
@@ -67,6 +67,7 @@
     "vite": "5.1.6",
     "vite-plugin-svgr": "^2.4.0",
     "vite-tsconfig-paths": "^4.0.2",
-    "wagmi": "^2.13.3"
+    "wagmi": "^2.13.3",
+    "vite-plugin-node-polyfills": "^0.24.0"
   }
 }
