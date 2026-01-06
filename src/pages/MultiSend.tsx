@@ -8,7 +8,6 @@ import {
 import toast from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { SelectToken } from "../components/swap/SelectToken";
-import { SwapBalanceDisplay } from "../components/swap/SwapBalanceDisplay";
 import {
   ERC20Token,
   getERC20TokenBySymbol,
@@ -167,7 +166,6 @@ export const MultiSend = () => {
               )
             }
           />
-          <SwapBalanceDisplay token={selectedToken} />
         </div>
 
         <RecipientInputRow
@@ -201,17 +199,6 @@ export const MultiSend = () => {
           onSelect={(option) => setIntervalBetweenTxs(option as ScheduleOption)}
           disabled={isProcessing}
         />
-
-        <div className="w-[96%] mx-auto mb-4 flex justify-between items-center text-[14px]">
-          <span className="text-gray-400">Fees</span>
-          <span className="text-white">
-            {isFeeLoading ? (
-              <Spinner />
-            ) : (
-              `${feeDisplay} ${selectedToken?.symbol || ""}`
-            )}
-          </span>
-        </div>
 
         <div className="border-solid">
           <button

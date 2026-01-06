@@ -3,7 +3,6 @@ import toast from "react-hot-toast";
 import { InfoPanel } from "../components/InfoPanel";
 import { Spinner } from "../components/Spinner";
 import { SelectToken } from "../components/swap/SelectToken";
-import { SwapBalanceDisplay } from "../components/swap/SwapBalanceDisplay";
 import { SwapInputTokensButton } from "../components/swap/SwapInputTokensButton";
 import {
   ERC20Token,
@@ -132,12 +131,6 @@ export const Swap = () => {
                 }}
                 disabled={isProcessing}
               />
-              <SwapBalanceDisplay
-                token={inSwapToken}
-                onBalanceChange={(balance: bigint) =>
-                  setInSwapTokenBalance(balance)
-                }
-              />
             </div>
           </div>
         </div>
@@ -170,7 +163,6 @@ export const Swap = () => {
               }}
               disabled={isProcessing}
             />
-            <SwapBalanceDisplay token={outSwapToken} />
           </div>
         </div>
         {(isReadyForSwap || isPriceLoading) && (
