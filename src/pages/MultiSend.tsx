@@ -25,6 +25,7 @@ import {
 } from "../constants/schedule.constants";
 import { ButtonGroupWithLabel } from "../utils/buttonGroupWithLabel";
 import { RecipientInputRow } from "../utils/recipientInfoRow";
+import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
 
 const NON_NATIVE_GAS_TOKENS = ["USDC", "USDT", "DAI"];
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
@@ -73,7 +74,7 @@ export const MultiSend = () => {
         setAddress2("");
         setAmount2("");
         setTotalAmount("");
-        await refreshBalances();
+        await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
       },
     });
 

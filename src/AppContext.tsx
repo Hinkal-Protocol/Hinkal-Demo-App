@@ -31,12 +31,11 @@ type AppContextArgumnets = {
   setDataLoaded: (val: boolean) => void;
   erc20List: ERC20Token[];
   balances: TokenBalance[];
-  refreshBalances: () => Promise<void>;
+  refreshBalances: (interval?: number) => Promise<void>;
 };
 
 const hinkalInstance = new Hinkal<Connector>();
 const BALANCE_REFRESH_INTERVAL = 100000;
-const BALANCE_REFRESH_DELAY = 3000;
 
 const AppContext = createContext<AppContextArgumnets>({
   hinkal: hinkalInstance,
@@ -80,33 +79,37 @@ export const AppContextProvider: FC<AppContextProps> = ({
     [chainId]
   );
 
-  const refreshBalances = useCallback(async () => {
-    if (!dataLoaded || isRefreshing) return;
+  const refreshBalances = useCallback(
+    async (interval?: number) => {
+      if (!dataLoaded || isRefreshing) return;
 
-    try {
-      setIsRefreshing(true);
-      await new Promise((resolve) =>
-        setTimeout(resolve, BALANCE_REFRESH_DELAY)
-      ); // Wait 3 seconds before refreshing
-      const ethAddress = await hinkal.getEthereumAddress();
+      try {
+        setIsRefreshing(true);
 
-      const bals = await hinkal.getBalances(
-        hinkal.getCurrentChainId(),
-        hinkal.userKeys.getShieldedPrivateKey(),
-        hinkal.userKeys.getShieldedPublicKey(),
-        ethAddress,
-        false,
-        true
-      );
+        if (interval)
+          await new Promise((resolve) => setTimeout(resolve, interval));
 
-      const balancesArray = Array.from(bals.values());
-      setBalances(balancesArray);
-    } catch (error) {
-      console.error("Error refreshing balances:", error);
-    } finally {
-      setIsRefreshing(false);
-    }
-  }, [dataLoaded, hinkal]);
+        const ethAddress = await hinkal.getEthereumAddress();
+
+        const bals = await hinkal.getBalances(
+          hinkal.getCurrentChainId(),
+          hinkal.userKeys.getShieldedPrivateKey(),
+          hinkal.userKeys.getShieldedPublicKey(),
+          ethAddress,
+          false,
+          true
+        );
+
+        const balancesArray = Array.from(bals.values());
+        setBalances(balancesArray);
+      } catch (error) {
+        console.error("Error refreshing balances:", error);
+      } finally {
+        setIsRefreshing(false);
+      }
+    },
+    [dataLoaded, hinkal]
+  );
 
   useEffect(() => {
     if (!dataLoaded) return;

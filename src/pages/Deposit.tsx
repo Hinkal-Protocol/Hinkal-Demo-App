@@ -9,6 +9,7 @@ import { toast } from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
 import { useAppContext } from "../AppContext";
+import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
 
 export const Deposit = () => {
   const { hinkal, refreshBalances } = useAppContext();
@@ -29,7 +30,7 @@ export const Deposit = () => {
 
       if (result && typeof result === "object" && "hash" in result)
         await hinkal.waitForTransaction(result.hash);
-      await refreshBalances();
+      await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
     } catch (err) {
       const errorMessage = getErrorMessage(err, ErrorCategory.DEPOSIT);
       toast.error(errorMessage);
