@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.5",
-    "@hinkal/common": "file:../Hinkal-Protocol/dist/libs/shared/common",
+    "@hinkal/common": "0.2.17",
     "@tanstack/react-query": "^5.0.0",
     "@vitejs/plugin-react": "^3.0.0",
     "axios": "^1.3.1",
