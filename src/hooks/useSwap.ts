@@ -35,8 +35,7 @@ export const useSwap = ({ onError, onSuccess }: UseSwapOptions = {}) => {
 
         const amountInWei = getAmountInWei(tokenIn, amountIn);
 
-        await hinkalSwap(
-          hinkal,
+        await hinkal.swap(
           [tokenIn, tokenOut],
           [-amountInWei, expectedAmountOut],
           ExternalActionId.Uniswap,
