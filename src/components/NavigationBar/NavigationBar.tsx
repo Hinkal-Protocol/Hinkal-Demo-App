@@ -45,13 +45,13 @@ export const NavigationBar = ({
             onClick={() => setActiveTab(AppTab.Swap)}
           />
         </div>
-        <div className={buttonClassName}>
+        {/* <div className={buttonClassName}>
           <TabButton
             isActive={activeTab === AppTab.MultiSend}
             title="MultiSend"
             onClick={() => setActiveTab(AppTab.MultiSend)}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );
