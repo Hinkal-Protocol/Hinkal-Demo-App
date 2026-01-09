@@ -2,14 +2,14 @@ import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { isMobile } from "react-device-detect";
 import { useConfig, useConnectors } from "wagmi";
 import type { Connector } from "wagmi";
-import { Hinkal } from "@sabaaa1/common";
+import { Hinkal } from "@hinkal/common";
 import coinbaseLogo from "../assets/coinbaseWalletLogo.png";
 import metamaskLogo from "../assets/metamaskWalletLogo.png";
 import walletconnectLogo from "../assets/walletconnectWalletLogo.png";
 import { Modal } from "./Modal";
 import { Spinner } from "./Spinner";
 import { useAppContext } from "../AppContext";
-import { prepareWagmiHinkal } from "@sabaaa1/common/providers/prepareWagmiHinkal";
+import { prepareWagmiHinkal } from "@hinkal/common/providers/prepareWagmiHinkal";
 import toast from "react-hot-toast";
 
 interface ChooseWalletProps {

@@ -5,7 +5,7 @@ import {
   ExternalActionId,
   FeeStructure,
   processGasEstimates,
-} from "@sabaaa1/common";
+} from "@hinkal/common";
 import { useAppContext } from "../AppContext";
 import {
   convertScheduleToMs,

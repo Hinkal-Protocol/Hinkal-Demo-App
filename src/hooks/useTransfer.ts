@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { ERC20Token, hinkalTransfer, getAmountInWei } from "@sabaaa1/common";
+import { ERC20Token, hinkalTransfer, getAmountInWei } from "@hinkal/common";
 import { useAppContext } from "../AppContext";
 
 type UseTransferOptions = {

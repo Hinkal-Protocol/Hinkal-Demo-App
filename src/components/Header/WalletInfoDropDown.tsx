@@ -1,4 +1,4 @@
-import { TokenBalance, zeroAddress } from "@sabaaa1/common";
+import { TokenBalance, zeroAddress } from "@hinkal/common";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
 import Copy from "../../assets/Copy.svg";

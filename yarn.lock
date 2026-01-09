@@ -1042,6 +1042,30 @@
     "@tanstack/react-virtual" "^3.0.0-beta.60"
     client-only "^0.0.1"
 
+"@hinkal/common@file:../Hinkal-Protocol/dist/libs/shared/common":
+  version "0.2.432440"
+  dependencies:
+    "@coral-xyz/anchor" "^0.31.0"
+    "@solana/spl-token" "^0.4.14"
+    "@solana/wallet-adapter-react" "^0.15.39"
+    "@solana/web3.js" "^1.98.4"
+    async-mutex "^0.4.0"
+    axios "^1.6.8"
+    bs58 "^6.0.0"
+    buffer "6.0.3"
+    circomlibjs-hinkal-fork "^0.0.3"
+    dotenv "^16.4.5"
+    ethers-v6h "npm:ethers@^6.15.0"
+    idb-keyval "6.2.1"
+    libsodium-wrappers "^0.7.10"
+    multiformats "^9.4.2"
+    node-forge "^1.3.1"
+    process "0.11.10"
+    snarkjs "0.7.5"
+    tweetnacl "^1.0.3"
+    ua-parser-js "^1.0.37"
+    uuid "^9.0.1"
+
 "@humanwhocodes/config-array@^0.13.0":
   version "0.13.0"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.13.0.tgz#fb907624df3256d04b9aa2df50d7aa97ec648748"
@@ -1914,30 +1938,6 @@
   version "4.53.5"
   resolved "https://registry.yarnpkg.com/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.53.5.tgz#e0d19dffcf25f0fd86f50402a3413004003939e9"
   integrity sha512-JRpZUhCfhZ4keB5v0fe02gQJy05GqboPOaxvjugW04RLSYYoB/9t2lx2u/tMs/Na/1NXfY8QYjgRljRpN+MjTQ==
-
-"@sabaaa1/common@file:../../hinkal/dist/libs/shared/common":
-  version "0.2.65"
-  dependencies:
-    "@coral-xyz/anchor" "^0.31.0"
-    "@solana/spl-token" "^0.4.14"
-    "@solana/wallet-adapter-react" "^0.15.39"
-    "@solana/web3.js" "^1.98.4"
-    async-mutex "^0.4.0"
-    axios "^1.6.8"
-    bs58 "^6.0.0"
-    buffer "6.0.3"
-    circomlibjs-hinkal-fork "^0.0.3"
-    dotenv "^16.4.5"
-    ethers-v6h "npm:ethers@^6.15.0"
-    idb-keyval "6.2.1"
-    libsodium-wrappers "^0.7.10"
-    multiformats "^9.4.2"
-    node-forge "^1.3.1"
-    process "0.11.10"
-    snarkjs "0.7.5"
-    tweetnacl "^1.0.3"
-    ua-parser-js "^1.0.37"
-    uuid "^9.0.1"
 
 "@safe-global/safe-apps-provider@0.18.6":
   version "0.18.6"

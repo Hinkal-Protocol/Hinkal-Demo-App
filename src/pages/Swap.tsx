@@ -9,7 +9,7 @@ import {
   ErrorCategory,
   getAmountInToken,
   getErrorMessage,
-} from "@sabaaa1/common";
+} from "@hinkal/common";
 import { useUniswapPrice } from "../hooks/useUniswapPrice";
 import { useSwap } from "../hooks/useSwap";
 import { useAppContext } from "../AppContext";
@@ -21,7 +21,6 @@ export const Swap = () => {
   const [inSwapAmount, setInSwapAmount] = useState("");
   const [inSwapToken, setInSwapToken] = useState<ERC20Token | undefined>();
   const [outSwapToken, setOutSwapToken] = useState<ERC20Token | undefined>();
-  const [inSwapTokenBalance, setInSwapTokenBalance] = useState(0n);
   const [priceDetailsShown, setPriceDetailsShown] = useState(false);
   const [relayerInfoShown, setRelayerInfoShown] = useState(false);
 
@@ -105,20 +104,6 @@ export const Swap = () => {
             value={inSwapAmount}
           />
           <div className="flex items-center grow gap-2 h-full min-w-fit">
-            <button
-              type="button"
-              onClick={() =>
-                setInSwapAmount(
-                  `${Number(
-                    inSwapToken
-                      ? getAmountInToken(inSwapToken, inSwapTokenBalance)
-                      : 0
-                  ).toFixed(6)}`
-                )
-              }
-            >
-              MAX
-            </button>
             <div className="flex flex-col gap-2 items-end justify-end grow max-w-fit">
               <SelectToken
                 swapToken={inSwapToken}

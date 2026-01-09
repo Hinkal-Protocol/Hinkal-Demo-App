@@ -5,7 +5,7 @@ import {
   TokenBalance,
   getERC20Registry,
   networkRegistry,
-} from "@sabaaa1/common";
+} from "@hinkal/common";
 import {
   Dispatch,
   FC,

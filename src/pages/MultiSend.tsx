@@ -15,7 +15,7 @@ import {
   getAmountInToken,
   getErrorMessage,
   ErrorCategory,
-} from "@sabaaa1/common";
+} from "@hinkal/common";
 import { useAppContext } from "../AppContext";
 import { useMultiSend } from "../hooks/useMultiSend";
 import {
