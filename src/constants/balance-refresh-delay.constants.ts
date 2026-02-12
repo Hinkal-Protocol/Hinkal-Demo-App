@@ -1,0 +1,1 @@
+export const BALANCE_REFRESH_DELAY_AFTER_TX = 3000;

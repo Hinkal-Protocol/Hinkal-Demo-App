@@ -1,6 +1,5 @@
 import { Popover } from "@headlessui/react";
 import { WalletSettingsBody } from "./WalletSettingsBody";
-import { ReactNode } from "react";
 
 export const WalletSettingsPopover = ({
   shieldedAddress,

@@ -1,27 +1,18 @@
-import { arbitrum, avalanche, bsc, hardhat, mainnet, optimism, polygon } from 'wagmi/chains';
-import { configureChains, createConfig } from 'wagmi';
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
-import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
-import { publicProvider } from 'wagmi/providers/public';
-import { networkRegistry } from '@hinkal/common';
-
-const CHAINS = [mainnet, polygon, bsc, arbitrum, optimism, avalanche, hardhat];
+import { http, createConfig } from "wagmi";
+import { metaMask } from "wagmi/connectors";
+import { networkRegistry } from "@hinkal/common";
+import { SUPPORTED_CHAINS } from "./constants/supported-chain-ids.constants";
 
 export const getWagmiConfig = () => {
-  const { chains, publicClient } = configureChains(CHAINS, [
-    jsonRpcProvider({
-      rpc: (chain) => {
-        const networkData = networkRegistry[chain.id];
-        return { http: networkData ? networkData.fetchRpcUrl! : '' };
-      },
-    }),
-    publicProvider(),
-  ]);
-  const metaMaskConnector = new MetaMaskConnector({ chains, options: {} });
+  const transports = SUPPORTED_CHAINS.reduce((acc, chain) => {
+    const networkData = networkRegistry[chain.id];
+    acc[chain.id] = http(networkData?.fetchRpcUrl || undefined);
+    return acc;
+  }, {} as Record<number, ReturnType<typeof http>>);
 
   return createConfig({
-    autoConnect: false,
-    connectors: [metaMaskConnector],
-    publicClient,
+    chains: SUPPORTED_CHAINS,
+    connectors: [metaMask()],
+    transports,
   });
 };

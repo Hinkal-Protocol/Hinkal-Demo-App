@@ -1,43 +1,60 @@
-import { SyntheticEvent, useCallback, useState } from 'react';
-import toast from 'react-hot-toast';
-import { Spinner } from '../components/Spinner';
-import { TokenAmountInput } from '../components/TokenAmountInput';
-import { getErrorMessage } from '../utils/getErrorMessage';
+import { SyntheticEvent, useCallback, useMemo, useState } from "react";
+import toast from "react-hot-toast";
+import { Spinner } from "../components/Spinner";
+import { TokenAmountInput } from "../components/TokenAmountInput";
+import { getErrorMessage, ERC20Token } from "@hinkal/common";
+import { useTransfer } from "../hooks/useTransfer";
+import { useAppContext } from "../AppContext";
+import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
 
 export const Transfer = () => {
+  const { refreshBalances } = useAppContext();
+
   const { transfer, isProcessing } = useTransfer({
-    onError: (err) => {
+    onError: (err: Error) => {
       const message = getErrorMessage(err);
-      if (message !== 'Transaction failed') {
+      if (message !== "Transaction failed") {
         toast.error(message);
       }
     },
-    onSuccess: () => {
-      toast.success('You have successfully transferred. Balance will update in several seconds');
+    onSuccess: async () => {
+      toast.success(
+        "You have successfully transferred. Balance will update in several seconds"
+      );
+      await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
     },
   });
 
   // local states
-  const [selectedToken, setSelectedToken] = useState(getShortERC20Registry(chainIds.polygon)[0]);
-  const [transferAmount, setTransferAmount] = useState('');
-  const [transferAddress, setTransferAddress] = useState('');
-
-  const handleTransfer = useCallback(
-    () => transfer?.(selectedToken, transferAmount, transferAddress),
-    [transfer, selectedToken, transferAmount, transferAddress],
+  const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
+    undefined
   );
+  const [transferAmount, setTransferAmount] = useState<string>("");
+  const [transferAddress, setTransferAddress] = useState<string>("");
+
+  const handleTransfer = useCallback(() => {
+    if (!selectedToken) return;
+    transfer?.(selectedToken, transferAmount, transferAddress);
+  }, [selectedToken, transferAmount, transferAddress, transfer]);
 
   /**
    * recipient address onChange handler
    * @param event onChange event  instance
    */
-  const setTransferAddressHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const setTransferAddressHandler = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setTransferAddress(event.target.value);
   };
 
   const handleSubmit = (event: SyntheticEvent) => {
     event.preventDefault();
   };
+
+  const isDisabled = useMemo(
+    () => !selectedToken || !transferAmount || !transferAddress || isProcessing,
+    [selectedToken, transferAmount, transferAddress, isProcessing]
+  );
 
   return (
     <form className="rounded-lg" onSubmit={handleSubmit}>
@@ -48,14 +65,17 @@ export const Transfer = () => {
         setSelectedToken={setSelectedToken}
       />
       <div className="mt-[-3%]">
-        <label htmlFor="recipentAddress" className="text-white pl-[5%] text-[14px] font-[300]">
+        <label
+          htmlFor="recipentAddress"
+          className="text-white pl-[5%] text-[14px] font-[300]"
+        >
           Recipient address
         </label>
         <input
           type="text"
           placeholder="Please paste address here"
           className="bg-[#272B30] h-10 w-[90%] rounded-lg ml-[5%] text-[16px] pl-2 outline-none placeholder:text-[13.5px] mt-1 text-white"
-          disabled={!transfer}
+          disabled={isProcessing}
           onChange={setTransferAddressHandler}
           value={transferAddress}
         />
@@ -65,17 +85,17 @@ export const Transfer = () => {
       <div className=" border-solid ">
         <button
           type="submit"
-          disabled={!transfer || isProcessing}
+          disabled={isDisabled}
           onClick={handleTransfer}
           className={`w-[90%] mb-3 mx-[5%] rounded-lg h-10 text-sm font-semibold outline-none ${
-            transfer
-              ? 'bg-primary text-white hover:bg-[#4d32fa] duration-200'
-              : 'bg-[#37363d] text-[#848688] cursor-not-allowed'
+            !isDisabled
+              ? "bg-primary text-white hover:bg-[#4d32fa] duration-200"
+              : "bg-[#37363d] text-[#848688] cursor-not-allowed"
           } `}
         >
           {isProcessing ? (
             <div className="flex items-center justify-center gap-x-2">
-              <span>Transferring</span> <Spinner />{' '}
+              <span>Transferring</span> <Spinner />{" "}
             </div>
           ) : (
             <span>Transfer</span>

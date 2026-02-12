@@ -1,31 +1,52 @@
-import { SyntheticEvent, useCallback, useEffect, useState } from "react";
-import { chainIds, getERC20Registry, getAmountInWei } from "@hinkal/common";
+import { SyntheticEvent, useCallback, useState, useMemo } from "react";
+import {
+  getAmountInWei,
+  ERC20Token,
+  getErrorMessage,
+  ErrorCategory,
+} from "@hinkal/common";
+import { toast } from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
 import { useAppContext } from "../AppContext";
+import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
 
 export const Deposit = () => {
-  // local states
-  const { hinkal } = useAppContext();
+  const { hinkal, refreshBalances } = useAppContext();
 
-  const [selectedToken, setSelectedToken] = useState(
-    getERC20Registry(chainIds.polygon)[0]
+  const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
+    undefined
   );
   const [depositAmount, setDepositAmount] = useState<string>("");
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleDeposit = useCallback(async () => {
-    const erc20addresses = [selectedToken.erc20TokenAddress];
-    const amountChanges = [getAmountInWei(selectedToken, depositAmount)];
     try {
-      await hinkal.deposit?.(erc20addresses, amountChanges);
+      if (!selectedToken) return;
+      setIsProcessing(true);
+      const amountInWei = getAmountInWei(selectedToken, depositAmount);
+
+      const result = await hinkal.deposit([selectedToken], [amountInWei]);
+
+      if (result && typeof result === "object" && "hash" in result)
+        await hinkal.waitForTransaction(result.hash);
+      await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
     } catch (err) {
-      console.log("deposit error", { err });
+      const errorMessage = getErrorMessage(err, ErrorCategory.DEPOSIT);
+      toast.error(errorMessage);
+    } finally {
+      setIsProcessing(false);
     }
-  }, [hinkal.deposit, depositAmount, selectedToken]);
+  }, [hinkal, depositAmount, selectedToken, refreshBalances]);
 
   const handleSubmit = (event: SyntheticEvent) => {
     event.preventDefault();
   };
+
+  const isDisabled = useMemo(
+    () => !hinkal || !selectedToken || !depositAmount || isProcessing,
+    [hinkal, selectedToken, depositAmount, isProcessing]
+  );
 
   return (
     <div>
@@ -41,17 +62,17 @@ export const Deposit = () => {
         <div className="border-solid">
           <button
             type="submit"
-            disabled={!hinkal?.deposit || false}
+            disabled={isDisabled}
             onClick={handleDeposit}
             className={`w-[90%] ml-[5%] mb-3 md:mx-[5%] rounded-lg h-10 text-sm font-semibold outline-none ${
-              true
+              !isDisabled
                 ? "bg-primary text-white hover:bg-[#4d32fa] duration-200"
                 : "bg-[#37363d] text-[#848688] cursor-not-allowed"
             } `}
           >
-            {false ? (
+            {isProcessing ? (
               <div className="mx-[5%] flex items-center justify-center gap-x-2">
-                <span>Depositing</span> <Spinner />{" "}
+                <span>Depositing</span> <Spinner />
               </div>
             ) : (
               <span>Deposit</span>

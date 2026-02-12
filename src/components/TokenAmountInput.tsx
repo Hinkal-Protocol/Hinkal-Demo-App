@@ -1,6 +1,6 @@
 import { Listbox } from "@headlessui/react";
-import { ERC20Token, chainIds, getERC20Registry } from "@hinkal/common";
-import { SetStateAction, useEffect, useMemo } from "react";
+import { ERC20Token } from "@hinkal/common";
+import { SetStateAction, useEffect } from "react";
 import VectorDown from "../assets/VectorDown.svg";
 import { useAppContext } from "../AppContext";
 
@@ -8,8 +8,8 @@ interface TokenAmountInputInterface {
   buttonWrapperStyles?: string;
   tokenAmount: string;
   setTokenAmount: (param: SetStateAction<string>) => void;
-  selectedToken: ERC20Token;
-  setSelectedToken: (param: SetStateAction<ERC20Token>) => void;
+  selectedToken: ERC20Token | undefined;
+  setSelectedToken: (param: SetStateAction<ERC20Token | undefined>) => void;
 }
 
 export const TokenAmountInput = ({
@@ -22,8 +22,8 @@ export const TokenAmountInput = ({
   const { erc20List } = useAppContext();
 
   useEffect(() => {
-    setSelectedToken(erc20List[0]);
-  }, [setSelectedToken, erc20List]);
+    if (erc20List.length > 0) setSelectedToken(erc20List[0]);
+  }, [erc20List, setSelectedToken]);
 
   /**
    * deposit amount onChange handler
@@ -59,12 +59,22 @@ export const TokenAmountInput = ({
                   true ? "cursor-pointer" : "cursor-not-allowed"
                 } `}
               >
-                <img
-                  src={selectedToken?.logoURI}
-                  alt="tokenIcon"
-                  className="w-[26px]"
-                />
-                <span>{selectedToken?.symbol}</span>
+                {selectedToken ? (
+                  <>
+                    {selectedToken.logoURI && (
+                      <img
+                        src={selectedToken.logoURI}
+                        alt={selectedToken.symbol}
+                        className="w-[26px]"
+                      />
+                    )}
+                    <span>{selectedToken.symbol}</span>
+                  </>
+                ) : (
+                  <span className="text-[#9ca3af] text-sm">
+                    Connect to select
+                  </span>
+                )}
                 {!open ? (
                   <VectorDown />
                 ) : (

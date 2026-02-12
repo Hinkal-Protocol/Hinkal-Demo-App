@@ -1,7 +1,7 @@
-import { ERC20Token } from '@hinkal/common';
-import { useState } from 'react';
-import VectorDown from '../../assets/VectorDown.svg';
-import { TokenDropdown } from './TokenDropdown';
+import { ERC20Token } from "@hinkal/common";
+import { useState } from "react";
+import VectorDown from "../../assets/VectorDown.svg";
+import { TokenDropdown } from "./TokenDropdown";
 
 interface SelectTokenProps {
   swapToken?: ERC20Token;
@@ -10,7 +10,12 @@ interface SelectTokenProps {
   tokenFilter?: (arg: ERC20Token) => boolean;
 }
 
-export const SelectToken = ({ swapToken, onTokenChange, disabled, tokenFilter }: SelectTokenProps) => {
+export const SelectToken = ({
+  swapToken,
+  onTokenChange,
+  disabled,
+  tokenFilter,
+}: SelectTokenProps) => {
   const [isTokenSelectShown, setIsTokenSelectShown] = useState(false);
   return (
     <>
@@ -19,17 +24,23 @@ export const SelectToken = ({ swapToken, onTokenChange, disabled, tokenFilter }:
         disabled={disabled}
         onClick={() => setIsTokenSelectShown((prev) => !prev)}
         className={`rounded-lg ${
-          swapToken ? 'bg-modalBgColor' : 'bg-primary'
+          swapToken ? "bg-modalBgColor" : "bg-primary"
         } px-3 py-2 w-fit mr-[15px] flex items-center justify-center`}
       >
         <span className="text-xl font-[600]">
           {swapToken ? (
             <span className="flex justify-center items-center gap-x-2">
-              {swapToken.logoURI && <img src={swapToken.logoURI} alt="" className="w-[24px] h-[24px]" />}
-              <span>{swapToken.symbol}</span>{' '}
+              {swapToken.logoURI && (
+                <img
+                  src={swapToken.logoURI}
+                  alt=""
+                  className="w-[24px] h-[24px]"
+                />
+              )}
+              <span>{swapToken.symbol}</span>{" "}
             </span>
           ) : (
-            'Select token'
+            "Select token"
           )}
         </span>
         {!isTokenSelectShown ? (

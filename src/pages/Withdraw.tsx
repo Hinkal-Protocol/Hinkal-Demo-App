@@ -1,47 +1,71 @@
-import { SyntheticEvent, useCallback, useState } from 'react';
-import { toast } from 'react-hot-toast';
-import { InfoPanel } from '../components/InfoPanel';
-import { Spinner } from '../components/Spinner';
-import { TokenAmountInput } from '../components/TokenAmountInput';
-import { ToggleSwitch } from '../components/withdraw/ToggleSwitch';
-import { getErrorMessage } from '../utils/getErrorMessage';
+import {
+  SyntheticEvent,
+  useCallback,
+  useState,
+  useEffect,
+  useMemo,
+} from "react";
+import { toast } from "react-hot-toast";
+import { InfoPanel } from "../components/InfoPanel";
+import { Spinner } from "../components/Spinner";
+import { TokenAmountInput } from "../components/TokenAmountInput";
+import { ToggleSwitch } from "../components/withdraw/ToggleSwitch";
+import { useAppContext } from "../AppContext";
+import { useWithdraw } from "../hooks/useWithdraw";
+import { ERC20Token, ErrorCategory, getErrorMessage } from "@hinkal/common";
+import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
 
 export const Withdraw = () => {
+  const { hinkal, refreshBalances } = useAppContext();
+
   const { withdraw, isProcessing } = useWithdraw({
+    hinkal,
     onError: (err) => {
-      const message = getErrorMessage(err);
-      if (message !== 'Transaction failed') {
+      const message = getErrorMessage(err, ErrorCategory.WITHDRAW);
+      if (message !== "Send failed") {
         toast.error(message, { id: message });
       }
     },
-    onSuccess: () => {
-      toast.success('You have successfully withdrawn. Balance will update in several seconds');
+    onSuccess: async () => {
+      toast.success(
+        "You have successfully withdrawn. Balance will update in several seconds"
+      );
+      await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
     },
   });
 
-  // local states
-  const [selectedToken, setSelectedToken] = useState(getShortERC20Registry(chainIds.polygon)[0]);
-  const [withdrawAmount, setWithdrawAmount] = useState('');
-  const [recipientAddress, setRecipientAddress] = useState('');
+  const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
+    undefined
+  );
+  const [withdrawAmount, setWithdrawAmount] = useState("");
+  const [recipientAddress, setRecipientAddress] = useState("");
   const [isRelayerOff, setIsRelayerOff] = useState(false);
   const [showRelayerDetails, setShowRelayerDetails] = useState(false);
 
-  const handleWithdraw = useCallback(
-    () => withdraw?.(selectedToken, withdrawAmount, recipientAddress, isRelayerOff),
-    [withdraw, selectedToken, withdrawAmount, recipientAddress, isRelayerOff],
-  );
+  const handleWithdraw = useCallback(() => {
+    if (!selectedToken) return;
+    withdraw?.(selectedToken, withdrawAmount, recipientAddress, isRelayerOff);
+  }, [withdraw, selectedToken, withdrawAmount, recipientAddress, isRelayerOff]);
 
-  /**
-   * recipient address onChange handler
-   * @param event onChange event  instance
-   */
-  const setRecipientAddressHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const setRecipientAddressHandler = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setRecipientAddress(event.target.value);
   };
 
   const handleSubmit = (event: SyntheticEvent) => {
     event.preventDefault();
   };
+
+  const isDisabled = useMemo(
+    () =>
+      !hinkal ||
+      !selectedToken ||
+      !withdrawAmount ||
+      !recipientAddress ||
+      isProcessing,
+    [hinkal, selectedToken, withdrawAmount, recipientAddress, isProcessing]
+  );
 
   return (
     <div>
@@ -53,8 +77,11 @@ export const Withdraw = () => {
           setSelectedToken={setSelectedToken}
         />
         <div className="mt-[-15px] text-white">
-          <label htmlFor="recipentAddressWithdraw" className="text-white pl-[5%] text-[14px] font-[300]">
-            Recipient address{' '}
+          <label
+            htmlFor="recipentAddressWithdraw"
+            className="text-white pl-[5%] text-[14px] font-[300]"
+          >
+            Recipient address{" "}
           </label>
           <br />
           <input
@@ -83,17 +110,17 @@ export const Withdraw = () => {
         <div className="border-solid">
           <button
             type="submit"
-            disabled={!withdraw || isProcessing}
+            disabled={isDisabled}
             onClick={handleWithdraw}
             className={`w-[90%] mb-3 mx-[5%] rounded-lg h-10 mt-3 text-sm font-semibold outline-none ${
-              withdraw
-                ? 'bg-primary text-white hover:bg-[#4d32fa] duration-200'
-                : 'bg-[#37363d] text-[#848688] cursor-not-allowed'
+              !isDisabled
+                ? "bg-primary text-white hover:bg-[#4d32fa] duration-200"
+                : "bg-[#37363d] text-[#848688] cursor-not-allowed"
             } `}
           >
             {isProcessing ? (
               <div className="flex items-center justify-center gap-x-2">
-                <span>Withdrawing</span> <Spinner />{' '}
+                <span>Withdrawing</span> <Spinner />
               </div>
             ) : (
               <span>Withdraw</span>

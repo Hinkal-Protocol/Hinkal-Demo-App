@@ -26,6 +26,6 @@ export const TokenDropdownButton = ({
     key={token ? token.name + token.erc20TokenAddress + token.logoURI : null}
   >
     {token && <img src={token.logoURI} alt="" className="w-[26px] h-[26px]" />}
-    <span className="text-xl text-center">{token && token.symbol}</span>
+    <span className="text-lg text-center">{token && token.symbol}</span>
   </button>
 );
