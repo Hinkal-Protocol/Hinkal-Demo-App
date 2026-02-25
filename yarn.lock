@@ -1042,10 +1042,10 @@
     "@tanstack/react-virtual" "^3.0.0-beta.60"
     client-only "^0.0.1"
 
-"@hinkal/common@0.2.17":
-  version "0.2.17"
-  resolved "https://registry.yarnpkg.com/@hinkal/common/-/common-0.2.17.tgz#704af3a5114900b13dc7f7913847f8e52612bad8"
-  integrity sha512-EmUEUUAzSbP2zEaJ4/zXAX6FISfob0rsmwYAjBhd8yWGLCUKaHDz7tH8eZyj/xIzaE025OoSAX+lHW5kEuhk8g==
+"@hinkal/common@0.2.22":
+  version "0.2.22"
+  resolved "https://registry.yarnpkg.com/@hinkal/common/-/common-0.2.22.tgz#2dfc795fd916029b5c04a9938295a82933e0d2c3"
+  integrity sha512-EQX5hPvimQSUaNsI0r+sbmJVcwvQZi8bTwX7Ngy3gwHAhCiKoSnzcfqRHFm1Yds2R7avJkGK3PATGbhA0KqOJQ==
   dependencies:
     "@coral-xyz/anchor" "^0.31.0"
     "@solana/spl-token" "^0.4.14"
