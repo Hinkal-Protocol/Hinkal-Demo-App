@@ -30,7 +30,7 @@ export const TokenAmountInput = ({
    * @param event onChange event instance
    */
   const setTokenAmountHandler = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const regExp = /^[0-9]*[.]?[0-9]*$/;
     if (regExp.test(event.target.value)) {
@@ -45,7 +45,7 @@ export const TokenAmountInput = ({
       >
         <Listbox
           disabled={false}
-          value={selectedToken}
+          value={selectedToken ?? null}
           onChange={setSelectedToken}
           as="div"
           className="flex flex-col relative w-[50%] min-[375px]:w-[40%] lg:w-[35%]"

@@ -15,7 +15,7 @@ export const Deposit = () => {
   const { hinkal, refreshBalances } = useAppContext();
 
   const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
-    undefined
+    undefined,
   );
   const [depositAmount, setDepositAmount] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
@@ -28,8 +28,9 @@ export const Deposit = () => {
 
       const result = await hinkal.deposit([selectedToken], [amountInWei]);
 
-      if (result && typeof result === "object" && "hash" in result)
-        await hinkal.waitForTransaction(result.hash);
+      if (result && typeof result === "object" && "hash" in result) {
+        await hinkal.waitForTransaction(result.hash as string);
+      }
       await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
     } catch (err) {
       const errorMessage = getErrorMessage(err, ErrorCategory.DEPOSIT);
@@ -45,7 +46,7 @@ export const Deposit = () => {
 
   const isDisabled = useMemo(
     () => !hinkal || !selectedToken || !depositAmount || isProcessing,
-    [hinkal, selectedToken, depositAmount, isProcessing]
+    [hinkal, selectedToken, depositAmount, isProcessing],
   );
 
   return (

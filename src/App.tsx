@@ -21,7 +21,7 @@ const App = () => {
           <main
             className={"flex justify-center md:gap-x-[9%] flex-col md:flex-row"}
           >
-            <section className="bg-modalBgColor rounded-xl w-[87%] md:w-[40%] min-w-[300px] md:mt-[120px] md:h-fit mx-auto md:mx-0 md:mb-20 pt-2">
+            <section className="bg-modalBgColor rounded-xl w-[87%] md:w-[40%] min-w-[300px] md:mt-[120px] md:h-fit mx-auto md:mx-0 md:mb-20 p-4">
               <NavigationBar
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
