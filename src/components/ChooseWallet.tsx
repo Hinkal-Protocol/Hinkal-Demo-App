@@ -64,7 +64,7 @@ export const ChooseWallet = ({
       setChainId,
       setDataLoaded,
       onHide,
-    ]
+    ],
   );
 
   return (
@@ -80,7 +80,7 @@ export const ChooseWallet = ({
       <div className="p-5 pb-10 flex flex-col items-center gap-y-5">
         {connectors
           .filter((connector) =>
-            isMobile ? connector.name === "WalletConnect" : true
+            isMobile ? connector.name === "WalletConnect" : true,
           )
           .map((connector) => (
             <button
@@ -112,7 +112,9 @@ export const ChooseWallet = ({
                 />
               )}
               <span>{connector.name}</span>
-              {connectingId === connector.id && <Spinner />}
+              {connectingId === connector.id && (
+                <Spinner styleSize="size-5 mr-0" />
+              )}
             </button>
           ))}
       </div>

@@ -30,7 +30,7 @@ export const TokenAmountInput = ({
    * @param event onChange event instance
    */
   const setTokenAmountHandler = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const regExp = /^[0-9]*[.]?[0-9]*$/;
     if (regExp.test(event.target.value)) {
@@ -45,7 +45,7 @@ export const TokenAmountInput = ({
       >
         <Listbox
           disabled={false}
-          value={selectedToken}
+          value={selectedToken ?? null}
           onChange={setSelectedToken}
           as="div"
           className="flex flex-col relative w-[50%] min-[375px]:w-[40%] lg:w-[35%]"
@@ -83,14 +83,12 @@ export const TokenAmountInput = ({
                   </div>
                 )}
               </Listbox.Button>
-              <Listbox.Options className="absolute w-full top-10 text-white flex flex-col bg-[#272B30] rounded-b-lg z-20">
+              <Listbox.Options className="absolute w-full top-10 text-white flex flex-col bg-[#272B30] rounded-b-lg z-20 max-h-64 overflow-y-auto">
                 {erc20List.map((token, index) => (
                   <Listbox.Option
                     key={token.name + token.erc20TokenAddress}
                     value={token}
                     className={`cursor-pointer py-2 flex items-center gap-x-2 pl-[8px] ${
-                      token?.name === selectedToken?.name ? "bg-[#64717d]" : ""
-                    } ${
                       index === erc20List.length - 1 ? " rounded-b-lg" : ""
                     }  `}
                   >
