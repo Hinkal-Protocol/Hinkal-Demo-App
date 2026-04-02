@@ -5,7 +5,7 @@ import {
   TokenBalance,
   getERC20Registry,
   networkRegistry,
-} from "@hinkal/common";
+} from "h_test_1";
 import {
   Dispatch,
   FC,
@@ -80,7 +80,7 @@ export const AppContextProvider: FC<AppContextProps> = ({
   );
 
   const refreshBalances = useCallback(async () => {
-    if (!dataLoaded || isRefreshing) return;
+    if (!dataLoaded || isRefreshing || !chainId) return;
 
     try {
       setIsRefreshing(true);
@@ -88,21 +88,20 @@ export const AppContextProvider: FC<AppContextProps> = ({
       const ethAddress = await hinkal.getEthereumAddress();
 
       const bals = await hinkal.getBalances(
-        hinkal.getCurrentChainId(),
+        chainId,
         hinkal.userKeys.getShieldedPrivateKey(),
         hinkal.userKeys.getShieldedPublicKey(),
         ethAddress,
       );
 
       const balancesArray = Array.from(bals.values());
-      console.log("balances:", balancesArray);
       setBalances(balancesArray);
     } catch (error) {
       console.error("Error refreshing balances:", error);
     } finally {
       setIsRefreshing(false);
     }
-  }, [dataLoaded, hinkal]);
+  }, [dataLoaded, hinkal, chainId]);
 
   useEffect(() => {
     if (!dataLoaded) return;

@@ -9,7 +9,7 @@ import {
   ErrorCategory,
   getAmountInToken,
   getErrorMessage,
-} from "@hinkal/common";
+} from "h_test_1";
 import { useUniswapPrice } from "../hooks/useUniswapPrice";
 import { useSwap } from "../hooks/useSwap";
 import { useAppContext } from "../AppContext";

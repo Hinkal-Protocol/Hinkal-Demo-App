@@ -5,7 +5,7 @@ import {
   ExternalActionId,
   FeeStructure,
   processGasEstimates,
-} from "@hinkal/common";
+} from "h_test_1";
 import { useAppContext } from "../AppContext";
 import {
   convertScheduleToMs,
@@ -18,7 +18,7 @@ interface UseMultiSendProps {
 }
 
 export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
-  const { hinkal } = useAppContext();
+  const { hinkal, chainId } = useAppContext();
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [fee, setFee] = useState<bigint | null>(null);
   const [isFeeLoading, setIsFeeLoading] = useState<boolean>(false);
@@ -28,11 +28,11 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
 
   const calculateFee = useCallback(
     async (token: ERC20Token) => {
-      if (!hinkal || !token) return;
+      if (!hinkal || !token || !chainId ) return;
 
       try {
         setIsFeeLoading(true);
-        const chainId = hinkal.getCurrentChainId();
+
 
         const { priceOfTransactionInToken } = await processGasEstimates(
           chainId,

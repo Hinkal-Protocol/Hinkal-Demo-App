@@ -2,7 +2,7 @@ import { SyntheticEvent, useCallback, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
-import { getErrorMessage, ERC20Token } from "@hinkal/common";
+import { getErrorMessage, ERC20Token } from "h_test_1";
 import { useTransfer } from "../hooks/useTransfer";
 import { useAppContext } from "../AppContext";
 import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";

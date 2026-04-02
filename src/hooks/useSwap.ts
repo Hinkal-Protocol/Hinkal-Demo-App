@@ -4,7 +4,7 @@ import {
   getAmountInWei,
   hinkalSwap,
   ExternalActionId,
-} from "@hinkal/common";
+} from "h_test_1";
 import { useAppContext } from "../AppContext";
 
 type UseSwapOptions = {

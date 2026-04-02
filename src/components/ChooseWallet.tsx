@@ -2,14 +2,14 @@ import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { isMobile } from "react-device-detect";
 import { useConfig, useConnectors } from "wagmi";
 import type { Connector } from "wagmi";
-import { Hinkal } from "@hinkal/common";
+import { Hinkal } from "h_test_1";
 import coinbaseLogo from "../assets/coinbaseWalletLogo.png";
 import metamaskLogo from "../assets/metamaskWalletLogo.png";
 import walletconnectLogo from "../assets/walletconnectWalletLogo.png";
 import { Modal } from "./Modal";
 import { Spinner } from "./Spinner";
 import { useAppContext } from "../AppContext";
-import { prepareWagmiHinkal } from "@hinkal/common/providers/prepareWagmiHinkal";
+import { prepareWagmiHinkal } from "h_test_1/providers/prepareWagmiHinkal";
 import toast from "react-hot-toast";
 
 interface ChooseWalletProps {
@@ -46,7 +46,12 @@ export const ChooseWallet = ({
         const hinkal = await prepareWagmiHinkal(connector, config);
         setHinkal(hinkal);
         setShieldedAddress(hinkal.userKeys.getShieldedPublicKey());
-        setChainId(hinkal.getCurrentChainId());
+        const providerAdapter = hinkal.getProviderAdapter();
+        console.log("setting chain id:", providerAdapter.getChainId());
+        const chainId = providerAdapter.getChainId();
+        if (!chainId) throw new Error("Chain id not found");
+        setChainId(chainId);
+
         setDataLoaded(true);
         onHide();
       } catch (err) {
@@ -64,7 +69,7 @@ export const ChooseWallet = ({
       setChainId,
       setDataLoaded,
       onHide,
-    ]
+    ],
   );
 
   return (
@@ -80,7 +85,7 @@ export const ChooseWallet = ({
       <div className="p-5 pb-10 flex flex-col items-center gap-y-5">
         {connectors
           .filter((connector) =>
-            isMobile ? connector.name === "WalletConnect" : true
+            isMobile ? connector.name === "WalletConnect" : true,
           )
           .map((connector) => (
             <button

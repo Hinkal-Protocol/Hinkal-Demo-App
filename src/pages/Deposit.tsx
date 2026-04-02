@@ -4,32 +4,45 @@ import {
   ERC20Token,
   getErrorMessage,
   ErrorCategory,
-} from "@hinkal/common";
+} from "h_test_1";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
 import { useAppContext } from "../AppContext";
 import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
+import { ethers } from "ethers";
 
 export const Deposit = () => {
-  const { hinkal, refreshBalances } = useAppContext();
+  const { hinkal, refreshBalances, chainId } = useAppContext();
 
   const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
-    undefined
+    undefined,
   );
   const [depositAmount, setDepositAmount] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleDeposit = useCallback(async () => {
     try {
-      if (!selectedToken) return;
+      if (!chainId || !selectedToken) return;
       setIsProcessing(true);
       const amountInWei = getAmountInWei(selectedToken, depositAmount);
 
-      const result = await hinkal.deposit([selectedToken], [amountInWei]);
+      console.log({ userKeys: hinkal.userKeys });
+      console.log({ generateProofRemotely: hinkal.generateProofRemotely });
+      console.log("accessKeys", hinkal.userKeys.getAccessKey());
+      console.log("signature check:", hinkal.userKeys.getSignature());
+
+      console.log("chainId:", chainId);
+      const result: any = await hinkal.deposit(
+        [selectedToken],
+        [amountInWei],
+        false,
+        true,
+      );
+      console.log("deposit result:", result);
 
       if (result && typeof result === "object" && "hash" in result)
-        await hinkal.waitForTransaction(result.hash);
+        await hinkal.waitForTransaction(chainId, result.hash);
       await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
     } catch (err) {
       const errorMessage = getErrorMessage(err, ErrorCategory.DEPOSIT);
@@ -45,7 +58,7 @@ export const Deposit = () => {
 
   const isDisabled = useMemo(
     () => !hinkal || !selectedToken || !depositAmount || isProcessing,
-    [hinkal, selectedToken, depositAmount, isProcessing]
+    [hinkal, selectedToken, depositAmount, isProcessing],
   );
 
   return (

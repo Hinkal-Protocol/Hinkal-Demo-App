@@ -1,4 +1,4 @@
-import { ERC20Token, getUniswapPrice } from "@hinkal/common";
+import { ERC20Token, getUniswapPrice } from "h_test_1";
 import { useEffect, useState } from "react";
 import { useAppContext } from "../AppContext";
 
