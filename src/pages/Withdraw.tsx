@@ -12,7 +12,7 @@ import { TokenAmountInput } from "../components/TokenAmountInput";
 import { ToggleSwitch } from "../components/withdraw/ToggleSwitch";
 import { useAppContext } from "../AppContext";
 import { useWithdraw } from "../hooks/useWithdraw";
-import { ERC20Token, ErrorCategory, getErrorMessage } from "h_test_1";
+import { ERC20Token, ErrorCategory, getErrorMessage } from "@hinkal/common";
 import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
 
 export const Withdraw = () => {
@@ -28,14 +28,14 @@ export const Withdraw = () => {
     },
     onSuccess: async () => {
       toast.success(
-        "You have successfully withdrawn. Balance will update in several seconds"
+        "You have successfully withdrawn. Balance will update in several seconds",
       );
       await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
     },
   });
 
   const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
-    undefined
+    undefined,
   );
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [recipientAddress, setRecipientAddress] = useState("");
@@ -48,7 +48,7 @@ export const Withdraw = () => {
   }, [withdraw, selectedToken, withdrawAmount, recipientAddress, isRelayerOff]);
 
   const setRecipientAddressHandler = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setRecipientAddress(event.target.value);
   };
@@ -64,7 +64,7 @@ export const Withdraw = () => {
       !withdrawAmount ||
       !recipientAddress ||
       isProcessing,
-    [hinkal, selectedToken, withdrawAmount, recipientAddress, isProcessing]
+    [hinkal, selectedToken, withdrawAmount, recipientAddress, isProcessing],
   );
 
   return (

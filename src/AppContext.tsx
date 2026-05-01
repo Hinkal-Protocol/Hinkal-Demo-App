@@ -5,7 +5,7 @@ import {
   TokenBalance,
   getERC20Registry,
   networkRegistry,
-} from "h_test_1";
+} from "@hinkal/common";
 import {
   Dispatch,
   FC,

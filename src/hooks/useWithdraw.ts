@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { ERC20Token, getAmountInWei } from "h_test_1";
+import { ERC20Token, getAmountInWei } from "@hinkal/common";
 
 interface UseWithdrawProps {
   hinkal: any;
@@ -19,7 +19,7 @@ export const useWithdraw = ({
       token: ERC20Token,
       amount: string,
       recipientAddress: string,
-      isRelayerOff: boolean
+      isRelayerOff: boolean,
     ) => {
       if (!hinkal) {
         throw new Error("Hinkal instance not initialized");
@@ -38,7 +38,7 @@ export const useWithdraw = ({
           undefined,
           undefined,
           undefined,
-          false
+          false,
         );
 
         if (typeof tx === "bigint") {
@@ -56,7 +56,7 @@ export const useWithdraw = ({
         setIsProcessing(false);
       }
     },
-    [hinkal, onSuccess, onError]
+    [hinkal, onSuccess, onError],
   );
 
   return {

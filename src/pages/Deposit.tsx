@@ -4,7 +4,7 @@ import {
   ERC20Token,
   getErrorMessage,
   ErrorCategory,
-} from "h_test_1";
+} from "@hinkal/common";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
@@ -33,12 +33,7 @@ export const Deposit = () => {
       console.log("signature check:", hinkal.userKeys.getSignature());
 
       console.log("chainId:", chainId);
-      const result: any = await hinkal.deposit(
-        [selectedToken],
-        [amountInWei],
-        false,
-        true,
-      );
+      const result: any = await hinkal.deposit([selectedToken], [amountInWei]);
       console.log("deposit result:", result);
 
       if (result && typeof result === "object" && "hash" in result)

@@ -2,7 +2,7 @@ import { SyntheticEvent, useCallback, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
-import { getErrorMessage, ERC20Token } from "h_test_1";
+import { getErrorMessage, ERC20Token } from "@hinkal/common";
 import { useTransfer } from "../hooks/useTransfer";
 import { useAppContext } from "../AppContext";
 import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
@@ -19,7 +19,7 @@ export const Transfer = () => {
     },
     onSuccess: async () => {
       toast.success(
-        "You have successfully transferred. Balance will update in several seconds"
+        "You have successfully transferred. Balance will update in several seconds",
       );
       await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
     },
@@ -27,7 +27,7 @@ export const Transfer = () => {
 
   // local states
   const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
-    undefined
+    undefined,
   );
   const [transferAmount, setTransferAmount] = useState<string>("");
   const [transferAddress, setTransferAddress] = useState<string>("");
@@ -42,7 +42,7 @@ export const Transfer = () => {
    * @param event onChange event  instance
    */
   const setTransferAddressHandler = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setTransferAddress(event.target.value);
   };
@@ -53,7 +53,7 @@ export const Transfer = () => {
 
   const isDisabled = useMemo(
     () => !selectedToken || !transferAmount || !transferAddress || isProcessing,
-    [selectedToken, transferAmount, transferAddress, isProcessing]
+    [selectedToken, transferAmount, transferAddress, isProcessing],
   );
 
   return (

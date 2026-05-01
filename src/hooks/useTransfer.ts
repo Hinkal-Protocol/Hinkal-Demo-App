@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { ERC20Token, hinkalTransfer, getAmountInWei } from "h_test_1";
+import { ERC20Token, hinkalTransfer, getAmountInWei } from "@hinkal/common";
 import { useAppContext } from "../AppContext";
 
 type UseTransferOptions = {
@@ -29,7 +29,7 @@ export const useTransfer = ({
           hinkal,
           [token],
           [-amountInBigInt],
-          recipientAddress
+          recipientAddress,
         );
 
         onSuccess?.();
@@ -40,7 +40,7 @@ export const useTransfer = ({
         setIsProcessing(false);
       }
     },
-    [hinkal, dataLoaded, onError, onSuccess]
+    [hinkal, dataLoaded, onError, onSuccess],
   );
 
   return { transfer, isProcessing };

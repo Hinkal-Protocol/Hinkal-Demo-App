@@ -1,5 +1,5 @@
 import { Listbox } from "@headlessui/react";
-import { ERC20Token } from "h_test_1";
+import { ERC20Token } from "@hinkal/common";
 import { SetStateAction, useEffect } from "react";
 import VectorDown from "../assets/VectorDown.svg";
 import { useAppContext } from "../AppContext";
@@ -30,7 +30,7 @@ export const TokenAmountInput = ({
    * @param event onChange event instance
    */
   const setTokenAmountHandler = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const regExp = /^[0-9]*[.]?[0-9]*$/;
     if (regExp.test(event.target.value)) {

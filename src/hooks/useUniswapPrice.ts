@@ -1,4 +1,4 @@
-import { ERC20Token, getUniswapPrice } from "h_test_1";
+import { ERC20Token, getUniswapPrice } from "@hinkal/common";
 import { useEffect, useState } from "react";
 import { useAppContext } from "../AppContext";
 
@@ -36,7 +36,7 @@ export const useUniswapPrice = ({
           chainId,
           inSwapAmount,
           inSwapToken,
-          outSwapToken
+          outSwapToken,
         );
         console.log({ priceDict });
         setPrice(priceDict.tokenPrice);

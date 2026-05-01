@@ -4,7 +4,7 @@ import { WagmiProvider } from "wagmi";
 import App from "./App";
 import { getWagmiConfig } from "./wagmi.config";
 import { AppContextProvider } from "./AppContext";
-import { preProcessing } from "h_test_1";
+import { preProcessing } from "@hinkal/common";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 preProcessing();
@@ -20,5 +20,5 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         </AppContextProvider>
       </QueryClientProvider>
     </WagmiProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
