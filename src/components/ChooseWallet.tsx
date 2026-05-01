@@ -46,7 +46,6 @@ export const ChooseWallet = ({
         setHinkal(hinkal);
         setShieldedAddress(hinkal.userKeys.getShieldedPublicKey());
         const providerAdapter = hinkal.getProviderAdapter();
-        console.log("setting chain id:", providerAdapter.getChainId());
         const chainId = providerAdapter.getChainId();
         if (!chainId) throw new Error("Chain id not found");
         setChainId(chainId);

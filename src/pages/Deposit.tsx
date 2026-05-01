@@ -27,14 +27,7 @@ export const Deposit = () => {
       setIsProcessing(true);
       const amountInWei = getAmountInWei(selectedToken, depositAmount);
 
-      console.log({ userKeys: hinkal.userKeys });
-      console.log({ generateProofRemotely: hinkal.generateProofRemotely });
-      console.log("accessKeys", hinkal.userKeys.getAccessKey());
-      console.log("signature check:", hinkal.userKeys.getSignature());
-
-      console.log("chainId:", chainId);
-      const result: any = await hinkal.deposit([selectedToken], [amountInWei]);
-      console.log("deposit result:", result);
+      const result = await hinkal.deposit([selectedToken], [amountInWei]);
 
       if (result && typeof result === "object" && "hash" in result)
         await hinkal.waitForTransaction(chainId, result.hash);
