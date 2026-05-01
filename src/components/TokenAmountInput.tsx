@@ -30,7 +30,7 @@ export const TokenAmountInput = ({
    * @param event onChange event instance
    */
   const setTokenAmountHandler = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const regExp = /^[0-9]*[.]?[0-9]*$/;
     if (regExp.test(event.target.value)) {

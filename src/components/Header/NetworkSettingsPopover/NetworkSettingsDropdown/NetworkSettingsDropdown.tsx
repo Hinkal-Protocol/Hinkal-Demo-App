@@ -1,6 +1,6 @@
 import { NetworkDropdownItem } from "./NetworkDropdownItem";
 import { useCallback, useMemo } from "react";
-import { balanceChangedHandler, networkRegistry } from "@hinkal/common";
+import { networkRegistry } from "@hinkal/common";
 import { useAppContext } from "../../../../AppContext";
 import { SUPPORTED_CHAIN_IDS } from "../../../../constants/supported-chain-ids.constants";
 
@@ -16,9 +16,9 @@ export const NetworkSettingsDropdown = ({
   const networkList = useMemo(
     () =>
       Object.values(networkRegistry).filter((network) =>
-        SUPPORTED_CHAIN_IDS.includes(network.chainId)
+        SUPPORTED_CHAIN_IDS.includes(network.chainId),
       ),
-    []
+    [],
   );
 
   const switchNetwork = useCallback(
@@ -32,7 +32,7 @@ export const NetworkSettingsDropdown = ({
         await refreshBalances();
       }
     },
-    [networkList, hinkal, setChainId, close]
+    [networkList, hinkal, setChainId, close],
   );
 
   return (

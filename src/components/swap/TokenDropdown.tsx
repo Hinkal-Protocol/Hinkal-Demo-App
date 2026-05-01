@@ -14,14 +14,14 @@ interface TokenDropdownProps {
 
 const splitTokenButtonsIntoRows = (
   tokenButtons: ReactNode[],
-  itemsPerRow: number
+  itemsPerRow: number,
 ) =>
   tokenButtons.reduce(
     (arr: ReactNode[][], button, index) =>
       index % itemsPerRow
         ? [...arr.slice(0, -1), [...arr[arr.length - 1], button]]
         : [...arr, [button]],
-    [[]]
+    [[]],
   );
 
 export const TokenDropdown = ({
@@ -33,7 +33,7 @@ export const TokenDropdown = ({
 }: TokenDropdownProps) => {
   const { erc20List } = useAppContext();
   const [itemsPerRow, setItemsPerRow] = useState(
-    window.innerWidth <= 500 ? 2 : 4
+    window.innerWidth <= 500 ? 2 : 4,
   );
   useEffect(() => {
     const onWindowSizeUpdate = () =>
@@ -68,7 +68,7 @@ export const TokenDropdown = ({
                       setIsTokenSelectShown={setIsTokenSelectShown}
                     />
                   )),
-                itemsPerRow
+                itemsPerRow,
               ).map((buttons, index) => (
                 <div
                   key={index}

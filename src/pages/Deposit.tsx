@@ -10,26 +10,27 @@ import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
 import { useAppContext } from "../AppContext";
 import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
+import { ethers } from "ethers";
 
 export const Deposit = () => {
-  const { hinkal, refreshBalances } = useAppContext();
+  const { hinkal, refreshBalances, chainId } = useAppContext();
 
   const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
-    undefined
+    undefined,
   );
   const [depositAmount, setDepositAmount] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleDeposit = useCallback(async () => {
     try {
-      if (!selectedToken) return;
+      if (!chainId || !selectedToken) return;
       setIsProcessing(true);
       const amountInWei = getAmountInWei(selectedToken, depositAmount);
 
       const result = await hinkal.deposit([selectedToken], [amountInWei]);
 
       if (result && typeof result === "object" && "hash" in result)
-        await hinkal.waitForTransaction(result.hash);
+        await hinkal.waitForTransaction(chainId, result.hash);
       await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
     } catch (err) {
       const errorMessage = getErrorMessage(err, ErrorCategory.DEPOSIT);
@@ -45,7 +46,7 @@ export const Deposit = () => {
 
   const isDisabled = useMemo(
     () => !hinkal || !selectedToken || !depositAmount || isProcessing,
-    [hinkal, selectedToken, depositAmount, isProcessing]
+    [hinkal, selectedToken, depositAmount, isProcessing],
   );
 
   return (

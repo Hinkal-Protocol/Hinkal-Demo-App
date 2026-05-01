@@ -36,7 +36,7 @@ export const useUniswapPrice = ({
           chainId,
           inSwapAmount,
           inSwapToken,
-          outSwapToken
+          outSwapToken,
         );
         console.log({ priceDict });
         setPrice(priceDict.tokenPrice);

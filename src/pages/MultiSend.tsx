@@ -38,14 +38,14 @@ export const MultiSend = () => {
     const nativeToken = getERC20Token(ZERO_ADDRESS, chainId);
 
     const stablecoins = NON_NATIVE_GAS_TOKENS.map((symbol) =>
-      getERC20TokenBySymbol(symbol, chainId)
+      getERC20TokenBySymbol(symbol, chainId),
     ).filter((token): token is ERC20Token => token !== undefined);
 
     return nativeToken ? [nativeToken, ...stablecoins] : stablecoins;
   }, [chainId]);
 
   const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
-    undefined
+    undefined,
   );
   const [totalAmount, setTotalAmount] = useState<string>("");
 
@@ -87,7 +87,7 @@ export const MultiSend = () => {
       const isTokenStillValid = allowedTokens.some(
         (token) =>
           token.erc20TokenAddress.toLowerCase() ===
-          selectedToken.erc20TokenAddress.toLowerCase()
+          selectedToken.erc20TokenAddress.toLowerCase(),
       );
 
       if (!isTokenStillValid) setSelectedToken(allowedTokens[0] || undefined);
@@ -100,7 +100,7 @@ export const MultiSend = () => {
 
   const setAmountHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
-    setValue: (value: string) => void
+    setValue: (value: string) => void,
   ) => {
     if (/^[0-9]*[.]?[0-9]*$/.test(event.target.value)) {
       setValue(event.target.value);
@@ -116,7 +116,6 @@ export const MultiSend = () => {
       address2,
       amount2,
       schedule,
-      intervalBetweenTxs
     );
   }, [
     multiSend,
@@ -126,7 +125,6 @@ export const MultiSend = () => {
     address2,
     amount2,
     schedule,
-    intervalBetweenTxs,
   ]);
 
   const handleSubmit = (event: SyntheticEvent) => {
@@ -142,7 +140,7 @@ export const MultiSend = () => {
       !address2 ||
       !amount2 ||
       isProcessing,
-    [hinkal, selectedToken, address1, amount1, address2, amount2, isProcessing]
+    [hinkal, selectedToken, address1, amount1, address2, amount2, isProcessing],
   );
 
   const feeDisplay = useMemo(() => {
@@ -162,7 +160,7 @@ export const MultiSend = () => {
               allowedTokens.some(
                 (allowedToken) =>
                   allowedToken.erc20TokenAddress.toLowerCase() ===
-                  token.erc20TokenAddress.toLowerCase()
+                  token.erc20TokenAddress.toLowerCase(),
               )
             }
           />

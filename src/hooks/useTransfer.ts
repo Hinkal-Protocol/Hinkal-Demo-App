@@ -29,7 +29,7 @@ export const useTransfer = ({
           hinkal,
           [token],
           [-amountInBigInt],
-          recipientAddress
+          recipientAddress,
         );
 
         onSuccess?.();
@@ -40,7 +40,7 @@ export const useTransfer = ({
         setIsProcessing(false);
       }
     },
-    [hinkal, dataLoaded, onError, onSuccess]
+    [hinkal, dataLoaded, onError, onSuccess],
   );
 
   return { transfer, isProcessing };

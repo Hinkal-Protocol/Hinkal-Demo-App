@@ -22,7 +22,7 @@ export const useSwap = ({ onError, onSuccess }: UseSwapOptions = {}) => {
       tokenOut: ERC20Token,
       amountIn: string,
       expectedAmountOut: bigint,
-      fee: string
+      fee: string,
     ) => {
       try {
         setIsProcessing(true);
@@ -39,7 +39,7 @@ export const useSwap = ({ onError, onSuccess }: UseSwapOptions = {}) => {
           [tokenIn, tokenOut],
           [-amountInWei, expectedAmountOut],
           ExternalActionId.Uniswap,
-          fee
+          fee,
         );
 
         onSuccess?.();
@@ -50,7 +50,7 @@ export const useSwap = ({ onError, onSuccess }: UseSwapOptions = {}) => {
         setIsProcessing(false);
       }
     },
-    [hinkal, onError, onSuccess]
+    [hinkal, onError, onSuccess],
   );
 
   return { swap, isProcessing };

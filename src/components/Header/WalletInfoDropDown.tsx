@@ -11,12 +11,12 @@ import { useAppContext } from "../../AppContext";
 const filterTokenBalances = (tokenBalances: TokenBalance[]) => {
   const nonZeroBalances = [...tokenBalances]
     .sort((a, b) =>
-      a.token.erc20TokenAddress < b.token.erc20TokenAddress ? -1 : 1
+      a.token.erc20TokenAddress < b.token.erc20TokenAddress ? -1 : 1,
     )
     .filter((tokenBalance) => tokenBalance.balance !== 0n);
   if (nonZeroBalances.length === 0)
     return tokenBalances.filter(
-      (tokenBalance) => tokenBalance.token.erc20TokenAddress === zeroAddress
+      (tokenBalance) => tokenBalance.token.erc20TokenAddress === zeroAddress,
     );
   return nonZeroBalances;
 };

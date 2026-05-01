@@ -19,7 +19,7 @@ export const Transfer = () => {
     },
     onSuccess: async () => {
       toast.success(
-        "You have successfully transferred. Balance will update in several seconds"
+        "You have successfully transferred. Balance will update in several seconds",
       );
       await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
     },
@@ -27,7 +27,7 @@ export const Transfer = () => {
 
   // local states
   const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
-    undefined
+    undefined,
   );
   const [transferAmount, setTransferAmount] = useState<string>("");
   const [transferAddress, setTransferAddress] = useState<string>("");
@@ -42,7 +42,7 @@ export const Transfer = () => {
    * @param event onChange event  instance
    */
   const setTransferAddressHandler = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setTransferAddress(event.target.value);
   };
@@ -53,7 +53,7 @@ export const Transfer = () => {
 
   const isDisabled = useMemo(
     () => !selectedToken || !transferAmount || !transferAddress || isProcessing,
-    [selectedToken, transferAmount, transferAddress, isProcessing]
+    [selectedToken, transferAmount, transferAddress, isProcessing],
   );
 
   return (
