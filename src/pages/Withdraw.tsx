@@ -12,7 +12,7 @@ import { TokenAmountInput } from "../components/TokenAmountInput";
 import { ToggleSwitch } from "../components/withdraw/ToggleSwitch";
 import { useAppContext } from "../AppContext";
 import { useWithdraw } from "../hooks/useWithdraw";
-import { ERC20Token, ErrorCategory, getErrorMessage } from "@hinkal/common";
+import { ERC20Token } from "@gurg/hi-test";
 import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
 
 export const Withdraw = () => {
@@ -21,10 +21,8 @@ export const Withdraw = () => {
   const { withdraw, isProcessing } = useWithdraw({
     hinkal,
     onError: (err) => {
-      const message = getErrorMessage(err, ErrorCategory.WITHDRAW);
-      if (message !== "Send failed") {
-        toast.error(message, { id: message });
-      }
+      const message = err instanceof Error ? err.message : "Unknown error";
+      toast.error(message, { id: message });
     },
     onSuccess: async () => {
       toast.success(

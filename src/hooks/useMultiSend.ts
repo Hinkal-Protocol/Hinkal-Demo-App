@@ -1,16 +1,16 @@
 import { useCallback, useState } from "react";
 import {
   ERC20Token,
-  getAmountInWei,
   ExternalActionId,
   FeeStructure,
-  processGasEstimates,
-} from "@hinkal/common";
+  getFeeStructure,
+} from "@gurg/hi-test";
 import { useAppContext } from "../AppContext";
 import {
   convertScheduleToMs,
   ScheduleOption,
 } from "../constants/schedule.constants";
+import { getAmountInWei } from "../utils/amount.utils";
 
 interface UseMultiSendProps {
   onError: (err: Error) => void;
@@ -32,26 +32,18 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
 
       try {
         setIsFeeLoading(true);
-
-        const { priceOfTransactionInToken } = await processGasEstimates(
+        const fee = await getFeeStructure(
           chainId,
           token,
+          [token.erc20TokenAddress],
           ExternalActionId.Transact,
-          1,
-          undefined,
-          undefined,
         );
 
-        if (priceOfTransactionInToken !== undefined) {
-          const totalFee = priceOfTransactionInToken * 2n;
-          setFee(totalFee);
-
-          setFeeStructure({
-            variableRate: 0n,
-            feeToken: token.erc20TokenAddress,
-            flatFee: priceOfTransactionInToken,
-          });
-        }
+        setFeeStructure({
+          variableRate: fee.variableRate,
+          feeToken: token.erc20TokenAddress,
+          flatFee: fee.flatFee,
+        });
       } catch (err) {
         console.error("Error calculating fee:", err);
         setFee(null);

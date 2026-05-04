@@ -1,4 +1,4 @@
-import { TokenBalance, zeroAddress } from "@hinkal/common";
+import { TokenBalance } from "@gurg/hi-test";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
 import Copy from "../../assets/Copy.svg";
@@ -7,6 +7,7 @@ import { copyToClipboard } from "../../utils/copyToClipboard";
 import { reloadPage } from "../../utils/pageReload";
 import { WalletInfoBalance } from "./WalletInfoBalance";
 import { useAppContext } from "../../AppContext";
+import { zeroAddress } from "../../constants/constants";
 
 const filterTokenBalances = (tokenBalances: TokenBalance[]) => {
   const nonZeroBalances = [...tokenBalances]
@@ -30,7 +31,7 @@ export const WalletInfoDropDown = () => {
 
   const handleCopyShieldedAddress = () => {
     try {
-      const shieldedAddress = hinkal.userKeys.getShieldedPublicKey();
+      const shieldedAddress = hinkal.getShieldedPublicKey();
       if (!shieldedAddress) {
         toast.error("No shielded address found");
         return;

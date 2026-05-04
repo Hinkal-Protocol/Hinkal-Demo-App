@@ -1,4 +1,5 @@
-import { TokenBalance, getAmountInToken } from "@hinkal/common";
+import { TokenBalance } from "@gurg/hi-test";
+import { getAmountInToken } from "../../utils/amount.utils";
 
 interface WalletInfoBalanceProps {
   tokenBalance: TokenBalance;

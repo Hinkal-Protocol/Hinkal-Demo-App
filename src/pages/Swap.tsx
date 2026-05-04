@@ -4,16 +4,12 @@ import { InfoPanel } from "../components/InfoPanel";
 import { Spinner } from "../components/Spinner";
 import { SelectToken } from "../components/swap/SelectToken";
 import { SwapInputTokensButton } from "../components/swap/SwapInputTokensButton";
-import {
-  ERC20Token,
-  ErrorCategory,
-  getAmountInToken,
-  getErrorMessage,
-} from "@hinkal/common";
+import { ERC20Token } from "@gurg/hi-test";
 import { useUniswapPrice } from "../hooks/useUniswapPrice";
 import { useSwap } from "../hooks/useSwap";
 import { useAppContext } from "../AppContext";
 import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
+import { getAmountInToken } from "../utils/amount.utils";
 
 export const Swap = () => {
   const { hinkal, refreshBalances } = useAppContext();
@@ -36,8 +32,8 @@ export const Swap = () => {
 
   const { swap, isProcessing } = useSwap({
     onError: (err) => {
-      const message = getErrorMessage(err, ErrorCategory.SWAP);
-      if (message !== "Swap failed") toast.error(message);
+      const message = err instanceof Error ? err.message : "Unknown error";
+      toast.error(message, { id: message });
     },
     onSuccess: async () => {
       toast.success("Swap successful! Balance will update in several seconds");

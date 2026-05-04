@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
-import { ERC20Token, hinkalTransfer, getAmountInWei } from "@hinkal/common";
+import { ERC20Token } from "@gurg/hi-test";
 import { useAppContext } from "../AppContext";
+import { getAmountInWei } from "../utils/amount.utils";
 
 type UseTransferOptions = {
   onError?: (error: Error) => void;
@@ -25,12 +26,7 @@ export const useTransfer = ({
         if (!recipientAddress) throw new Error("Recipient address is required");
 
         const amountInBigInt = getAmountInWei(token, amount);
-        await hinkalTransfer(
-          hinkal,
-          [token],
-          [-amountInBigInt],
-          recipientAddress,
-        );
+        await hinkal.transfer([token], [-amountInBigInt], recipientAddress);
 
         onSuccess?.();
       } catch (err) {

@@ -2,7 +2,7 @@ import { SyntheticEvent, useCallback, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
-import { getErrorMessage, ERC20Token } from "@hinkal/common";
+import { ERC20Token } from "@gurg/hi-test";
 import { useTransfer } from "../hooks/useTransfer";
 import { useAppContext } from "../AppContext";
 import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
@@ -12,10 +12,8 @@ export const Transfer = () => {
 
   const { transfer, isProcessing } = useTransfer({
     onError: (err: Error) => {
-      const message = getErrorMessage(err);
-      if (message !== "Transaction failed") {
-        toast.error(message);
-      }
+      const message = err instanceof Error ? err.message : "Unknown error";
+      toast.error(message, { id: message });
     },
     onSuccess: async () => {
       toast.success(

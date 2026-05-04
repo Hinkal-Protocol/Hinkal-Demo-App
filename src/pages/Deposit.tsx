@@ -1,16 +1,11 @@
 import { SyntheticEvent, useCallback, useState, useMemo } from "react";
-import {
-  getAmountInWei,
-  ERC20Token,
-  getErrorMessage,
-  ErrorCategory,
-} from "@hinkal/common";
+import { ERC20Token } from "@gurg/hi-test";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
 import { useAppContext } from "../AppContext";
 import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
-import { ethers } from "ethers";
+import { getAmountInWei } from "../utils/amount.utils";
 
 export const Deposit = () => {
   const { hinkal, refreshBalances, chainId } = useAppContext();
@@ -33,7 +28,7 @@ export const Deposit = () => {
         await hinkal.waitForTransaction(chainId, result.hash);
       await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
     } catch (err) {
-      const errorMessage = getErrorMessage(err, ErrorCategory.DEPOSIT);
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
       toast.error(errorMessage);
     } finally {
       setIsProcessing(false);
