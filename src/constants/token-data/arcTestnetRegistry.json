@@ -1,0 +1,22 @@
+{
+  "networkRegistry": [
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x3600000000000000000000000000000000000000",
+      "name": "USDC",
+      "symbol": "USDC"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x0000000000000000000000000000000000000000",
+      "name": "USDC",
+      "symbol": "USDC"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x175cdb1d338945f0d851a741ccf787d343e57952",
+      "name": "Tether USD",
+      "symbol": "USDT"
+    }
+  ]
+}

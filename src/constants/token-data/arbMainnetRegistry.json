@@ -1,0 +1,28 @@
+{
+  "networkRegistry": [
+    {
+      "chainId": 42161,
+      "erc20TokenAddress": "0x0000000000000000000000000000000000000000",
+      "name": "ETH",
+      "symbol": "ETH"
+    },
+    {
+      "chainId": 42161,
+      "erc20TokenAddress": "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+      "name": "USD Coin",
+      "symbol": "USDC"
+    },
+    {
+      "chainId": 42161,
+      "erc20TokenAddress": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+      "name": "USDT",
+      "symbol": "USDT"
+    },
+    {
+      "chainId": 42161,
+      "erc20TokenAddress": "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
+      "name": "Dai",
+      "symbol": "DAI"
+    }
+  ]
+}

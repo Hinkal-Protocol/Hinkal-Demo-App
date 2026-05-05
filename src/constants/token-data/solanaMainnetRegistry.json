@@ -1,0 +1,22 @@
+{
+  "networkRegistry": [
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "11111111111111111111111111111111",
+      "name": "Solana",
+      "symbol": "SOL"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "name": "USD Coin",
+      "symbol": "USDC"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
+      "name": "Tether USD",
+      "symbol": "USDT"
+    }
+  ]
+}
