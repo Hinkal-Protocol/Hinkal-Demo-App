@@ -18,7 +18,7 @@ import {
 import { ButtonGroupWithLabel } from "../utils/buttonGroupWithLabel";
 import { RecipientInputRow } from "../utils/recipientInfoRow";
 import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
-import { zeroAddress } from "../constants/constants";
+import { zeroAddress } from "../constants";
 import { getTokenData } from "../constants/token-data";
 
 const NON_NATIVE_GAS_TOKENS = ["USDC", "USDT", "DAI"];

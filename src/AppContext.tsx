@@ -1,11 +1,4 @@
-import {
-  ERC20Token,
-  EthereumNetwork,
-  Hinkal,
-  TokenBalance,
-  getERC20Registry,
-  networkRegistry,
-} from "@hinkal/common";
+import { ERC20Token, Hinkal, TokenBalance, getErc20Token } from "@gurg/hi-test";
 import {
   Dispatch,
   FC,
@@ -19,14 +12,17 @@ import {
   useCallback,
 } from "react";
 import { Connector } from "wagmi";
+import { getTokenData } from "./constants/token-data";
+import { Network } from "./types";
+import { networkRegistry } from "./constants/networkRegistry";
 
 type AppContextArgumnets = {
   hinkal: Hinkal<Connector>;
   setHinkal: Dispatch<SetStateAction<Hinkal<Connector>>>;
   chainId?: number;
   setChainId: (num: number) => void;
-  selectedNetwork: EthereumNetwork | undefined;
-  setSelectedNetwork: (net: EthereumNetwork) => void;
+  selectedNetwork: Network | undefined;
+  setSelectedNetwork: (net: Network) => void;
   dataLoaded: boolean;
   setDataLoaded: (val: boolean) => void;
   erc20List: ERC20Token[];
@@ -43,7 +39,7 @@ const AppContext = createContext<AppContextArgumnets>({
   chainId: undefined,
   setChainId: (num: number) => {},
   selectedNetwork: undefined,
-  setSelectedNetwork: (net: EthereumNetwork) => {},
+  setSelectedNetwork: (net: Network) => {},
   dataLoaded: false,
   setDataLoaded: (val: boolean) => {},
   erc20List: [],
@@ -60,10 +56,11 @@ export const AppContextProvider: FC<AppContextProps> = ({
   const [chainId, setChainId] = useState<number | undefined>();
   const [dataLoaded, setDataLoaded] = useState<boolean>(false);
 
-  const [selectedNetwork, setSelectedNetwork] = useState<
-    EthereumNetwork | undefined
-  >(undefined);
+  const [selectedNetwork, setSelectedNetwork] = useState<Network | undefined>(
+    undefined,
+  );
 
+  const [erc20List, setErc20List] = useState<ERC20Token[]>([]);
   const [balances, setBalances] = useState<TokenBalance[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -74,10 +71,31 @@ export const AppContextProvider: FC<AppContextProps> = ({
     setSelectedNetwork(network);
   }, [chainId, networkList]);
 
-  const erc20List = useMemo(
-    () => (chainId ? getERC20Registry(chainId) : []),
-    [chainId],
-  );
+  useEffect(() => {
+    let isCancelled = false;
+
+    const loadErc20List = async () => {
+      if (!chainId) {
+        if (!isCancelled) setErc20List([]);
+        return;
+      }
+
+      const tokenData = getTokenData(chainId);
+      const tokens = await Promise.all(
+        tokenData.map((token) =>
+          getErc20Token(chainId, token.erc20TokenAddress),
+        ),
+      );
+
+      if (!isCancelled) setErc20List(tokens);
+    };
+
+    loadErc20List();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [chainId]);
 
   const refreshBalances = useCallback(async () => {
     if (!dataLoaded || isRefreshing || !chainId) return;
@@ -85,14 +103,7 @@ export const AppContextProvider: FC<AppContextProps> = ({
     try {
       setIsRefreshing(true);
 
-      const ethAddress = await hinkal.getEthereumAddress();
-
-      const bals = await hinkal.getBalances(
-        chainId,
-        hinkal.userKeys.getShieldedPrivateKey(),
-        hinkal.userKeys.getShieldedPublicKey(),
-        ethAddress,
-      );
+      const bals = await hinkal.getTotalBalance(chainId);
 
       const balancesArray = Array.from(bals.values());
       setBalances(balancesArray);

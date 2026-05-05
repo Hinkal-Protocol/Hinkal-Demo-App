@@ -5,3 +5,9 @@ export enum AppTab {
   Swap,
   MultiSend,
 }
+
+export type Network = {
+  chainId: number;
+  name: string;
+  fetchRpcUrl: string;
+};

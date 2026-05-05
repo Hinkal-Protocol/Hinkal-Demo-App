@@ -1,8 +1,8 @@
 import { NetworkDropdownItem } from "./NetworkDropdownItem";
 import { useCallback, useMemo } from "react";
-import { networkRegistry } from "@hinkal/common";
 import { useAppContext } from "../../../../AppContext";
 import { SUPPORTED_CHAIN_IDS } from "../../../../constants/supported-chain-ids.constants";
+import { networkRegistry } from "../../../../constants/networkRegistry";
 
 interface NetworkSettingsDropdownProps {
   close: () => void;

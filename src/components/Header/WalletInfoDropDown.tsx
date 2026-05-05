@@ -7,7 +7,7 @@ import { copyToClipboard } from "../../utils/copyToClipboard";
 import { reloadPage } from "../../utils/pageReload";
 import { WalletInfoBalance } from "./WalletInfoBalance";
 import { useAppContext } from "../../AppContext";
-import { zeroAddress } from "../../constants/constants";
+import { zeroAddress } from "../../constants";
 
 const filterTokenBalances = (tokenBalances: TokenBalance[]) => {
   const nonZeroBalances = [...tokenBalances]
