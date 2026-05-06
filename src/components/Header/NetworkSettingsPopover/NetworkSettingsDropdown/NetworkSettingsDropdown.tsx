@@ -28,9 +28,8 @@ export const NetworkSettingsDropdown = ({
       setBalances([]);
       close();
       await hinkal.resetMerkle();
-      await refreshBalances(0, true, chainId);
     },
-    [hinkal, setChainId, close, refreshBalances],
+    [hinkal, setChainId, close],
   );
 
   return (

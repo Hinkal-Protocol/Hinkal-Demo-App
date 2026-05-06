@@ -106,14 +106,14 @@ export const AppContextProvider: FC<AppContextProps> = ({
   }, [chainId]);
 
   const refreshBalances = useCallback(
-    async (delayMs?: number, force = false, effectChainId?: number) => {
+    async (delayMs?: number, force = false) => {
       if (!dataLoaded || (!force && isRefreshingRef.current) || !chainId) {
         return;
       }
       try {
         isRefreshingRef.current = true;
         if (delayMs) await new Promise((res) => setTimeout(res, delayMs));
-        const bals = await hinkal.getTotalBalance(effectChainId || chainId);
+        const bals = await hinkal.getTotalBalance(chainId);
         const balancesArray = Array.from(bals.values());
         setBalances(balancesArray);
       } catch (error) {
