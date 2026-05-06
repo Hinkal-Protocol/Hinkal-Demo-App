@@ -1,6 +1,6 @@
 import { TokenBalance } from "@gurg/hi-test";
 import toast from "react-hot-toast";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import Copy from "../../assets/Copy.svg";
 import Disconnect from "../../assets/Disconnect.svg";
 import { copyToClipboard } from "../../utils/copyToClipboard";
@@ -23,7 +23,21 @@ const filterTokenBalances = (tokenBalances: TokenBalance[]) => {
 };
 
 export const WalletInfoDropDown = () => {
-  const { balances, hinkal, chainId, refreshBalances } = useAppContext();
+  const { balances, hinkal, chainId, refreshBalances, erc20List } =
+    useAppContext();
+
+  const nativeToken = useMemo(
+    () => erc20List.find((t) => t.erc20TokenAddress === zeroAddress),
+    [erc20List],
+  );
+
+  const displayBalances = useMemo(
+    () =>
+      balances.length === 0 && nativeToken
+        ? [{ token: nativeToken, balance: 0n }]
+        : filterTokenBalances(balances),
+    [balances, nativeToken],
+  );
 
   const handleCopyShieldedAddress = () => {
     try {
@@ -52,7 +66,7 @@ export const WalletInfoDropDown = () => {
             <div className="h-4 w-24 rounded bg-gray-100" />
           </div>
         ) : (
-          filterTokenBalances(balances).map((tokenBalance) => (
+          displayBalances.map((tokenBalance) => (
             <WalletInfoBalance
               tokenBalance={tokenBalance}
               key={tokenBalance.token.erc20TokenAddress}

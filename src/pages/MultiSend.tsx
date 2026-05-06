@@ -87,7 +87,7 @@ export const MultiSend = () => {
         toast.error(message, { id: message });
       },
       onSuccess: async () => {
-        toast.success("Multi send successed!");
+        toast.success("Multi send succeeded!");
         setAddress1("");
         setAmount1("");
         setAddress2("");
@@ -193,14 +193,6 @@ export const MultiSend = () => {
           amountValue={amount2}
           onAddressChange={(e) => setAddress2(e.target.value)}
           onAmountChange={(event) => setAmountHandler(event, setAmount2)}
-          disabled={isProcessing}
-        />
-
-        <ButtonGroupWithLabel
-          label="Schedule Transfer"
-          options={SCHEDULE_OPTIONS}
-          selected={schedule}
-          onSelect={(option) => setSchedule(option as ScheduleOption)}
           disabled={isProcessing}
         />
 
