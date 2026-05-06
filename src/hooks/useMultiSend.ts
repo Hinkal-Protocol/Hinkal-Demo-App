@@ -34,7 +34,7 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
         setIsFeeLoading(true);
         const fee = await getFeeStructure(
           chainId,
-          token,
+          token.erc20TokenAddress,
           [token.erc20TokenAddress],
           ExternalActionId.Transact,
         );
