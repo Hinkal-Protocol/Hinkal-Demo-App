@@ -28,7 +28,12 @@ type AppContextArgumnets = {
   setDataLoaded: (val: boolean) => void;
   erc20List: ERC20Token[];
   balances: TokenBalance[];
-  refreshBalances: (delayMs?: number, force?: boolean) => Promise<void>;
+  setBalances: (balances: TokenBalance[]) => void;
+  refreshBalances: (
+    delayMs?: number,
+    force?: boolean,
+    chainId?: number,
+  ) => Promise<void>;
 };
 
 const hinkalInstance = new Hinkal<Connector>();
@@ -45,6 +50,7 @@ const AppContext = createContext<AppContextArgumnets>({
   setDataLoaded: (val: boolean) => {},
   erc20List: [],
   balances: [],
+  setBalances: (balances: TokenBalance[]) => {},
   refreshBalances: async (delayMs?: number, force?: boolean) => {},
 });
 
@@ -100,14 +106,14 @@ export const AppContextProvider: FC<AppContextProps> = ({
   }, [chainId]);
 
   const refreshBalances = useCallback(
-    async (delayMs?: number, force = false) => {
+    async (delayMs?: number, force = false, effectChainId?: number) => {
       if (!dataLoaded || (!force && isRefreshingRef.current) || !chainId) {
         return;
       }
       try {
         isRefreshingRef.current = true;
         if (delayMs) await new Promise((res) => setTimeout(res, delayMs));
-        const bals = await hinkal.getTotalBalance(chainId);
+        const bals = await hinkal.getTotalBalance(effectChainId || chainId);
         const balancesArray = Array.from(bals.values());
         setBalances(balancesArray);
       } catch (error) {
@@ -144,6 +150,7 @@ export const AppContextProvider: FC<AppContextProps> = ({
         setDataLoaded,
         erc20List,
         balances,
+        setBalances,
         refreshBalances,
       }}
     >
