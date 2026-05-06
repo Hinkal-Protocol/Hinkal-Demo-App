@@ -10,6 +10,7 @@ import {
   useMemo,
   useState,
   useCallback,
+  useRef,
 } from "react";
 import { Connector } from "wagmi";
 import { getTokenData } from "./constants/token-data";
@@ -27,7 +28,7 @@ type AppContextArgumnets = {
   setDataLoaded: (val: boolean) => void;
   erc20List: ERC20Token[];
   balances: TokenBalance[];
-  refreshBalances: (interval?: number) => Promise<void>;
+  refreshBalances: (delayMs?: number, force?: boolean) => Promise<void>;
 };
 
 const hinkalInstance = new Hinkal<Connector>();
@@ -44,7 +45,7 @@ const AppContext = createContext<AppContextArgumnets>({
   setDataLoaded: (val: boolean) => {},
   erc20List: [],
   balances: [],
-  refreshBalances: async () => {},
+  refreshBalances: async (delayMs?: number, force?: boolean) => {},
 });
 
 type AppContextProps = { children: ReactNode };
@@ -62,7 +63,7 @@ export const AppContextProvider: FC<AppContextProps> = ({
 
   const [erc20List, setErc20List] = useState<ERC20Token[]>([]);
   const [balances, setBalances] = useState<TokenBalance[]>([]);
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  const isRefreshingRef = useRef(false);
 
   const networkList = useMemo(() => Object.values(networkRegistry), []);
 
@@ -98,22 +99,25 @@ export const AppContextProvider: FC<AppContextProps> = ({
     };
   }, [chainId]);
 
-  const refreshBalances = useCallback(async () => {
-    if (!dataLoaded || isRefreshing || !chainId) return;
-
-    try {
-      setIsRefreshing(true);
-
-      const bals = await hinkal.getTotalBalance(chainId);
-
-      const balancesArray = Array.from(bals.values());
-      setBalances(balancesArray);
-    } catch (error) {
-      console.error("Error refreshing balances:", error);
-    } finally {
-      setIsRefreshing(false);
-    }
-  }, [dataLoaded, hinkal, chainId]);
+  const refreshBalances = useCallback(
+    async (delayMs?: number, force = false) => {
+      if (!dataLoaded || (!force && isRefreshingRef.current) || !chainId) {
+        return;
+      }
+      try {
+        isRefreshingRef.current = true;
+        if (delayMs) await new Promise((res) => setTimeout(res, delayMs));
+        const bals = await hinkal.getTotalBalance(chainId);
+        const balancesArray = Array.from(bals.values());
+        setBalances(balancesArray);
+      } catch (error) {
+        console.error("Error refreshing balances:", error);
+      } finally {
+        isRefreshingRef.current = false;
+      }
+    },
+    [dataLoaded, hinkal, chainId],
+  );
 
   useEffect(() => {
     if (!dataLoaded) return;

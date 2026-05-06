@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { ERC20Token } from "@gurg/hi-test";
 import { getAmountInWei } from "../utils/amount.utils";
+import { useAppContext } from "../AppContext";
 
 interface UseWithdrawProps {
   hinkal: any;
@@ -13,6 +14,7 @@ export const useWithdraw = ({
   onSuccess,
   onError,
 }: UseWithdrawProps) => {
+  const { chainId } = useAppContext();
   const [isProcessing, setIsProcessing] = useState(false);
 
   const withdraw = useCallback(
@@ -47,7 +49,8 @@ export const useWithdraw = ({
           return;
         }
 
-        if ("hash" in tx) await hinkal.waitForTransaction(tx.hash);
+        if (typeof tx === "string")
+          await hinkal.waitForTransaction(chainId, tx);
 
         onSuccess?.();
       } catch (err) {
@@ -57,7 +60,7 @@ export const useWithdraw = ({
         setIsProcessing(false);
       }
     },
-    [hinkal, onSuccess, onError],
+    [hinkal, chainId, onSuccess, onError],
   );
 
   return {
