@@ -28,7 +28,12 @@ type AppContextArgumnets = {
   setDataLoaded: (val: boolean) => void;
   erc20List: ERC20Token[];
   balances: TokenBalance[];
-  refreshBalances: (delayMs?: number, force?: boolean) => Promise<void>;
+  setBalances: (balances: TokenBalance[]) => void;
+  refreshBalances: (
+    delayMs?: number,
+    force?: boolean,
+    chainId?: number,
+  ) => Promise<void>;
 };
 
 const hinkalInstance = new Hinkal<Connector>();
@@ -45,6 +50,7 @@ const AppContext = createContext<AppContextArgumnets>({
   setDataLoaded: (val: boolean) => {},
   erc20List: [],
   balances: [],
+  setBalances: (balances: TokenBalance[]) => {},
   refreshBalances: async (delayMs?: number, force?: boolean) => {},
 });
 
@@ -144,6 +150,7 @@ export const AppContextProvider: FC<AppContextProps> = ({
         setDataLoaded,
         erc20List,
         balances,
+        setBalances,
         refreshBalances,
       }}
     >
