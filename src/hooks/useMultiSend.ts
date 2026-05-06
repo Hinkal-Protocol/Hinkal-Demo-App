@@ -28,29 +28,36 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
 
   const calculateFee = useCallback(
     async (token: ERC20Token) => {
-      if (!hinkal || !token || !chainId) return;
-
+      if (!hinkal || !token) return;
       try {
         setIsFeeLoading(true);
+        if (!hinkal || !token || !chainId) return;
 
-        const { priceOfTransactionInToken } = await processGasEstimates(
-          chainId,
-          token,
-          ExternalActionId.Transact,
-          1,
-          undefined,
-          undefined,
-        );
+        try {
+          setIsFeeLoading(true);
 
-        if (priceOfTransactionInToken !== undefined) {
-          const totalFee = priceOfTransactionInToken * 2n;
-          setFee(totalFee);
-
-          setFeeStructure({
-            variableRate: 0n,
-            feeToken: token.erc20TokenAddress,
-            flatFee: priceOfTransactionInToken,
-          });
+          const { priceOfTransactionInToken } = await processGasEstimates(
+            chainId,
+            token,
+            ExternalActionId.Transact,
+            1,
+            undefined,
+            undefined,
+          );
+          if (priceOfTransactionInToken !== undefined) {
+            setFee(priceOfTransactionInToken * 2n);
+            setFeeStructure({
+              variableRate: 0n,
+              feeToken: token.erc20TokenAddress,
+              flatFee: priceOfTransactionInToken,
+            });
+          }
+        } catch (err) {
+          console.error("Error calculating fee:", err);
+          setFee(null);
+          setFeeStructure(undefined);
+        } finally {
+          setIsFeeLoading(false);
         }
       } catch (err) {
         console.error("Error calculating fee:", err);
@@ -72,6 +79,7 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
       amount2: string,
       schedule: ScheduleOption,
     ) => {
+      if (!hinkal) throw new Error("Hinkal not initialized");
       if (!hinkal) {
         throw new Error("Hinkal not initialized");
       }
@@ -90,9 +98,13 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
 
         const txScheduleTime = Date.now() + convertScheduleToMs(schedule);
 
-        console.log("token:", token);
-        console.log("recipientAmounts:", recipientAmounts);
-        console.log("txScheduleTime:", txScheduleTime);
+        console.log("[MultiSend] calling depositAndWithdraw", {
+          token: token.symbol,
+          amounts: [amount1Wei.toString(), amount2Wei.toString()],
+          addresses: [address1, address2],
+          txScheduleTime,
+          feeStructure,
+        });
 
         const result = await hinkal.depositAndWithdraw(
           token,
@@ -106,19 +118,14 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
 
         onSuccess();
       } catch (err) {
+        console.error("[MultiSend] error", err);
         onError(err as Error);
       } finally {
         setIsProcessing(false);
       }
     },
-    [hinkal, onError, onSuccess],
+    [hinkal, feeStructure, onError, onSuccess],
   );
 
-  return {
-    multiSend,
-    isProcessing,
-    fee,
-    isFeeLoading,
-    calculateFee,
-  };
+  return { multiSend, isProcessing, fee, isFeeLoading, calculateFee };
 };

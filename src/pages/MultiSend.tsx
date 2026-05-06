@@ -1,3 +1,4 @@
+// MultiSend.tsx
 import {
   SyntheticEvent,
   useCallback,
@@ -34,45 +35,35 @@ export const MultiSend = () => {
 
   const allowedTokens = useMemo(() => {
     if (!chainId) return [];
-
     const nativeToken = getERC20Token(ZERO_ADDRESS, chainId);
-
     const stablecoins = NON_NATIVE_GAS_TOKENS.map((symbol) =>
       getERC20TokenBySymbol(symbol, chainId),
     ).filter((token): token is ERC20Token => token !== undefined);
-
     return nativeToken ? [nativeToken, ...stablecoins] : stablecoins;
   }, [chainId]);
 
   const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
     undefined,
   );
-  const [totalAmount, setTotalAmount] = useState<string>("");
-
   const [address1, setAddress1] = useState<string>("");
   const [amount1, setAmount1] = useState<string>("");
   const [address2, setAddress2] = useState<string>("");
   const [amount2, setAmount2] = useState<string>("");
-
   const [schedule, setSchedule] = useState<ScheduleOption>("instantly");
-  const [intervalBetweenTxs, setIntervalBetweenTxs] =
-    useState<ScheduleOption>("instantly");
 
   const { multiSend, isProcessing, fee, isFeeLoading, calculateFee } =
     useMultiSend({
       onError: (err) => {
+        console.error("[MultiSend] onError", err);
         const message = getErrorMessage(err, ErrorCategory.DEPOSIT);
-        if (message !== "Multi send failed") {
-          toast.error(message);
-        }
+        if (message !== "Multi send failed") toast.error(message);
       },
       onSuccess: async () => {
-        toast.success("Multi send successed!");
+        toast.success("Multi send succeeded!");
         setAddress1("");
         setAmount1("");
         setAddress2("");
         setAmount2("");
-        setTotalAmount("");
         await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
       },
     });
@@ -82,14 +73,12 @@ export const MultiSend = () => {
       setSelectedToken(undefined);
       return;
     }
-
     if (selectedToken) {
       const isTokenStillValid = allowedTokens.some(
         (token) =>
           token.erc20TokenAddress.toLowerCase() ===
           selectedToken.erc20TokenAddress.toLowerCase(),
       );
-
       if (!isTokenStillValid) setSelectedToken(allowedTokens[0] || undefined);
     }
   }, [chainId, allowedTokens, selectedToken]);
@@ -102,9 +91,8 @@ export const MultiSend = () => {
     event: React.ChangeEvent<HTMLInputElement>,
     setValue: (value: string) => void,
   ) => {
-    if (/^[0-9]*[.]?[0-9]*$/.test(event.target.value)) {
+    if (/^[0-9]*[.]?[0-9]*$/.test(event.target.value))
       setValue(event.target.value);
-    }
   };
 
   const handleMultiSend = useCallback(async () => {
@@ -127,9 +115,7 @@ export const MultiSend = () => {
     schedule,
   ]);
 
-  const handleSubmit = (event: SyntheticEvent) => {
-    event.preventDefault();
-  };
+  const handleSubmit = (event: SyntheticEvent) => event.preventDefault();
 
   const isDisabled = useMemo(
     () =>
@@ -187,14 +173,6 @@ export const MultiSend = () => {
           options={SCHEDULE_OPTIONS}
           selected={schedule}
           onSelect={(option) => setSchedule(option as ScheduleOption)}
-          disabled={isProcessing}
-        />
-
-        <ButtonGroupWithLabel
-          label="Interval Between Transactions"
-          options={SCHEDULE_OPTIONS}
-          selected={intervalBetweenTxs}
-          onSelect={(option) => setIntervalBetweenTxs(option as ScheduleOption)}
           disabled={isProcessing}
         />
 
