@@ -14,9 +14,249 @@
     },
     {
       "chainId": 5042002,
+      "erc20TokenAddress": "0x89B50855Aa3bE2F677cD6303Cec089B5F319D72a",
+      "name": "EURC",
+      "symbol": "EURC"
+    },
+    {
+      "chainId": 5042002,
       "erc20TokenAddress": "0x175cdb1d338945f0d851a741ccf787d343e57952",
       "name": "Tether USD",
       "symbol": "USDT"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x911b4000D3422F482F4062a913885f7b035382Df",
+      "name": "Wrapped USDC",
+      "symbol": "WUSDC"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x49cd69442dB073E7b94B0124e316AB7C68b95988",
+      "name": "Simple RAC Token",
+      "symbol": "SRAC"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x2D84D79C852f6842AbE0304b70bBaA1506AdD457",
+      "name": "USDC/EURC",
+      "symbol": "USDCEURC"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0xC5124C846c6e6307986988dFb7e743327aA05F19",
+      "name": "Synthra",
+      "symbol": "SYN"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x63F856fBAB3535174bFaFD6EFd720C634d6FD458",
+      "name": "Swap ACR Token",
+      "symbol": "SACS"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x6E63e2cABECCe5c3A1c37b79A958a9542076A1e3",
+      "name": "RAC Swap Token",
+      "symbol": "RACS"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x832Fa4331050045F911bD6d59EAD144A04B965cB",
+      "name": "Dogg Token",
+      "symbol": "DOGG"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x62b4B3458F8E35b211015c35E0d74877dFE508ec",
+      "name": "Wormhole Bitcoin",
+      "symbol": "wBTC"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0xd065a783C362d73b5a62EfB2B2e5DEDe49d16aa3",
+      "name": "Simple Pool LP",
+      "symbol": "SPLP"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x787804d1f98F4Da65C6de63AaA00906A8C6868F3",
+      "name": "Test USDT",
+      "symbol": "tUSDT"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x1eccf89268C90C5Ac954ed020Ca498D96F9f9733",
+      "name": "Test USDC",
+      "symbol": "tUSDC"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x4D81e87902aA4Cf67D99055D44b6D0341fCc419a",
+      "name": "Test USDY",
+      "symbol": "tUSDY"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0xCd4e6C8056608e7CA5b8cD126F32c56c43D92979",
+      "name": "Curve.fi USDCEURC Gauge Deposit",
+      "symbol": "USDCEURC-gauge"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0xe470A3Fb08345FD4a84c1b56Bd35bA7Be6297C3d",
+      "name": "Kitty Token",
+      "symbol": "KITTY"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x532E01937686e538541E8D9847129252168d5C95",
+      "name": "PUMP Token",
+      "symbol": "PUMP"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x0714027E44802b2Ff76389daF5371990CC3a4C24",
+      "name": "WUSDC/EURC",
+      "symbol": "WUSDCEURC"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0xBc4e50dEBe49a207cf977b220416b6a5e289d2b5",
+      "name": "Ciyeyforef",
+      "symbol": "CA4F"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x28951a0909Be0ae9Afb53015509C1732fd027ef3",
+      "name": "bbToken",
+      "symbol": "bbToken"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0xFabB12B18c4b0B79dd97D8EA7c000F7424C76195",
+      "name": "Simple Pool LP",
+      "symbol": "SPLP"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x18eAE2e870Ec4Bc31a41B12773c4F5c40Bf19aCD",
+      "name": "Simple Pool LP",
+      "symbol": "SPLP"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x1Bcabc3f981D4E4F7CB65fdcBc112139d670EfB7",
+      "name": "dUSDT",
+      "symbol": "dUSDT"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x36Fa0D9661D7bcD5af7a040C46df2337463f8328",
+      "name": "Curve.fi WUSDCEURC Gauge Deposit",
+      "symbol": "WUSDCEURC-gauge"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x942644106B073E30D72c2C5D7529D5C296ea91ab",
+      "name": "usdc",
+      "symbol": "eurc"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0xA6319791CA6303589e12b9184Dd983198547eA06",
+      "name": "UUSD Token",
+      "symbol": "UUSD"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0xd3F0f285910D912Df4a87c32C827eF8b55cD79F5",
+      "name": "khalimut",
+      "symbol": "LIMUT"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0xD0f28d422962C10d7802A65291b2f7693C5C86d1",
+      "name": "Kelantit",
+      "symbol": "NTIT"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x4173fD6b97e008dD6A209632bcFbA340BaBFF9aD",
+      "name": "Diyvanfiveef",
+      "symbol": "D15F"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x95aF759ec2f4385EdBbBA959A8a1CDc65610D080",
+      "name": "eurc/wusdc",
+      "symbol": "eurcwusdc"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x269b47978f4348C96f521658eF452fF85906fcfe",
+      "name": "arc",
+      "symbol": "arc"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0xc7ebe3eB8f1eE7eFa5367f9b3c3904721ec12233",
+      "name": "Curve.fi eurc Gauge Deposit",
+      "symbol": "eurc-gauge"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x25c8051c45cB94f216064603F13AbF90c077B8EE",
+      "name": "Simple Pool LP",
+      "symbol": "SPLP"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x87d33A964703d608D161e7ff9DBA93dCdaca5280",
+      "name": "hajijon",
+      "symbol": "HJI"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x15bFEc8CeA729885bb82e2f3aDC12A115a573602",
+      "name": "abasali",
+      "symbol": "ABS"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0xD0da6f2A6ACA57D79B783B8ABd7c22F03810e6cc",
+      "name": "Simple Pool LP",
+      "symbol": "SPLP"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0xb2B6dA55472A9077B45Bd9CC57C42E107c56f18e",
+      "name": "test",
+      "symbol": "TST"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0x732EdD0cd3E8459c8738F1465AE5918cc4c1C4F3",
+      "name": "ESUSD Token",
+      "symbol": "ESUSD"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0xd5522A56Af526BfDD89365659F60c880d7e1dbe1",
+      "name": "Simple Pool LP",
+      "symbol": "SPLP"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0xAac1a797A719036900AB63805567ab5f792f3874",
+      "name": "Simple Pool LP",
+      "symbol": "SPLP"
+    },
+    {
+      "chainId": 5042002,
+      "erc20TokenAddress": "0xC4E43ca0dee46b878f446017367493aD7B7C5725",
+      "name": "Simple Pool LP",
+      "symbol": "SPLP"
     }
   ]
 }

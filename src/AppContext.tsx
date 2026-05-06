@@ -88,7 +88,8 @@ export const AppContextProvider: FC<AppContextProps> = ({
         ),
       );
 
-      if (!isCancelled) setErc20List(tokens);
+      if (!isCancelled)
+        setErc20List(tokens.filter((token) => token !== undefined));
     };
 
     loadErc20List();
