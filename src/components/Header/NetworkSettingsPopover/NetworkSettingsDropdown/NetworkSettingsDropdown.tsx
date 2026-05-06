@@ -23,16 +23,13 @@ export const NetworkSettingsDropdown = ({
 
   const switchNetwork = useCallback(
     async (chainId: number) => {
-      const network = networkList.find((net) => net.chainId === chainId);
-      if (network) {
-        await hinkal.switchNetwork(network);
-        setChainId(network.chainId);
-        close();
-        await hinkal.resetMerkle();
-        await refreshBalances();
-      }
+      await hinkal.switchNetwork(chainId);
+      setChainId(chainId);
+      close();
+      await hinkal.resetMerkle();
+      await refreshBalances();
     },
-    [networkList, hinkal, setChainId, close],
+    [hinkal, setChainId, close, refreshBalances],
   );
 
   return (

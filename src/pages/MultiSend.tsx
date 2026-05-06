@@ -45,11 +45,13 @@ export const MultiSend = () => {
         NON_NATIVE_GAS_TOKENS.includes(token.symbol),
       );
 
-      const stablecoins = await Promise.all(
-        stablecoinsData.map((token) =>
-          getErc20Token(chainId, token.erc20TokenAddress),
-        ),
-      );
+      const stablecoins = (
+        await Promise.all(
+          stablecoinsData.map((token) =>
+            getErc20Token(chainId, token.erc20TokenAddress),
+          ),
+        )
+      ).filter((token) => token !== undefined);
 
       if (!isCancelled) {
         setAllowedTokens(

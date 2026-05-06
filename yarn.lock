@@ -962,9 +962,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gurg/hi-test@npm:0.1.39":
-  version: 0.1.39
-  resolution: "@gurg/hi-test@npm:0.1.39"
+"@gurg/hi-test@npm:0.1.40":
+  version: 0.1.40
+  resolution: "@gurg/hi-test@npm:0.1.40"
   dependencies:
     "@coral-xyz/anchor": "npm:^0.31.0"
     "@solana/spl-token": "npm:^0.4.14"
@@ -996,7 +996,7 @@ __metadata:
       optional: true
     wagmi:
       optional: true
-  checksum: 10c0/5de2eef3bac8a984240e8781e71da8ccb83825500f26394ce4e7404473eff1ec8496d6bbf2c8f04a7e386cf1116a0004650541b7351ccf13c081ffff5048d704
+  checksum: 10c0/a51a6f03c4b6df865addfd6f4799d5017adfa73c2c64278b2316655aecda2fed8808dcadc18bd74b7b061c849467482c86d128da26f275a5e4fe0e8ace9d4f95
   languageName: node
   linkType: hard
 
@@ -8195,7 +8195,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "hinkal-demo-app@workspace:."
   dependencies:
-    "@gurg/hi-test": "npm:0.1.39"
+    "@gurg/hi-test": "npm:0.1.40"
     "@headlessui/react": "npm:^1.7.5"
     "@tanstack/react-query": "npm:^5.0.0"
     "@types/jest": "npm:^29.4.0"
