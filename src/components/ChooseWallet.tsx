@@ -115,9 +115,7 @@ export const ChooseWallet = ({
                 />
               )}
               <span>{connector.name}</span>
-              {connectingId === connector.id && (
-                <Spinner styleSize="size-5 mr-0" />
-              )}
+              {connectingId === connector.id && <Spinner />}
             </button>
           ))}
       </div>

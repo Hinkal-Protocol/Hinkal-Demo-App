@@ -1,5 +1,10 @@
 import { useState, useCallback } from "react";
-import { ERC20Token, getAmountInWei, ExternalActionId } from "@hinkal/common";
+import {
+  ERC20Token,
+  getAmountInWei,
+  hinkalSwap,
+  ExternalActionId,
+} from "@hinkal/common";
 import { useAppContext } from "../AppContext";
 
 type UseSwapOptions = {

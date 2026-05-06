@@ -17,7 +17,6 @@ import {
   useMemo,
   useState,
   useCallback,
-  useRef,
 } from "react";
 import { Connector } from "wagmi";
 
@@ -32,7 +31,6 @@ type AppContextArgumnets = {
   setDataLoaded: (val: boolean) => void;
   erc20List: ERC20Token[];
   balances: TokenBalance[];
-  isRefreshing: boolean;
   refreshBalances: (interval?: number) => Promise<void>;
 };
 
@@ -50,7 +48,6 @@ const AppContext = createContext<AppContextArgumnets>({
   setDataLoaded: (val: boolean) => {},
   erc20List: [],
   balances: [],
-  isRefreshing: false,
   refreshBalances: async () => {},
 });
 
@@ -70,8 +67,6 @@ export const AppContextProvider: FC<AppContextProps> = ({
   const [balances, setBalances] = useState<TokenBalance[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const balanceCacheRef = useRef<Record<number, TokenBalance[]>>({});
-
   const networkList = useMemo(() => Object.values(networkRegistry), []);
 
   useEffect(() => {
@@ -79,50 +74,34 @@ export const AppContextProvider: FC<AppContextProps> = ({
     setSelectedNetwork(network);
   }, [chainId, networkList]);
 
-  useEffect(() => {
-    setBalances(chainId ? balanceCacheRef.current[chainId] ?? [] : []);
-  }, [chainId]);
-
   const erc20List = useMemo(
     () => (chainId ? getERC20Registry(chainId) : []),
     [chainId],
   );
 
-  const refreshBalances = useCallback(
-    async (interval?: number) => {
-      if (!dataLoaded || isRefreshing || !chainId) return;
-      const fetchingForChainId = chainId;
+  const refreshBalances = useCallback(async () => {
+    if (!dataLoaded || isRefreshing || !chainId) return;
 
-      try {
-        setIsRefreshing(true);
-        if (interval)
-          await new Promise((resolve) => setTimeout(resolve, interval));
+    try {
+      setIsRefreshing(true);
 
-        const ethAddress = await hinkal.getEthereumAddress();
+      const ethAddress = await hinkal.getEthereumAddress();
 
-        const bals = await hinkal.getBalances(
-          chainId,
-          hinkal.userKeys.getShieldedPrivateKey(),
-          hinkal.userKeys.getShieldedPublicKey(),
-          ethAddress,
-          false,
-          true,
-        );
-        if (chainId !== fetchingForChainId) return;
+      const bals = await hinkal.getBalances(
+        chainId,
+        hinkal.userKeys.getShieldedPrivateKey(),
+        hinkal.userKeys.getShieldedPublicKey(),
+        ethAddress,
+      );
 
-        const balancesArray = Array.from(bals.values());
-        balanceCacheRef.current[fetchingForChainId] = balancesArray;
-        setBalances(balancesArray);
-      } catch (error) {
-        if (error instanceof Error && error.message.includes("canceled"))
-          return;
-        console.error("Error refreshing balances:", error);
-      } finally {
-        setIsRefreshing(false);
-      }
-    },
-    [dataLoaded, hinkal],
-  );
+      const balancesArray = Array.from(bals.values());
+      setBalances(balancesArray);
+    } catch (error) {
+      console.error("Error refreshing balances:", error);
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [dataLoaded, hinkal, chainId]);
 
   useEffect(() => {
     if (!dataLoaded) return;
@@ -149,7 +128,6 @@ export const AppContextProvider: FC<AppContextProps> = ({
         setDataLoaded,
         erc20List,
         balances,
-        isRefreshing,
         refreshBalances,
       }}
     >
