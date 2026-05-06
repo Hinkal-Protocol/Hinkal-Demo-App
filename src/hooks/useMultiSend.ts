@@ -18,7 +18,7 @@ interface UseMultiSendProps {
 }
 
 export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
-  const { hinkal } = useAppContext();
+  const { hinkal, chainId } = useAppContext();
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [fee, setFee] = useState<bigint | null>(null);
   const [isFeeLoading, setIsFeeLoading] = useState<boolean>(false);
@@ -32,21 +32,33 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
       try {
         setIsFeeLoading(true);
         const chainId = hinkal.getCurrentChainId();
-        const { priceOfTransactionInToken } = await processGasEstimates(
-          chainId,
-          token,
-          ExternalActionId.Transact,
-          1,
-          undefined,
-          undefined,
-        );
-        if (priceOfTransactionInToken !== undefined) {
-          setFee(priceOfTransactionInToken * 2n);
-          setFeeStructure({
-            variableRate: 0n,
-            feeToken: token.erc20TokenAddress,
-            flatFee: priceOfTransactionInToken,
-          });
+        if (!hinkal || !token || !chainId) return;
+
+        try {
+          setIsFeeLoading(true);
+
+          const { priceOfTransactionInToken } = await processGasEstimates(
+            chainId,
+            token,
+            ExternalActionId.Transact,
+            1,
+            undefined,
+            undefined,
+          );
+          if (priceOfTransactionInToken !== undefined) {
+            setFee(priceOfTransactionInToken * 2n);
+            setFeeStructure({
+              variableRate: 0n,
+              feeToken: token.erc20TokenAddress,
+              flatFee: priceOfTransactionInToken,
+            });
+          }
+        } catch (err) {
+          console.error("Error calculating fee:", err);
+          setFee(null);
+          setFeeStructure(undefined);
+        } finally {
+          setIsFeeLoading(false);
         }
       } catch (err) {
         console.error("Error calculating fee:", err);
@@ -69,12 +81,22 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
       schedule: ScheduleOption,
     ) => {
       if (!hinkal) throw new Error("Hinkal not initialized");
+      if (!hinkal) {
+        throw new Error("Hinkal not initialized");
+      }
+      if (!chainId) return;
 
       try {
         setIsProcessing(true);
 
         const amount1Wei = getAmountInWei(token, amount1);
         const amount2Wei = getAmountInWei(token, amount2);
+
+        const recipientAmounts: Record<string, bigint> = {
+          [address1]: amount1Wei,
+          [address2]: amount2Wei,
+        };
+
         const txScheduleTime = Date.now() + convertScheduleToMs(schedule);
 
         console.log("[MultiSend] calling depositAndWithdraw", {
@@ -87,13 +109,13 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
 
         const result = await hinkal.depositAndWithdraw(
           token,
-          [amount1Wei, amount2Wei],
-          [address1, address2],
+          Object.values(recipientAmounts),
+          Object.keys(recipientAmounts),
           txScheduleTime,
           feeStructure,
         );
 
-        console.log("[MultiSend] depositAndWithdraw result", result);
+        if (result) await hinkal.waitForTransaction(chainId, result);
 
         onSuccess();
       } catch (err) {

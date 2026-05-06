@@ -27,7 +27,10 @@ export const WalletInfoBalance = ({ tokenBalance }: WalletInfoBalanceProps) => {
       </div>
       <div>
         <p className="text-white text-[18px] font-semibold">
-          {formatBalance(amount)} {tokenBalance.token.symbol}
+          {Number(
+            getAmountInToken(tokenBalance.token, tokenBalance.balance),
+          ).toFixed(4)}{" "}
+          {tokenBalance.token.symbol}
         </p>
       </div>
     </div>

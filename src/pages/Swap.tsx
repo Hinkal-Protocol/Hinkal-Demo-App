@@ -51,7 +51,7 @@ export const Swap = () => {
       outSwapToken && outSwapAmountWei
         ? getAmountInToken(outSwapToken, outSwapAmountWei)
         : "",
-    [outSwapToken, outSwapAmountWei]
+    [outSwapToken, outSwapAmountWei],
   );
 
   const isReadyForSwap = useMemo(
@@ -62,7 +62,7 @@ export const Swap = () => {
       inSwapToken &&
       outSwapToken &&
       fee,
-    [inSwapAmount, inSwapToken, outSwapToken, outSwapAmountWei, fee]
+    [inSwapAmount, inSwapToken, outSwapToken, outSwapAmountWei, fee],
   );
 
   const handleSwap = useCallback(async () => {
@@ -72,7 +72,7 @@ export const Swap = () => {
 
   const setTokenAmountHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
-    setValue: (value: string) => void
+    setValue: (value: string) => void,
   ) => {
     if (/^[0-9]*[.]?[0-9]*$/.test(event.target.value)) {
       setValue(event.target.value);

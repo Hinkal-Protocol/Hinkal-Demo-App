@@ -90,22 +90,23 @@ export const AppContextProvider: FC<AppContextProps> = ({
 
   const refreshBalances = useCallback(
     async (interval?: number) => {
-      if (!dataLoaded || isRefreshing) return;
+      if (!dataLoaded || isRefreshing || !chainId) return;
       const fetchingForChainId = hinkal.getCurrentChainId();
 
       try {
         setIsRefreshing(true);
-
         if (interval)
           await new Promise((resolve) => setTimeout(resolve, interval));
 
         const ethAddress = await hinkal.getEthereumAddress();
 
         const bals = await hinkal.getBalances(
-          fetchingForChainId,
+          hinkal.getCurrentChainId(),
           hinkal.userKeys.getShieldedPrivateKey(),
           hinkal.userKeys.getShieldedPublicKey(),
           ethAddress,
+          false,
+          true,
         );
         if (hinkal.getCurrentChainId() !== fetchingForChainId) return;
 

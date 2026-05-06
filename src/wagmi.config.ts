@@ -1,5 +1,5 @@
 import { http, createConfig } from "wagmi";
-import { metaMask } from "wagmi/connectors";
+import { metaMask, walletConnect } from "wagmi/connectors";
 import { networkRegistry } from "@hinkal/common";
 import { SUPPORTED_CHAINS } from "./constants/supported-chain-ids.constants";
 
@@ -12,7 +12,10 @@ export const getWagmiConfig = () => {
 
   return createConfig({
     chains: SUPPORTED_CHAINS,
-    connectors: [metaMask()],
+    connectors: [
+      metaMask(),
+      walletConnect({ projectId: "6c5e68094017e64428795a28e4c6aef1" }),
+    ],
     transports,
   });
 };
