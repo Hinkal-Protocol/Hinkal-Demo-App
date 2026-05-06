@@ -29,10 +29,10 @@ export const NetworkSettingsDropdown = ({
         setChainId(network.chainId);
         close();
         await hinkal.resetMerkle();
-        await refreshBalances();
+        await refreshBalances(0, true);
       }
     },
-    [networkList, hinkal, setChainId, close],
+    [networkList, hinkal, setChainId, close, refreshBalances],
   );
 
   return (

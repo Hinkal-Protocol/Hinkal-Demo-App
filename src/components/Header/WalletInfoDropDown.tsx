@@ -25,10 +25,6 @@ const filterTokenBalances = (tokenBalances: TokenBalance[]) => {
 export const WalletInfoDropDown = () => {
   const { balances, hinkal, chainId, refreshBalances } = useAppContext();
 
-  useEffect(() => {
-    if (chainId && refreshBalances) refreshBalances();
-  }, [chainId, refreshBalances]);
-
   const handleCopyShieldedAddress = () => {
     try {
       const shieldedAddress = hinkal.getShieldedPublicKey();
@@ -50,12 +46,19 @@ export const WalletInfoDropDown = () => {
         <p className="text-[#abaeaf] text-[12px] text-left">Balance</p>
       </div>
       <div className="flex flex-col justify-center gap-4 mb-[10%]">
-        {filterTokenBalances(balances).map((tokenBalance) => (
-          <WalletInfoBalance
-            tokenBalance={tokenBalance}
-            key={tokenBalance.token.erc20TokenAddress}
-          />
-        ))}
+        {balances.length === 0 ? (
+          <div className="flex items-center gap-2 animate-pulse">
+            <div className="w-6 h-6 rounded-full bg-gray-100" />
+            <div className="h-4 w-24 rounded bg-gray-100" />
+          </div>
+        ) : (
+          filterTokenBalances(balances).map((tokenBalance) => (
+            <WalletInfoBalance
+              tokenBalance={tokenBalance}
+              key={tokenBalance.token.erc20TokenAddress}
+            />
+          ))
+        )}
       </div>
 
       <div className="border-t-2 md:text-[15px] border-[#36393D]">
