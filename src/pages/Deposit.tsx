@@ -1,11 +1,18 @@
-import { SyntheticEvent, useCallback, useState, useMemo } from "react";
+import {
+  SyntheticEvent,
+  useCallback,
+  useState,
+  useMemo,
+  useEffect,
+} from "react";
 import { ERC20Token } from "@gurg/hi-test";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
 import { useAppContext } from "../AppContext";
 import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
-import { getAmountInWei } from "../utils/amount.utils";
+import { getAmountInToken, getAmountInWei } from "../utils/amount.utils";
+import { getPublicBalanceByTokenAddress } from "../utils/getPublicBalanceByToken";
 
 export const Deposit = () => {
   const { hinkal, refreshBalances, chainId } = useAppContext();
@@ -15,6 +22,29 @@ export const Deposit = () => {
   );
   const [depositAmount, setDepositAmount] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [publicBalance, setPublicBalance] = useState<bigint | null>(null);
+
+  useEffect(() => {
+    if (!selectedToken || !chainId) {
+      setPublicBalance(null);
+      return;
+    }
+    const fetch = async () => {
+      const ethAddress = await hinkal.getEthereumAddress();
+      const balance = await getPublicBalanceByTokenAddress(
+        chainId,
+        ethAddress,
+        selectedToken.erc20TokenAddress,
+      );
+      setPublicBalance(balance);
+    };
+    fetch();
+  }, [selectedToken, chainId, hinkal]);
+
+  const publicBalanceDisplay = useMemo(() => {
+    if (publicBalance === null || !selectedToken) return null;
+    return Number(getAmountInToken(selectedToken, publicBalance)).toFixed(6);
+  }, [publicBalance, selectedToken]);
 
   const handleDeposit = useCallback(async () => {
     try {
@@ -32,6 +62,7 @@ export const Deposit = () => {
       toast.error(errorMessage);
     } finally {
       setIsProcessing(false);
+      refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
     }
   }, [hinkal, depositAmount, selectedToken, refreshBalances]);
 
@@ -54,6 +85,11 @@ export const Deposit = () => {
           selectedToken={selectedToken}
           setSelectedToken={setSelectedToken}
         />
+        {publicBalanceDisplay !== null && (
+          <p className="text-gray-200 text-[12px] pl-[5%] mt-2">
+            Available: {publicBalanceDisplay} {selectedToken?.symbol}
+          </p>
+        )}
         <div className="w-[90%] mx-auto mb-6 mt-6 h-[1px] bg-[#272B30]" />
         <div className="border-solid">
           <button
