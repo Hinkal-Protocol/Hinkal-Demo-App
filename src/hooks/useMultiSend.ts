@@ -31,7 +31,6 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
       if (!hinkal || !token) return;
       try {
         setIsFeeLoading(true);
-        const chainId = hinkal.getCurrentChainId();
         if (!hinkal || !token || !chainId) return;
 
         try {

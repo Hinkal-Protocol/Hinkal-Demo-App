@@ -91,7 +91,7 @@ export const AppContextProvider: FC<AppContextProps> = ({
   const refreshBalances = useCallback(
     async (interval?: number) => {
       if (!dataLoaded || isRefreshing || !chainId) return;
-      const fetchingForChainId = hinkal.getCurrentChainId();
+      const fetchingForChainId = chainId;
 
       try {
         setIsRefreshing(true);
@@ -101,14 +101,14 @@ export const AppContextProvider: FC<AppContextProps> = ({
         const ethAddress = await hinkal.getEthereumAddress();
 
         const bals = await hinkal.getBalances(
-          hinkal.getCurrentChainId(),
+          chainId,
           hinkal.userKeys.getShieldedPrivateKey(),
           hinkal.userKeys.getShieldedPublicKey(),
           ethAddress,
           false,
           true,
         );
-        if (hinkal.getCurrentChainId() !== fetchingForChainId) return;
+        if (chainId !== fetchingForChainId) return;
 
         const balancesArray = Array.from(bals.values());
         balanceCacheRef.current[fetchingForChainId] = balancesArray;
