@@ -8,7 +8,7 @@ import walletconnectLogo from "../assets/walletconnectWalletLogo.png";
 import { Modal } from "./Modal";
 import { Spinner } from "./Spinner";
 import { useAppContext } from "../AppContext";
-import { prepareWagmiHinkal } from "@hinkal/common/providers/prepareWagmiHinkal";
+import { prepareWagmiHinkal } from "@gurg/hi-test";
 import toast from "react-hot-toast";
 
 interface ChooseWalletProps {
@@ -44,7 +44,7 @@ export const ChooseWallet = ({
         await new Promise((resolve) => setTimeout(resolve, 200));
         const hinkal = await prepareWagmiHinkal(connector, config);
         setHinkal(hinkal);
-        setShieldedAddress(hinkal.userKeys.getShieldedPublicKey());
+        setShieldedAddress(hinkal.getShieldedPublicKey());
         const providerAdapter = hinkal.getProviderAdapter();
         const chainId = providerAdapter.getChainId();
         if (!chainId) throw new Error("Chain id not found");
@@ -115,7 +115,9 @@ export const ChooseWallet = ({
                 />
               )}
               <span>{connector.name}</span>
-              {connectingId === connector.id && <Spinner />}
+              {connectingId === connector.id && (
+                <Spinner styleSize="size-5 mr-0" />
+              )}
             </button>
           ))}
       </div>

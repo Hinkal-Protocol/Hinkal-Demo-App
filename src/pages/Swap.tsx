@@ -1,19 +1,23 @@
-import { SyntheticEvent, useCallback, useMemo, useState } from "react";
+import {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import toast from "react-hot-toast";
 import { InfoPanel } from "../components/InfoPanel";
 import { Spinner } from "../components/Spinner";
 import { SelectToken } from "../components/swap/SelectToken";
 import { SwapInputTokensButton } from "../components/swap/SwapInputTokensButton";
-import {
-  ERC20Token,
-  ErrorCategory,
-  getAmountInToken,
-  getErrorMessage,
-} from "@hinkal/common";
+import { ERC20Token } from "@gurg/hi-test";
 import { useUniswapPrice } from "../hooks/useUniswapPrice";
 import { useSwap } from "../hooks/useSwap";
 import { useAppContext } from "../AppContext";
 import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
+import { getAmountInToken } from "../utils/amount.utils";
+import { useFee } from "../hooks/useFee";
+import { FeeDisplay } from "../components/FeeDisplay";
 
 export const Swap = () => {
   const { hinkal, refreshBalances } = useAppContext();
@@ -34,10 +38,12 @@ export const Swap = () => {
     outSwapToken,
   });
 
+  const { fee: swapFee, isFeeLoading, feeStructure, calculateFee } = useFee();
+
   const { swap, isProcessing } = useSwap({
     onError: (err) => {
-      const message = getErrorMessage(err, ErrorCategory.SWAP);
-      if (message !== "Swap failed") toast.error(message);
+      const message = err instanceof Error ? err.message : "Unknown error";
+      toast.error(message, { id: message });
     },
     onSuccess: async () => {
       toast.success("Swap successful! Balance will update in several seconds");
@@ -67,8 +73,23 @@ export const Swap = () => {
 
   const handleSwap = useCallback(async () => {
     if (!inSwapToken || !outSwapToken || !outSwapAmountWei || !fee) return;
-    await swap(inSwapToken, outSwapToken, inSwapAmount, outSwapAmountWei, fee);
-  }, [swap, inSwapToken, outSwapToken, inSwapAmount, outSwapAmountWei, fee]);
+    await swap(
+      inSwapToken,
+      outSwapToken,
+      inSwapAmount,
+      outSwapAmountWei,
+      fee,
+      feeStructure,
+    );
+  }, [
+    swap,
+    inSwapToken,
+    outSwapToken,
+    inSwapAmount,
+    outSwapAmountWei,
+    fee,
+    feeStructure,
+  ]);
 
   const setTokenAmountHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -87,6 +108,10 @@ export const Swap = () => {
   };
 
   const handleSubmit = (e: SyntheticEvent) => e.preventDefault();
+
+  useEffect(() => {
+    if (inSwapToken && inSwapAmount) calculateFee(inSwapToken);
+  }, [inSwapToken, inSwapAmount, calculateFee]);
 
   return (
     <form onSubmit={handleSubmit} className="text-white">
@@ -178,6 +203,11 @@ export const Swap = () => {
           </div>
         )}
       </div>
+      <FeeDisplay
+        fee={swapFee}
+        isFeeLoading={isFeeLoading}
+        selectedToken={inSwapToken}
+      />
       <div
         onClick={() => setRelayerInfoShown((prev) => !prev)}
         className="bg-[#272b3000] w-[88%] mx-auto rounded-xl py-1 flex items-center justify-between"

@@ -1,12 +1,13 @@
-import { TokenBalance, zeroAddress } from "@hinkal/common";
+import { TokenBalance } from "@gurg/hi-test";
 import toast from "react-hot-toast";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import Copy from "../../assets/Copy.svg";
 import Disconnect from "../../assets/Disconnect.svg";
 import { copyToClipboard } from "../../utils/copyToClipboard";
 import { reloadPage } from "../../utils/pageReload";
 import { WalletInfoBalance } from "./WalletInfoBalance";
 import { useAppContext } from "../../AppContext";
+import { zeroAddress } from "../../constants";
 
 const filterTokenBalances = (tokenBalances: TokenBalance[]) => {
   const nonZeroBalances = [...tokenBalances]
@@ -22,15 +23,25 @@ const filterTokenBalances = (tokenBalances: TokenBalance[]) => {
 };
 
 export const WalletInfoDropDown = () => {
-  const { balances, hinkal, chainId, refreshBalances } = useAppContext();
+  const { balances, hinkal, chainId, refreshBalances, erc20List } =
+    useAppContext();
 
-  useEffect(() => {
-    if (chainId && refreshBalances) refreshBalances();
-  }, [chainId, refreshBalances]);
+  const nativeToken = useMemo(
+    () => erc20List.find((t) => t.erc20TokenAddress === zeroAddress),
+    [erc20List],
+  );
+
+  const displayBalances = useMemo(
+    () =>
+      balances.length === 0 && nativeToken
+        ? [{ token: nativeToken, balance: 0n }]
+        : filterTokenBalances(balances),
+    [balances, nativeToken],
+  );
 
   const handleCopyShieldedAddress = () => {
     try {
-      const shieldedAddress = hinkal.userKeys.getShieldedPublicKey();
+      const shieldedAddress = hinkal.getShieldedPublicKey();
       if (!shieldedAddress) {
         toast.error("No shielded address found");
         return;
@@ -49,12 +60,19 @@ export const WalletInfoDropDown = () => {
         <p className="text-[#abaeaf] text-[12px] text-left">Balance</p>
       </div>
       <div className="flex flex-col justify-center gap-4 mb-[10%]">
-        {filterTokenBalances(balances).map((tokenBalance) => (
-          <WalletInfoBalance
-            tokenBalance={tokenBalance}
-            key={tokenBalance.token.erc20TokenAddress}
-          />
-        ))}
+        {balances.length === 0 ? (
+          <div className="flex items-center gap-2 animate-pulse">
+            <div className="w-6 h-6 rounded-full bg-gray-100" />
+            <div className="h-4 w-24 rounded bg-gray-100" />
+          </div>
+        ) : (
+          displayBalances.map((tokenBalance) => (
+            <WalletInfoBalance
+              tokenBalance={tokenBalance}
+              key={tokenBalance.token.erc20TokenAddress}
+            />
+          ))
+        )}
       </div>
 
       <div className="border-t-2 md:text-[15px] border-[#36393D]">

@@ -1,4 +1,4 @@
-import { ERC20Token } from "@hinkal/common";
+import { ERC20Token } from "@gurg/hi-test";
 import { useState } from "react";
 import VectorDown from "../../assets/VectorDown.svg";
 import { TokenDropdown } from "./TokenDropdown";

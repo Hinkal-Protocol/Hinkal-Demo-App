@@ -1,0 +1,1342 @@
+{
+  "networkRegistry": [
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x0000000000000000000000000000000000000000",
+      "name": "Polygon POL",
+      "symbol": "POL"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+      "name": "USD Coin (PoS)",
+      "symbol": "USDC.e"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x3c499c542cef5e3811e1192ce70d8cc03d5c3359",
+      "name": "USD Coin",
+      "symbol": "USDC"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+      "name": "USDT",
+      "symbol": "USDT"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
+      "name": "WETH",
+      "symbol": "WETH"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6",
+      "name": "Wrapped Bitcoin",
+      "symbol": "WBTC"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
+      "name": "Dai",
+      "symbol": "DAI"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xE7a24EF0C5e95Ffb0f6684b813A78F2a3AD7D171",
+      "name": "am3CRV",
+      "symbol": "am3CRV"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x87ff96aba480f1813aF5c780387d8De7cf7D8261",
+      "name": "Wrapped BUSD",
+      "symbol": "WBUSD"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x2088C47Fc0c78356c622F79dBa4CbE1cCfA84A91",
+      "name": "Huobi USD",
+      "symbol": "HUSD"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xdAb529f40E671A1D4bF91361c21bf9f0C9712ab7",
+      "name": "Binance USD",
+      "symbol": "BUSD"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xDBf31dF14B66535aF65AaC99C32e9eA844e14501",
+      "name": "Renec BTC",
+      "symbol": "renBTC"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xD6DF932A45C0f255f85145f286eA0b292B21C90B",
+      "name": " Aave (PoS)",
+      "symbol": "AAVE"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x7D645CBbCAdE2A130bF1bf0528b8541d32D3f8Cf",
+      "name": "Alerto",
+      "symbol": "ALRTO"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x2e1AD108fF1D8C782fcBbB89AAd783aC49586756",
+      "name": "TrueUSD",
+      "symbol": "TUSD"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x4e3Decbb3645551B8A19f0eA1678079FCB33fB4c",
+      "name": "Jarvis Synthetic Euro",
+      "symbol": "jEUR"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
+      "name": "Wrapped POL",
+      "symbol": "WPOL"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x45c32fA6DF82ead1e2EF74d17b76547EDdFaFF89",
+      "name": "Frax",
+      "symbol": "FRAX"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x8343091F2499FD4b6174A46D067A920a3b851FF9",
+      "name": "Jarvis Synthetic Japanese Yen",
+      "symbol": "JJPY"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x431D5dfF03120AFA4bDf332c61A6e1766eF37BDB",
+      "name": "JPY Coin",
+      "symbol": "JPY"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xE2Aa7db6dA1dAE97C5f5C6914d285fBfCC32A128",
+      "name": "PAR Stablecoin",
+      "symbol": "PAR"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x7BDF330f423Ea880FF95fC41A280fD5eCFD3D09f",
+      "name": "Euro Tether (PoS)",
+      "symbol": "EURT"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xE111178A87A3BFf0c8d18DECBa5798827539Ae99",
+      "name": "STASIS EURS Token",
+      "symbol": "EURS"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xa3Fa99A148fA48D14Ed51d610c367C61876997F1",
+      "name": "miMATIC",
+      "symbol": "MAI"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x750e4C4984a9e0f12978eA6742Bc1c5D248f40ed",
+      "name": "Axelar Wrapped USDC",
+      "symbol": "axlUSDC"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xb5DFABd7fF7F83BAB83995E72A52B97ABb7bcf63",
+      "name": "Real USD",
+      "symbol": "Real USD"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x361a5a4993493ce00f61c32d4ecca5512b82ce90",
+      "name": "Stake DAO",
+      "symbol": "SDT"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x2C2D8a078B33bf7782a16AcCE2C5BA6653a90D5f",
+      "name": "L3USD",
+      "symbol": "L3USD"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x172370d5Cd63279eFa6d502DAB29171933a610AF",
+      "name": "CRV (PoS)",
+      "symbol": "CRV"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x3A58a54C066FdC0f2D55FC9C89F0415C92eBf3C4",
+      "name": "Staked MATIC",
+      "symbol": "stMATIC"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x40379a439D4F6795B6fc9aa5687dB461677A2dBa",
+      "name": "Real USD v2",
+      "symbol": "Real USD v2"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x00e8c0E92eB3Ad88189E7125Ec8825eDc03Ab265",
+      "name": "Real USD Wrapped",
+      "symbol": "Real USD Wrapped"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xfa68fb4628dff1028cfec22b4162fccd0d45efb6",
+      "name": "MaticX",
+      "symbol": "MaticX"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x2ee50c34392e7e7a1d17b0a42328a8d1ad6894e3",
+      "name": "sMVLP",
+      "symbol": "sMVLP"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x1205f31718499dbf1fca446663b532ef87481fe1",
+      "name": "S*USDC",
+      "symbol": "S*USDC"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x29e38769f23701a2e4a8ef0492e19da4604be62c",
+      "name": "S*USDT",
+      "symbol": "S*USDT"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x513cdee00251f39de280d9e5f771a6eafebcc88e",
+      "name": "2eur",
+      "symbol": "2eur"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xE193C653B6030a9BB443AE7c6Ef6e35d93348f98",
+      "name": "xFRAX-MAI3",
+      "symbol": "xFRAX-MAI3"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xFbdd194376de19a88118e84E279b977f165d01b8",
+      "name": "BIFI",
+      "symbol": "BIFI"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xb33eaad8d922b1083446dc23f610c2567fb5180f",
+      "name": "Uniswap (PoS)",
+      "symbol": "UNI"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x53e0bca35ec356bd5dddfebbd1fc0fd03fabad39",
+      "name": "ChainLink Token",
+      "symbol": "LINK"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x61299774020da444af134c82fa83e3810b309991",
+      "name": "Render Token",
+      "symbol": "RNDR"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x5fe2b58c013d7601147dcdd68c143a77499f5531",
+      "name": "Graph Token",
+      "symbol": "GRT"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xbbba073c31bf03b8acf7c28ef0738decf3695683",
+      "name": "SAND",
+      "symbol": "SAND"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xc3c7d422809852031b44ab29eec9f1eff2a58756",
+      "name": "Lido DAO Token (PoS)",
+      "symbol": "LDO"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x50b728d8d964fd00c2d0aad81718b71311fef68a",
+      "name": "Synthetix Network Token (PoS)",
+      "symbol": "SNX"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x6e4e624106cb12e168e6533f8ec7c82263358940",
+      "name": "Axelar",
+      "symbol": "AXL"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x6d80113e533a2C0fe82EaBD35f1875DcEA89Ea97",
+      "name": "WMATIC_A_TOKEN v3",
+      "symbol": "WMATIC_A_TOKEN v3"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xe50fA9b3c56FfB159cB0FCA61F5c9D750e8128c8",
+      "name": "WETH_A_TOKEN v3",
+      "symbol": "WETH_A_TOKEN v3"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xf59036CAEBeA7dC4b86638DFA2E3C97dA9FcCd40",
+      "name": "wstETH_A_TOKEN v3",
+      "symbol": "wstETH_A_TOKEN v3"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x078f358208685046a11C85e8ad32895DED33A249",
+      "name": "WBTC_A_TOKEN v3",
+      "symbol": "WBTC_A_TOKEN v3"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xA4D94019934D8333Ef880ABFFbF2FDd611C762BD",
+      "name": "USDC_A_TOKEN v3",
+      "symbol": "USDC_A_TOKEN v3"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x6ab707Aca953eDAeFBc4fD23bA73294241490620",
+      "name": "USDT_A_TOKEN v3",
+      "symbol": "USDT_A_TOKEN v3"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x82E64f49Ed5EC1bC6e43DAD4FC8Af9bb3A2312EE",
+      "name": "DAI_A_TOKEN v3",
+      "symbol": "DAI_A_TOKEN v3"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x8dF3aad3a84da6b69A4DA8aeC3eA40d9091B2Ac4",
+      "name": "WMATIC_A_TOKEN v2",
+      "symbol": "WMATIC_A_TOKEN v2"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x28424507fefb6f7f8E9D3860F56504E4e5f5f390",
+      "name": "WETH_A_TOKEN v2",
+      "symbol": "WETH_A_TOKEN v2"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x5c2ed810328349100A66B82b78a1791B101C9D61",
+      "name": "WBTC_A_TOKEN v2",
+      "symbol": "WBTC_A_TOKEN v2"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x1a13F4Ca1d028320A707D99520AbFefca3998b7F",
+      "name": "USDC.E_A_TOKEN v2",
+      "symbol": "USDC.E_A_TOKEN v2"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x60D55F02A771d515e077c9C2403a1ef324885CeC",
+      "name": "USDT_A_TOKEN v2",
+      "symbol": "USDT_A_TOKEN v2"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x27F8D03b3a2196956ED754baDc28D73be8830A6e",
+      "name": "DAI_A_TOKEN v2",
+      "symbol": "DAI_A_TOKEN v2"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x03b54A6e9a984069379fae1a4fC4dBAE93B3bCCD",
+      "name": "wstETH",
+      "symbol": "wstETH"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x9c2C5fd7b07E95EE044DDeba0E97a665F142394f",
+      "name": "1inch",
+      "symbol": "1INCH"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xF328b73B6c685831F238c30a23Fc19140CB4D8FC",
+      "name": "Across Protocol Token",
+      "symbol": "ACX"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xdDa7b23D2D72746663E7939743f929a3d85FC975",
+      "name": "Ambire AdEx",
+      "symbol": "ADX"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xE0B52e49357Fd4DAf2c15e02058DCE6BC0057db4",
+      "name": "agEur",
+      "symbol": "agEUR"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x6a6bD53d677F8632631662C48bD47b1D4D6524ee",
+      "name": "Adventure Gold",
+      "symbol": "AGLD"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xe2341718c6C0CbFa8e6686102DD8FbF4047a9e9B",
+      "name": "AIOZ Network",
+      "symbol": "AIOZ"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x95c300e7740D2A88a44124B424bFC1cB2F9c3b89",
+      "name": "Alchemix",
+      "symbol": "ALCX"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x82dCf1Df86AdA26b2dCd9ba6334CeDb8c2448e9e",
+      "name": "Aleph im",
+      "symbol": "ALEPH"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xbFc70507384047Aa74c29Cdc8c5Cb88D0f7213AC",
+      "name": "Alethea Artificial Liquid Intelligence",
+      "symbol": "ALI"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x50858d870FAF55da2fD90FB6DF7c34b5648305C6",
+      "name": "My Neighbor Alice",
+      "symbol": "ALICE"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x3AE490db48d74B1bC626400135d4616377D0109f",
+      "name": "Alpha Venture DAO",
+      "symbol": "ALPHA"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x0621d647cecbFb64b79E44302c1933cB4f27054d",
+      "name": "Amp",
+      "symbol": "AMP"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x101A023270368c0D50BFfb62780F4aFd4ea79C35",
+      "name": "Ankr",
+      "symbol": "ANKR"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x2b8504ab5eFc246d0eC5Ec7E74565683227497de",
+      "name": "Aragon",
+      "symbol": "ANT"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xB7b31a6BC18e48888545CE79e83E06003bE70930",
+      "name": "ApeCoin",
+      "symbol": "APE"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x45C27821E80F8789b60Fd8B600C73815d34DDa6C",
+      "name": "API3",
+      "symbol": "API3"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xEE800B277A96B0f490a1A732e1D6395FAD960A26",
+      "name": "ARPA Chain",
+      "symbol": "ARPA"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x04bEa9FCE76943E90520489cCAb84E84C0198E29",
+      "name": "AirSwap",
+      "symbol": "AST"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x0df0f72EE0e5c9B7ca761ECec42754992B2Da5BF",
+      "name": "Automata",
+      "symbol": "ATA"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x5eB8D998371971D01954205c7AFE90A7AF6a95AC",
+      "name": "Audius",
+      "symbol": "AUDIO"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x61BDD9C7d4dF4Bf47A4508c0c8245505F2Af5b7b",
+      "name": "Axie Infinity",
+      "symbol": "AXS"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x1FcbE5937B0cc2adf69772D228fA4205aCF4D9b2",
+      "name": "Badger DAO",
+      "symbol": "BADGER"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x9a71012B13CA4d3D0Cdc72A177DF3ef03b0E76A3",
+      "name": "Balancer",
+      "symbol": "BAL"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xA8b1E0764f85f53dfe21760e8AfE5446D82606ac",
+      "name": "Band Protocol",
+      "symbol": "BAND"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x3Cef98bb43d732E2F285eE605a8158cDE967D219",
+      "name": "Basic Attention Token",
+      "symbol": "BAT"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x91c89A94567980f0e9723b487b0beD586eE96aa7",
+      "name": "Biconomy",
+      "symbol": "BICO"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x63400d9586873eB03c84F76755D26Ef2a9a2abeF",
+      "name": "Big Time",
+      "symbol": "BIGTIME"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x438B28C5AA5F00a817b7Def7cE2Fb3d5d1970974",
+      "name": "Bluzelle",
+      "symbol": "BLZ"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xc26D47d5c33aC71AC5CF9F776D63Ba292a4F7842",
+      "name": "Bancor Network Token",
+      "symbol": "BNT"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xa4B2B20b2C73c7046ED19AC6bfF5E5285c58F20a",
+      "name": "Boba Network",
+      "symbol": "BOBA"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xA041544fe2BE56CCe31Ebb69102B965E06aacE80",
+      "name": "BarnBridge",
+      "symbol": "BOND"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x91a4635F620766145C099E15889Bd2766906A559",
+      "name": "Celer Network",
+      "symbol": "CELR"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x594C984E3318e91313f881B021A0C4203fF5E59F",
+      "name": "Chromia",
+      "symbol": "CHR"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xf1938Ce12400f9a761084E7A80d37e732a4dA056",
+      "name": "Chiliz",
+      "symbol": "CHZ"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x8505b9d2254A7Ae468c0E9dd10Ccea3A837aef5c",
+      "name": "Compound",
+      "symbol": "COMP"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x5dCc7FEEEfeF110419549A4417313876D33D354c",
+      "name": "Clearpool",
+      "symbol": "CPOOL"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x93B0fF1C8828F6eB039D345Ff681eD735086d925",
+      "name": "Covalent",
+      "symbol": "CQT"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xAdA58DF0F643D959C2A47c9D4d4c1a4deFe3F11C",
+      "name": "Cronos",
+      "symbol": "CRO"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x2727Ab1c2D22170ABc9b595177B2D5C6E1Ab7B7B",
+      "name": "Cartesi",
+      "symbol": "CTSI"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x8c208BC2A808a088a78398fed8f2640cab0b6EDb",
+      "name": "Cryptex Finance",
+      "symbol": "CTX"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x276C9cbaa4BDf57d7109a41e67BD09699536FA3d",
+      "name": "Somnium Space CUBEs",
+      "symbol": "CUBE"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x66Dc5A08091d1968e08C16aA5b27BAC8398b02Be",
+      "name": "Civic",
+      "symbol": "CVC"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x4257EA7637c355F81616050CbB6a9b709fd72683",
+      "name": "Convex Finance",
+      "symbol": "CVX"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x26f5FB1e6C8a65b3A873fF0a213FA16EFF5a7828",
+      "name": "DerivaDAO",
+      "symbol": "DDX"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xff835562C761205659939B64583dd381a6AA4D92",
+      "name": "DexTools",
+      "symbol": "DEXT"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x993f2CafE9dbE525243f4A78BeBC69DAc8D36000",
+      "name": "DIA",
+      "symbol": "DIA"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x85955046DF4668e1DD369D2DE9f3AEB98DD2A369",
+      "name": "DeFi Pulse Index",
+      "symbol": "DPI"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x4C3bF0a3DE9524aF68327d1D2558a3B70d17D42a",
+      "name": "dYdX",
+      "symbol": "DYDX"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xE0339c80fFDE91F3e20494Df88d4206D86024cdF",
+      "name": "Dogelon Mars",
+      "symbol": "ELON"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x7eC26842F195c852Fa843bB9f6D8B583a274a157",
+      "name": "Enjin Coin",
+      "symbol": "ENJ"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xbD7A5Cf51d22930B8B3Df6d834F9BCEf90EE7c4f",
+      "name": "Ethereum Name Service",
+      "symbol": "ENS"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x0E50BEA95Fe001A370A4F1C220C49AEdCB982DeC",
+      "name": "Ethernity Chain",
+      "symbol": "ERN"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x8a037dbcA8134FFc72C362e394e35E0Cad618F85",
+      "name": "Euro Coin",
+      "symbol": "EURC"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x176f5AB638cf4Ff3B6239Ba609C3fadAA46ef5B0",
+      "name": "Harvest Finance",
+      "symbol": "FARM"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x7583FEDDbceFA813dc18259940F76a02710A8905",
+      "name": "Fetch ai",
+      "symbol": "FET"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x7A7B94F18EF6AD056CDa648588181CDA84800f94",
+      "name": "Stafi",
+      "symbol": "FIS"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x853B41823905aB4d63558542b0F06748A5e345fe",
+      "name": "FLOKI",
+      "symbol": "FLOKI"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x9ff62d1FC52A907B6DCbA8077c2DDCA6E6a9d3e1",
+      "name": "Forta",
+      "symbol": "FORT"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x5eCbA59DAcc1ADc5bDEA35f38A732823fc3dE977",
+      "name": "Ampleforth Governance Token",
+      "symbol": "FORTH"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x65A05DB8322701724c197AF82C9CaE41195B0aA8",
+      "name": "ShapeShift FOX Token",
+      "symbol": "FOX"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x104592a158490a9228070E0A8e5343B499e125D0",
+      "name": "Frax",
+      "symbol": "FRAX"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xC9c1c1c20B3658F8787CC2FD702267791f224Ce1",
+      "name": "Fantom",
+      "symbol": "FTM"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x3e121107F6F22DA4911079845a470757aF4e1A1b",
+      "name": "Frax Share",
+      "symbol": "FXS"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x385Eeac5cB85A38A9a07A70c73e0a3271CfB54A7",
+      "name": "Aavegotchi",
+      "symbol": "GHST"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x0B220b82F3eA3B7F6d9A1D8ab58930C064A2b5Bf",
+      "name": "Golem",
+      "symbol": "GLM"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x5FFD62D3C3eE2E81C00A7b9079FB248e7dF024A8",
+      "name": "Gnosis Token",
+      "symbol": "GNO"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xF88fc6b493eda7650E4bcf7A290E8d108F677CfE",
+      "name": "Gods Unchained",
+      "symbol": "GODS"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xdb95f9188479575F3F718a245EcA1B3BF74567EC",
+      "name": "Gitcoin",
+      "symbol": "GTC"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xC8A94a3d3D2dabC3C1CaffFFDcA6A7543c3e3e65",
+      "name": "Gemini Dollar",
+      "symbol": "GUSD"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x482bc619eE7662759CDc0685B4E78f464Da39C73",
+      "name": "GYEN",
+      "symbol": "GYEN"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x6cCBF3627b2C83AFEF05bf2F035E7f7B210Fe30D",
+      "name": "HOPR",
+      "symbol": "HOPR"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x9Cb74C8032b007466865f060ad2c46145d45553D",
+      "name": "IDEX",
+      "symbol": "IDEX"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xFA46dAf9909e116DBc40Fe1cC95fC0Bb1f452aBE",
+      "name": "Illuvium",
+      "symbol": "ILV"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x183070C90B34A63292cC908Ce1b263Cb56D49A7F",
+      "name": "Immutable X",
+      "symbol": "IMX"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xfBd8A3b908e764dBcD51e27992464B4432A1132b",
+      "name": "Index Cooperative",
+      "symbol": "INDEX"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x4E8dc2149EaC3f3dEf36b1c281EA466338249371",
+      "name": "Injective",
+      "symbol": "INJ"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xF18Ac368001b0DdC80aA6a8374deb49e868EFDb8",
+      "name": "Inverse Finance",
+      "symbol": "INV"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xf6372cDb9c1d3674E83842e3800F2A62aC9F3C66",
+      "name": "IoTeX",
+      "symbol": "IOTX"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xb87f5c1E81077FfcfE821dA240fd20C99c533aF1",
+      "name": "JasmyCoin",
+      "symbol": "JASMY"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x42f37A1296b2981F7C3cAcEd84c5096b2Eb0C72C",
+      "name": "Keep Network",
+      "symbol": "KEEP"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x324b28d6565f784d596422B0F2E5aB6e9CFA1Dc7",
+      "name": "Kyber Network Crystal",
+      "symbol": "KNC"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x53AEc293212E3B792563Bc16f1be26956adb12e9",
+      "name": "Keep3rV1",
+      "symbol": "KP3R"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xE8A51D0dD1b4525189ddA2187F90ddF0932b5482",
+      "name": "LCX",
+      "symbol": "LCX"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xe6E320b7bB22018D6CA1F4D8cea1365eF5d25ced",
+      "name": "Litentry",
+      "symbol": "LIT"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x465b67CB20A7E8bC4c51b4C7DA591C1945b41427",
+      "name": "League of Kingdoms",
+      "symbol": "LOKA"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x66EfB7cC647e0efab02eBA4316a2d2941193F6b3",
+      "name": "Loom Network",
+      "symbol": "LOOM"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x3962F4A0A0051DccE0be73A7e09cEf5756736712",
+      "name": "Livepeer",
+      "symbol": "LPT"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x8Ab2Fec94d17ae69FB90E7c773f2C85Ed1802c01",
+      "name": "Liquity",
+      "symbol": "LQTY"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x84e1670F61347CDaeD56dcc736FB990fBB47ddC1",
+      "name": "LoopringCoin V2",
+      "symbol": "LRC"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x23001f892c0C82b79303EDC9B9033cD190BB21c7",
+      "name": "Liquity USD",
+      "symbol": "LUSD"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xA1c57f48F0Deb89f569dFbE6E2B7f46D33606fD4",
+      "name": "Decentraland",
+      "symbol": "MANA"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x2B9E7ccDF0F4e5B24757c1E1a80e311E34Cb10c7",
+      "name": "Mask Network",
+      "symbol": "MASK"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x347ACCAFdA7F8c5BdeC57fa34a5b663CBd1aeca7",
+      "name": "MATH",
+      "symbol": "MATH"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xAa7DbD1598251f856C12f63557A4C4397c253Cea",
+      "name": "Moss Carbon Credit",
+      "symbol": "MCO2"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x1B9D40715E757Bdb9bdEC3215B898E46d8a3b71a",
+      "name": "Metis",
+      "symbol": "METIS"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x01288e04435bFcd4718FF203D6eD18146C17Cd4b",
+      "name": "Magic Internet Money",
+      "symbol": "MIM"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x1C5cccA2CB59145A4B25F452660cbA6436DDce9b",
+      "name": "Mirror Protocol",
+      "symbol": "MIR"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x6f7C932e7684666C9fd1d44527765433e01fF61d",
+      "name": "Maker",
+      "symbol": "MKR"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xa9f37D84c856fDa3812ad0519Dad44FA0a3Fe207",
+      "name": "Melon",
+      "symbol": "MLN"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x6968105460f67c3BF751bE7C15f92F5286Fd0CE5",
+      "name": "Monavale",
+      "symbol": "MONA"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xA3c322Ad15218fBFAEd26bA7f616249f7705D945",
+      "name": "GensoKishi Metaverse",
+      "symbol": "MV"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x4985E0B13554fB521840e893574D3848C10Fcc6f",
+      "name": "PolySwarm",
+      "symbol": "NCT"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x0Bf519071b02F22C17E7Ed5F4002ee1911f46729",
+      "name": "Numeraire",
+      "symbol": "NMR"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x282d8efCe846A88B159800bd4130ad77443Fa1A1",
+      "name": "Ocean Protocol",
+      "symbol": "OCEAN"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xa63Beffd33AB3a2EfD92a39A7D2361CEE14cEbA8",
+      "name": "Origin Protocol",
+      "symbol": "OGN"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x62414D03084EeB269E18C970a21f45D2967F0170",
+      "name": "OMG Network",
+      "symbol": "OMG"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x0EE392bA5ef1354c9bd75a98044667d307C0e773",
+      "name": "Orion Protocol",
+      "symbol": "ORN"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x9880e3dDA13c8e7D4804691A45160102d31F6060",
+      "name": "Orchid",
+      "symbol": "OXT"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x553d3D295e0f695B9228246232eDF400ed3560B5",
+      "name": "PAX Gold",
+      "symbol": "PAXG"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x1D47e931F82bb9F8D967F0Cc3288268449835806",
+      "name": "Pendle",
+      "symbol": "PENDLE"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x263534a4Fe3cb249dF46810718B7B612a30ebbff",
+      "name": "Perpetual Protocol",
+      "symbol": "PERP"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x7dc0cb65EC6019330a6841e9c274f2EE57A6CA6C",
+      "name": "Pluton",
+      "symbol": "PLU"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x8dc302e2141DA59c934d900886DbF1518Fd92cd4",
+      "name": "Polkastarter",
+      "symbol": "POLS"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xcB059C5573646047D6d88dDdb87B745C18161d3b",
+      "name": "Polymath",
+      "symbol": "POLY"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x73580A2416A57f1C4b6391DBA688A9e4f7DBECE0",
+      "name": "Marlin",
+      "symbol": "POND"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x0AaB8DC887D34f00D50E19aee48371a941390d14",
+      "name": "Power Ledger",
+      "symbol": "POWR"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x82FFdFD1d8699E8886a4e77CeFA9dd9710a7FefD",
+      "name": "Propy",
+      "symbol": "PRO"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x9377Eeb7419486FD4D485671d50baa4BF77c2222",
+      "name": "PARSIQ",
+      "symbol": "PRQ"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x36B77a184bE8ee56f5E81C56727B20647A42e28E",
+      "name": "Quant",
+      "symbol": "QNT"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x831753DD7087CaC61aB5644b308642cc1c33Dc13",
+      "name": "Quickswap",
+      "symbol": "QUICK"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x2f81e176471CC57fDC76f7d332FB4511bF2bebDD",
+      "name": "Radicle",
+      "symbol": "RAD"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x00e5646f60AC6Fb446f621d146B6E1886f002905",
+      "name": "Rai Reflex Index",
+      "symbol": "RAI"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x780053837cE2CeEaD2A90D9151aA21FC89eD49c2",
+      "name": "Rarible",
+      "symbol": "RARI"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xc3cFFDAf8F3fdF07da6D5e3A89B8723D5E385ff8",
+      "name": "Rubic",
+      "symbol": "RBC"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x19782D3Dc4701cEeeDcD90f0993f0A9126ed89d0",
+      "name": "Republic Token",
+      "symbol": "REN"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x6563c1244820CfBd6Ca8820FBdf0f2847363F733",
+      "name": "Reputation Augur v2",
+      "symbol": "REPv2"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xAdf2F2Ed91755eA3f4bcC9107a494879f633ae7C",
+      "name": "Request",
+      "symbol": "REQ"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x70c006878a5A50Ed185ac4C87d837633923De296",
+      "name": "REVV",
+      "symbol": "REVV"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x3b9dB434F08003A89554CDB43b3e0b1f8734BdE7",
+      "name": "Rari Governance Token",
+      "symbol": "RGT"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xbe662058e00849C3Eef2AC9664f37fEfdF2cdbFE",
+      "name": "iExec RLC",
+      "symbol": "RLC"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x76b8D57e5ac6afAc5D415a054453d1DD2c3C0094",
+      "name": "Rally",
+      "symbol": "RLY"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xF92501c8213da1D6C74A76372CCc720Dc8818407",
+      "name": "Rook",
+      "symbol": "ROOK"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x1d734A02eF1e1f5886e66b0673b71Af5B53ffA94",
+      "name": "Stader",
+      "symbol": "SD"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x6f8a06447Ff6FcF75d803135a7de15CE88C1d4ec",
+      "name": "Shiba Inu",
+      "symbol": "SHIB"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x0C7304fBAf2A320a1c50c46FE03752722F729946",
+      "name": "Smooth Love Potion",
+      "symbol": "SLP"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xcdB3C70CD25FD15307D84C4F9D37d5C043B33Fb2",
+      "name": "Spell Token",
+      "symbol": "SPELL"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xd72357dAcA2cF11A5F155b9FF7880E595A3F5792",
+      "name": "Storj Token",
+      "symbol": "STORJ"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xB36e3391B22a970d31A9b620Ae1A414C6c256d2a",
+      "name": "Stox",
+      "symbol": "STX"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x60Ea918FC64360269Da4efBDA11d8fC6514617C6",
+      "name": "SUKU",
+      "symbol": "SUKU"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xa1428174F516F527fafdD146b883bB4428682737",
+      "name": "SuperFarm",
+      "symbol": "SUPER"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xF81b4Bec6Ca8f9fe7bE01CA734F55B2b6e03A7a0",
+      "name": "Synth sUSD",
+      "symbol": "sUSD"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x0b3F868E0BE5597D5DB7fEB59E1CADBb0fdDa50a",
+      "name": "Sushi",
+      "symbol": "SUSHI"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x6aBB753C1893194DE4a83c6e8B4EadFc105Fd5f5",
+      "name": "Swipe",
+      "symbol": "SXP"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xe1708AbDE4847B4929b70547E5197F1Ba1db2250",
+      "name": "Tokemak",
+      "symbol": "TOKE"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xA7b98d63a137bF402b4570799ac4caD0BB1c4B1c",
+      "name": "OriginTrail",
+      "symbol": "TRAC"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xE3322702BEdaaEd36CdDAb233360B939775ae5f1",
+      "name": "Tellor",
+      "symbol": "TRB"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x8676815789211E799a6DC86d02748ADF9cF86836",
+      "name": "Tribe",
+      "symbol": "TRIBE"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x5b77bCA482bd3E7958b1103d123888EfCCDaF803",
+      "name": "TrueFi",
+      "symbol": "TRU"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x5667dcC0ab74D1b1355C3b2061893399331B57e2",
+      "name": "The Virtua Kolect",
+      "symbol": "TVK"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x3066818837c5e6eD6601bd5a91B0762877A6B731",
+      "name": "UMA Voting Token v1",
+      "symbol": "UMA"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x6F3B3286fd86d8b47EC737CEB3D0D354cc657B3e",
+      "name": "Pax Dollar",
+      "symbol": "USDP"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x8DE5B80a0C1B02Fe4976851D030B36122dbb8624",
+      "name": "Vanar Chain",
+      "symbol": "VANRY"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xd0258a3fD00f38aa8090dfee343f10A9D4d30D3F",
+      "name": "Voxies",
+      "symbol": "VOXEL"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x90bb6fEB70A9a43CfAaA615F856BA309FD759A90",
+      "name": "Wrapped Centrifuge",
+      "symbol": "WCFG"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x1B815d120B3eF02039Ee11dC2d33DE7aA4a8C603",
+      "name": "WOO Network",
+      "symbol": "WOO"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xDC3326e71D45186F113a2F448984CA0e8D201995",
+      "name": "XSGD",
+      "symbol": "XSGD"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xd2507e7b5794179380673870d88B22F94da6abe0",
+      "name": "XYO Network",
+      "symbol": "XYO"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xDA537104D6A5edd53c6fBba9A898708E465260b6",
+      "name": "yearn finance",
+      "symbol": "YFI"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0xb8cb8a7F4C2885C03e57E973C74827909Fdc2032",
+      "name": "DFI money",
+      "symbol": "YFII"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x82617aA52dddf5Ed9Bb7B370ED777b3182A30fd1",
+      "name": "Yield Guild Games",
+      "symbol": "YGG"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x6985884C4392D348587B19cb9eAAf157F13271cd",
+      "name": "LayerZero",
+      "symbol": "ZRO"
+    },
+    {
+      "chainId": 137,
+      "erc20TokenAddress": "0x5559Edb74751A0edE9DeA4DC23aeE72cCA6bE3D5",
+      "name": "0x Protocol Token",
+      "symbol": "ZRX"
+    }
+  ]
+}

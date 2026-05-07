@@ -1,8 +1,8 @@
 import { NetworkDropdownItem } from "./NetworkDropdownItem";
 import { useCallback, useMemo } from "react";
-import { networkRegistry } from "@hinkal/common";
 import { useAppContext } from "../../../../AppContext";
 import { SUPPORTED_CHAIN_IDS } from "../../../../constants/supported-chain-ids.constants";
+import { networkRegistry } from "../../../../constants/networkRegistry";
 
 interface NetworkSettingsDropdownProps {
   close: () => void;
@@ -11,7 +11,7 @@ interface NetworkSettingsDropdownProps {
 export const NetworkSettingsDropdown = ({
   close,
 }: NetworkSettingsDropdownProps) => {
-  const { hinkal, setChainId, refreshBalances } = useAppContext();
+  const { hinkal, setChainId, refreshBalances, setBalances } = useAppContext();
 
   const networkList = useMemo(
     () =>
@@ -23,16 +23,13 @@ export const NetworkSettingsDropdown = ({
 
   const switchNetwork = useCallback(
     async (chainId: number) => {
-      const network = networkList.find((net) => net.chainId === chainId);
-      if (network) {
-        await hinkal.switchNetwork(network);
-        setChainId(network.chainId);
-        close();
-        await hinkal.resetMerkle();
-        await refreshBalances();
-      }
+      await hinkal.switchNetwork(chainId);
+      setChainId(chainId);
+      setBalances([]);
+      close();
+      await hinkal.resetMerkle();
     },
-    [networkList, hinkal, setChainId, close],
+    [hinkal, setChainId, close],
   );
 
   return (

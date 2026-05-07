@@ -1,16 +1,9 @@
 import { useCallback, useState } from "react";
-import {
-  ERC20Token,
-  getAmountInWei,
-  ExternalActionId,
-  FeeStructure,
-  processGasEstimates,
-} from "@hinkal/common";
+import { ERC20Token, FeeStructure } from "@gurg/hi-test";
 import { useAppContext } from "../AppContext";
-import {
-  convertScheduleToMs,
-  ScheduleOption,
-} from "../constants/schedule.constants";
+import { getAmountInWei } from "../utils/amount.utils";
+import { getTxScheduleTime } from "../utils/getTxScheduleTime";
+import { ScheduleDelayOption } from "../types";
 
 interface UseMultiSendProps {
   onError: (err: Error) => void;
@@ -20,48 +13,6 @@ interface UseMultiSendProps {
 export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
   const { hinkal, chainId } = useAppContext();
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [fee, setFee] = useState<bigint | null>(null);
-  const [isFeeLoading, setIsFeeLoading] = useState<boolean>(false);
-  const [feeStructure, setFeeStructure] = useState<FeeStructure | undefined>(
-    undefined,
-  );
-
-  const calculateFee = useCallback(
-    async (token: ERC20Token) => {
-      if (!hinkal || !token || !chainId) return;
-
-      try {
-        setIsFeeLoading(true);
-
-        const { priceOfTransactionInToken } = await processGasEstimates(
-          chainId,
-          token,
-          ExternalActionId.Transact,
-          1,
-          undefined,
-          undefined,
-        );
-
-        if (priceOfTransactionInToken !== undefined) {
-          const totalFee = priceOfTransactionInToken * 2n;
-          setFee(totalFee);
-
-          setFeeStructure({
-            variableRate: 0n,
-            feeToken: token.erc20TokenAddress,
-            flatFee: priceOfTransactionInToken,
-          });
-        }
-      } catch (err) {
-        console.error("Error calculating fee:", err);
-        setFee(null);
-        setFeeStructure(undefined);
-      } finally {
-        setIsFeeLoading(false);
-      }
-    },
-    [hinkal],
-  );
 
   const multiSend = useCallback(
     async (
@@ -70,39 +21,28 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
       amount1: string,
       address2: string,
       amount2: string,
-      schedule: ScheduleOption,
+      selectedScheduleDelay: ScheduleDelayOption,
+      feeStructure?: FeeStructure,
     ) => {
-      if (!hinkal) {
-        throw new Error("Hinkal not initialized");
-      }
+      if (!hinkal) throw new Error("Hinkal not initialized");
       if (!chainId) return;
 
       try {
         setIsProcessing(true);
 
-        const amount1Wei = getAmountInWei(token, amount1);
-        const amount2Wei = getAmountInWei(token, amount2);
+        const amountsInBigInt = [
+          getAmountInWei(token, amount1),
+          getAmountInWei(token, amount2),
+        ];
+        const txScheduleTime = getTxScheduleTime(selectedScheduleDelay);
 
-        const recipientAmounts: Record<string, bigint> = {
-          [address1]: amount1Wei,
-          [address2]: amount2Wei,
-        };
-
-        const txScheduleTime = Date.now() + convertScheduleToMs(schedule);
-
-        console.log("token:", token);
-        console.log("recipientAmounts:", recipientAmounts);
-        console.log("txScheduleTime:", txScheduleTime);
-
-        const result = await hinkal.depositAndWithdraw(
+        await hinkal.depositAndWithdraw(
           token,
-          Object.values(recipientAmounts),
-          Object.keys(recipientAmounts),
+          amountsInBigInt,
+          [address1, address2],
           txScheduleTime,
           feeStructure,
         );
-
-        if (result) await hinkal.waitForTransaction(chainId, result);
 
         onSuccess();
       } catch (err) {
@@ -111,14 +51,11 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
         setIsProcessing(false);
       }
     },
-    [hinkal, onError, onSuccess],
+    [hinkal, chainId, onError, onSuccess],
   );
 
   return {
     multiSend,
     isProcessing,
-    fee,
-    isFeeLoading,
-    calculateFee,
   };
 };

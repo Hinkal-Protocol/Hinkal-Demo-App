@@ -1,21 +1,28 @@
-import { SyntheticEvent, useCallback, useMemo, useState } from "react";
+import {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import toast from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
-import { getErrorMessage, ERC20Token } from "@hinkal/common";
+import { ERC20Token } from "@gurg/hi-test";
 import { useTransfer } from "../hooks/useTransfer";
 import { useAppContext } from "../AppContext";
 import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
+import { useFee } from "../hooks/useFee";
+import { FeeDisplay } from "../components/FeeDisplay";
 
 export const Transfer = () => {
   const { refreshBalances } = useAppContext();
+  const { fee, isFeeLoading, feeStructure, calculateFee } = useFee();
 
   const { transfer, isProcessing } = useTransfer({
     onError: (err: Error) => {
-      const message = getErrorMessage(err);
-      if (message !== "Transaction failed") {
-        toast.error(message);
-      }
+      const message = err instanceof Error ? err.message : "Unknown error";
+      toast.error(message, { id: message });
     },
     onSuccess: async () => {
       toast.success(
@@ -34,8 +41,8 @@ export const Transfer = () => {
 
   const handleTransfer = useCallback(() => {
     if (!selectedToken) return;
-    transfer?.(selectedToken, transferAmount, transferAddress);
-  }, [selectedToken, transferAmount, transferAddress, transfer]);
+    transfer?.(selectedToken, transferAmount, transferAddress, feeStructure);
+  }, [selectedToken, transferAmount, transferAddress, transfer, feeStructure]);
 
   /**
    * recipient address onChange handler
@@ -55,6 +62,10 @@ export const Transfer = () => {
     () => !selectedToken || !transferAmount || !transferAddress || isProcessing,
     [selectedToken, transferAmount, transferAddress, isProcessing],
   );
+
+  useEffect(() => {
+    if (selectedToken && transferAmount) calculateFee(selectedToken);
+  }, [selectedToken, transferAmount, calculateFee]);
 
   return (
     <form className="rounded-lg" onSubmit={handleSubmit}>
@@ -81,6 +92,12 @@ export const Transfer = () => {
         />
         <br />
       </div>
+      <FeeDisplay
+        fee={fee}
+        isFeeLoading={isFeeLoading}
+        selectedToken={selectedToken}
+      />
+
       <div className="w-[90%] mx-auto mb-6 mt-6 h-[1px] bg-[#272B30]" />
       <div className=" border-solid ">
         <button

@@ -1,0 +1,418 @@
+{
+  "networkRegistry": [
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "11111111111111111111111111111111",
+      "name": "Solana",
+      "symbol": "SOL"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "name": "USD Coin",
+      "symbol": "USDC"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
+      "name": "Tether USD",
+      "symbol": "USDT"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "So11111111111111111111111111111111111111112",
+      "name": "Wrapped SOL",
+      "symbol": "wSOL"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN",
+      "name": "OFFICIAL TRUMP",
+      "symbol": "TRUMP"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "Dfh5DzRgSvvCFDoYc2ciTkMrbDfRKybA4SoFbPmApump",
+      "name": "Pippin",
+      "symbol": "pippin"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "3b8X44fLF9ooXaUm3hhSgjpmVs6rZZ3pPoGnGahc3Uu7",
+      "name": "",
+      "symbol": "PRIME"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "CASHx9KJUStyftLFWGvEVf59SGeG9sh5FfcnZMVPCASH",
+      "name": "CASH",
+      "symbol": "CASH"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo",
+      "name": "PayPal USD",
+      "symbol": "PYUSD"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "27G8MtK7VtTcCHkpASjSDdkWWYfoqT6ggEuKidVJidD4",
+      "name": "Jupiter Perps",
+      "symbol": "JLP"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs",
+      "name": "Ether (Portal)",
+      "symbol": "ETH"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "AvZZF1YaZDziPY2RCK4oJrRVrbN3mTD9NL24hPeaZeUj",
+      "name": "Syrup USDC",
+      "symbol": "syrupUSDC"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "USD1ttGY1N17NEEHLmELoaybftRBUSErhqYiQzvEmuB",
+      "name": "World Liberty Financial USD",
+      "symbol": "USD1"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "Gbu7JAKhTVtGyRryg8cYPiKNhonXpUqbrZuCDjfUpump",
+      "name": "snowball",
+      "symbol": "snowball"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "J1toso1uCk3RLmjorhTtrVwY9HJ7X8V9yYac6Y7kGCPn",
+      "name": "Jito Staked SOL",
+      "symbol": "JitoSOL"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "cbbtcf3aa214zXHbiAZQwf4122FBYbraNdFqgw4iMij",
+      "name": "Coinbase Wrapped BTC",
+      "symbol": "cbBTC"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "LBTCgU4b3wsFKsPwBn1rRZDx5DoFutM6RPiEt1TPDsY",
+      "name": "Lombard Staked BTC",
+      "symbol": "LBTC"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "9PR7nCP9DpcUotnDPVLUBUZKu5WAYkwrCUx9wDnSpump",
+      "name": "Comedian",
+      "symbol": "Ban"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "2u1tszSeqZ3qBWF3uNGPFc8TzMk2tdiwknnRMWGWjGWH",
+      "name": "Global Dollar",
+      "symbol": "USDG"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh",
+      "name": "Wrapped BTC (Portal)",
+      "symbol": "WBTC"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "GJAFwWjJ3vnTsrQVabjBVK2TYB1YtRCQXRDfDgUnpump",
+      "name": "Act I : The AI Prophecy",
+      "symbol": "ACT"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "9AvytnUKsLxPxFHFqS6VLxaxt5p6BhYNr53SD2Chpump",
+      "name": "The Official 67 Coin",
+      "symbol": "67"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv",
+      "name": "Pudgy Penguins",
+      "symbol": "PENGU"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump",
+      "name": "Fartcoin",
+      "symbol": "Fartcoin"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "61V8vBaqAGMpgDQi4JcAwo1dmBGHsyhzodcPqnEVpump",
+      "name": "AI Rig Complex",
+      "symbol": "arc"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "KMNo3nJsBXfcpJTVhZcXLW7RmTwTt4GVFE7suUBo9sS",
+      "name": "Kamino",
+      "symbol": "KMNO"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "8SkfuQkYNTskoQUbbjr2JbZQeqQV9egnJXgfMXf5bonk",
+      "name": "fih",
+      "symbol": "fih"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "DBRiDgJAMsM95moTzJs7M9LnkGErpbv9v6CUR1DXnUu5",
+      "name": "deBridge",
+      "symbol": "DBR"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "HzwqbKZw8HxMN6bF2yFZNrht3c2iXXzpKcFu7uBEDKtr",
+      "name": "EURC",
+      "symbol": "EURC"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "5oVNBeEEQvYi1cX3ir8Dx5n1P7pdxydbGF2X4TxVusJm",
+      "name": "Infinity",
+      "symbol": "INF"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "USDSwr9ApdHk5bvJKMjzff41FfuX8bSxdKcR81vTwcA",
+      "name": "USDS",
+      "symbol": "USDS"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "6FrrzDk5mQARGc1TDYoyVnSyRdds1t4PbtohCD6p3tgG",
+      "name": "USX",
+      "symbol": "USX"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "METvsvVRapdj9cFLzq4Tr43xK4tAjQfwX76z3n6mWQL",
+      "name": "Meteora",
+      "symbol": "MET"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "CtzPWv73Sn1dMGVU3ZtLv9yWSyUAanBni19YWDaznnkn",
+      "name": "OKX Wrapped BTC",
+      "symbol": "xBTC"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "7Y2TPeq3hqw21LRTCi4wBWoivDngCpNNJsN1hzhZpump",
+      "name": "Sachicoin",
+      "symbol": "SACHI"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "5YMkXAYccHSGnHn9nob9xEvv6Pvka9DZWH7nTbotTu9E",
+      "name": "hyUSD",
+      "symbol": "hyUSD"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "jupSoLaHXQiZZTSfEWMTRRgpnyFm8f6sZdosWBjx93v",
+      "name": "Jupiter Staked SOL",
+      "symbol": "JupSOL"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "HNg5PYJmtqcmzXrv6S9zP1CDKk5BgDuyFBxbvNApump",
+      "name": "Alchemist AI",
+      "symbol": "ALCH"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "J6pQQ3FAcJQeWPPGppWRb4nM8jU3wLyYbRrLh7feMfvd",
+      "name": "DoubleZero",
+      "symbol": "2Z"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "BANKJmvhT8tiJRsBSS1n2HryMBPvT5Ze4HU95DUAmeta",
+      "name": "Avici",
+      "symbol": "AVICI"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS",
+      "name": "Zcash",
+      "symbol": "ZEC"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "74SBV4zDXxTRgv1pEMoECskKBkZHc2yGPnc7GYVepump",
+      "name": "swarms",
+      "symbol": "swarms"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "zBTCug3er3tLyffELcvDNrKkCymbPWysGcWihESYfLg",
+      "name": "zBTC",
+      "symbol": "zBTC"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk",
+      "name": "USELESS COIN",
+      "symbol": "USELESS"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "PRVT6TB7uss3FrUd2D9xs2zqDBsa3GbMJMwCQsgmeta",
+      "name": "Umbra",
+      "symbol": "UMBRA"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "XsueG8BtpquVJX9LVLLEGuViXUungE6WmK5YZ3p3bd1",
+      "name": "Circle xStock",
+      "symbol": "CRCLx"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "5UUH9RTDiSpq6HKS6bp4NdU9PNJpXRXuiw6ShBTBhgH2",
+      "name": "TROLL",
+      "symbol": "TROLL"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "C2omVhcvt3DDY77S2KZzawFJQeETZofgZ4eNWWkXpump",
+      "name": "Bullish Degen",
+      "symbol": "BULLISH"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "C29ebrgYjYoJPMGPnPSGY1q3mMGk4iDSqnQeQQA7moon",
+      "name": "Nobody Sausage",
+      "symbol": "NOBODY"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",
+      "name": "Jupiter",
+      "symbol": "JUP"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "6AJcP7wuLwmRYLBNbi825wgguaPsWzPBEHcHndpRpump",
+      "name": "Vine Coin",
+      "symbol": "VINE"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "METAewgxyPbgwsseH8T16a39CQ5VyVxZi9zXiDPY18m",
+      "name": "Metaplex Token",
+      "symbol": "MPLX"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "MEFNBXixkEbait3xn9bkm8WsJzXtVsaJEn4c8Sam21u",
+      "name": "Magic Eden",
+      "symbol": "ME"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "85cQsFgbi8mBZxiPppbpPXuV7j1hA8tBwhjF4gKW6mHg",
+      "name": "Rizzmas",
+      "symbol": "Rizzmas"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So",
+      "name": "Marinade staked SOL (mSOL)",
+      "symbol": "mSOL"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "F7pB3ZdfBnyFw2LRHydWEn9BmhEa5XihXLjhySFRpump",
+      "name": "You’ll own nothing & be happy",
+      "symbol": "NOTHING"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "jtojtomepa8beP8AuQc6eXt5FriJwfFMwQx2v2f9mCL",
+      "name": "JITO",
+      "symbol": "JTO"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "98sMhvDwXj1RQi5c5Mndm3vPe9cBqPrbLaufMXFNMh5g",
+      "name": "HYPE",
+      "symbol": "HYPE"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "AT13ipG8K4HDyEJm3H1ZVQV2Bw8sihewoLQReSMsYo3o",
+      "name": "AU79",
+      "symbol": "AU79"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE",
+      "name": "Orca",
+      "symbol": "ORCA"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+      "name": "BOOK OF MEME",
+      "symbol": "BOME"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "BCXpjsHYmgVpRKdv4EQv1RARhYagnnwPkJjYbvM6bonk",
+      "name": "Flying Ketamine Horse",
+      "symbol": "FKH"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "3z2tRjNuQjoq6UDcw4zyEPD1Eb5KXMPYb4GWFzVT1DPg",
+      "name": "SURGE",
+      "symbol": "SURGE"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "8x5VqbHA8D7NkD52uNuS5nnt3PwA8pLD34ymskeSo2Wn",
+      "name": "zerebro",
+      "symbol": "ZEREBRO"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "A8C3xuqscfmyLrte3VmTqrAq8kgMASius9AFNANwpump",
+      "name": "FWOG",
+      "symbol": "FWOG"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "9hX59xHHnaZXLU6quvm5uGY2iDiT3jczaReHy6A6TYKw",
+      "name": "Zenrock BTC",
+      "symbol": "zenBTC"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "5BKTP1cWao5dhr8tkKcfPW9mWkKtuheMEAU6nih2jSX",
+      "name": "DogWifNoHat",
+      "symbol": "NoHat"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "5Y8NV33Vv7WbnLfq3zBcKSdYPrk7g2KoiQoe7M2tcxp5",
+      "name": "Onchain Yield Coin",
+      "symbol": "ONyc"
+    },
+    {
+      "chainId": 501,
+      "erc20TokenAddress": "1zJX5gRnjLgmTpq5sVwkq69mNDQkCemqoasyjaPW6jm",
+      "name": "KLEDAI",
+      "symbol": "KLED"
+    }
+  ]
+}

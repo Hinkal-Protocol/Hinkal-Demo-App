@@ -1,0 +1,16 @@
+{
+  "networkRegistry": [
+    {
+      "chainId": 728126428,
+      "erc20TokenAddress": "0x0000000000000000000000000000000000000000",
+      "name": "Tron",
+      "symbol": "TRX"
+    },
+    {
+      "chainId": 728126428,
+      "erc20TokenAddress": "0xa614f803B6FD780986A42c78Ec9c7f77e6DeD13C",
+      "name": "Tether USD",
+      "symbol": "USDT"
+    }
+  ]
+}
