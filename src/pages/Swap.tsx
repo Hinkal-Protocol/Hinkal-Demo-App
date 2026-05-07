@@ -38,7 +38,7 @@ export const Swap = () => {
     outSwapToken,
   });
 
-  const { fee: swapFee, isFeeLoading, calculateFee } = useFee();
+  const { fee: swapFee, isFeeLoading, feeStructure, calculateFee } = useFee();
 
   const { swap, isProcessing } = useSwap({
     onError: (err) => {
@@ -73,8 +73,23 @@ export const Swap = () => {
 
   const handleSwap = useCallback(async () => {
     if (!inSwapToken || !outSwapToken || !outSwapAmountWei || !fee) return;
-    await swap(inSwapToken, outSwapToken, inSwapAmount, outSwapAmountWei, fee);
-  }, [swap, inSwapToken, outSwapToken, inSwapAmount, outSwapAmountWei, fee]);
+    await swap(
+      inSwapToken,
+      outSwapToken,
+      inSwapAmount,
+      outSwapAmountWei,
+      fee,
+      feeStructure,
+    );
+  }, [
+    swap,
+    inSwapToken,
+    outSwapToken,
+    inSwapAmount,
+    outSwapAmountWei,
+    fee,
+    feeStructure,
+  ]);
 
   const setTokenAmountHandler = (
     event: React.ChangeEvent<HTMLInputElement>,

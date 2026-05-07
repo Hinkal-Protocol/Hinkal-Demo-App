@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { ERC20Token } from "@gurg/hi-test";
+import { ERC20Token, FeeStructure } from "@gurg/hi-test";
 import { useAppContext } from "../AppContext";
 import { getAmountInWei } from "../utils/amount.utils";
 
@@ -16,7 +16,12 @@ export const useTransfer = ({
   const [isProcessing, setIsProcessing] = useState(false);
 
   const transfer = useCallback(
-    async (token: ERC20Token, amount: string, recipientAddress: string) => {
+    async (
+      token: ERC20Token,
+      amount: string,
+      recipientAddress: string,
+      feeStructure?: FeeStructure,
+    ) => {
       try {
         setIsProcessing(true);
 
@@ -26,7 +31,13 @@ export const useTransfer = ({
         if (!recipientAddress) throw new Error("Recipient address is required");
 
         const amountInBigInt = getAmountInWei(token, amount);
-        await hinkal.transfer([token], [-amountInBigInt], recipientAddress);
+        await hinkal.transfer(
+          [token],
+          [-amountInBigInt],
+          recipientAddress,
+          undefined,
+          feeStructure,
+        );
 
         onSuccess?.();
       } catch (err) {

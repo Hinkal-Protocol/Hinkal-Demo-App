@@ -1,18 +1,26 @@
 import { useState, useCallback } from "react";
-import { ERC20Token, ExternalActionId, getFeeStructure } from "@gurg/hi-test";
+import {
+  ERC20Token,
+  ExternalActionId,
+  FeeStructure,
+  getFeeStructure,
+} from "@gurg/hi-test";
 import { useAppContext } from "../AppContext";
 
 export const useFee = () => {
   const { chainId } = useAppContext();
   const [fee, setFee] = useState<bigint | null>(null);
+  const [feeStructure, setFeeStructure] = useState<FeeStructure | undefined>(
+    undefined,
+  );
   const [isFeeLoading, setIsFeeLoading] = useState(false);
 
   const calculateFee = useCallback(
     async (
       token: ERC20Token,
       actionId: ExternalActionId = ExternalActionId.Transact,
-    ) => {
-      if (!chainId || !token) return;
+    ): Promise<FeeStructure | undefined> => {
+      if (!chainId || !token) return undefined;
       try {
         setIsFeeLoading(true);
         const result = await getFeeStructure(
@@ -22,8 +30,12 @@ export const useFee = () => {
           actionId,
         );
         setFee(result.flatFee);
+        setFeeStructure(result);
+        return result;
       } catch {
         setFee(null);
+        setFeeStructure(undefined);
+        return undefined;
       } finally {
         setIsFeeLoading(false);
       }
@@ -31,5 +43,5 @@ export const useFee = () => {
     [chainId],
   );
 
-  return { fee, isFeeLoading, calculateFee };
+  return { fee, feeStructure, isFeeLoading, calculateFee };
 };

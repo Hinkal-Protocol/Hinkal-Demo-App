@@ -19,7 +19,7 @@ import { FeeDisplay } from "../components/FeeDisplay";
 
 export const Withdraw = () => {
   const { hinkal, refreshBalances } = useAppContext();
-  const { fee, isFeeLoading, calculateFee } = useFee();
+  const { fee, isFeeLoading, feeStructure, calculateFee } = useFee();
 
   const { withdraw, isProcessing } = useWithdraw({
     hinkal,
@@ -45,8 +45,21 @@ export const Withdraw = () => {
 
   const handleWithdraw = useCallback(() => {
     if (!selectedToken) return;
-    withdraw?.(selectedToken, withdrawAmount, recipientAddress, isRelayerOff);
-  }, [withdraw, selectedToken, withdrawAmount, recipientAddress, isRelayerOff]);
+    withdraw(
+      selectedToken,
+      withdrawAmount,
+      recipientAddress,
+      isRelayerOff,
+      feeStructure,
+    );
+  }, [
+    withdraw,
+    selectedToken,
+    withdrawAmount,
+    recipientAddress,
+    isRelayerOff,
+    feeStructure,
+  ]);
 
   useEffect(() => {
     if (selectedToken && withdrawAmount) calculateFee(selectedToken);

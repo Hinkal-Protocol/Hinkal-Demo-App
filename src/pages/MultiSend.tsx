@@ -18,11 +18,13 @@ import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-del
 import { zeroAddress } from "../constants";
 import { getTokenData } from "../constants/token-data";
 import { ScheduleDelayOption } from "../types";
+import { useFee } from "../hooks/useFee";
 
 const NON_NATIVE_GAS_TOKENS = ["USDC", "USDT", "DAI"];
 
 export const MultiSend = () => {
   const { hinkal, refreshBalances, chainId } = useAppContext();
+  const { fee, isFeeLoading, feeStructure, calculateFee } = useFee();
 
   const [allowedTokens, setAllowedTokens] = useState<ERC20Token[]>([]);
 
@@ -77,21 +79,20 @@ export const MultiSend = () => {
   const [selectedScheduleDelay, setSelectedScheduleDelay] =
     useState<ScheduleDelayOption>(ScheduleDelayOption.INSTANTLY);
 
-  const { multiSend, isProcessing, fee, isFeeLoading, calculateFee } =
-    useMultiSend({
-      onError: (err) => {
-        const message = err instanceof Error ? err.message : "Unknown error";
-        toast.error(message, { id: message });
-      },
-      onSuccess: async () => {
-        toast.success("Multi send succeeded!");
-        setAddress1("");
-        setAmount1("");
-        setAddress2("");
-        setAmount2("");
-        await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
-      },
-    });
+  const { multiSend, isProcessing } = useMultiSend({
+    onError: (err) => {
+      const message = err instanceof Error ? err.message : "Unknown error";
+      toast.error(message, { id: message });
+    },
+    onSuccess: async () => {
+      toast.success("Multi send succeeded!");
+      setAddress1("");
+      setAmount1("");
+      setAddress2("");
+      setAmount2("");
+      await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
+    },
+  });
 
   useEffect(() => {
     if (!chainId) {
@@ -132,6 +133,7 @@ export const MultiSend = () => {
       address2,
       amount2,
       selectedScheduleDelay,
+      feeStructure,
     );
   }, [
     multiSend,
@@ -141,6 +143,7 @@ export const MultiSend = () => {
     address2,
     amount2,
     selectedScheduleDelay,
+    feeStructure,
   ]);
 
   const handleSubmit = (event: SyntheticEvent) => {

@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { ERC20Token, ExternalActionId } from "@gurg/hi-test";
+import { ERC20Token, ExternalActionId, FeeStructure } from "@gurg/hi-test";
 import { useAppContext } from "../AppContext";
 import { getAmountInWei } from "../utils/amount.utils";
 
@@ -19,6 +19,7 @@ export const useSwap = ({ onError, onSuccess }: UseSwapOptions = {}) => {
       amountIn: string,
       expectedAmountOut: bigint,
       fee: string,
+      feeStructure?: FeeStructure,
     ) => {
       try {
         setIsProcessing(true);
@@ -36,6 +37,8 @@ export const useSwap = ({ onError, onSuccess }: UseSwapOptions = {}) => {
           [-amountInWei, expectedAmountOut],
           ExternalActionId.Uniswap,
           fee,
+          undefined,
+          feeStructure,
         );
 
         onSuccess?.();

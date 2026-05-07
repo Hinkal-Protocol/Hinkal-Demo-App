@@ -1,10 +1,5 @@
 import { useCallback, useState } from "react";
-import {
-  ERC20Token,
-  ExternalActionId,
-  FeeStructure,
-  getFeeStructure,
-} from "@gurg/hi-test";
+import { ERC20Token, FeeStructure } from "@gurg/hi-test";
 import { useAppContext } from "../AppContext";
 import { getAmountInWei } from "../utils/amount.utils";
 import { getTxScheduleTime } from "../utils/getTxScheduleTime";
@@ -18,41 +13,6 @@ interface UseMultiSendProps {
 export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
   const { hinkal, chainId } = useAppContext();
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [fee, setFee] = useState<bigint | null>(null);
-  const [isFeeLoading, setIsFeeLoading] = useState<boolean>(false);
-  const [feeStructure, setFeeStructure] = useState<FeeStructure | undefined>(
-    undefined,
-  );
-
-  const calculateFee = useCallback(
-    async (token: ERC20Token) => {
-      if (!hinkal || !token || !chainId) return;
-
-      try {
-        setIsFeeLoading(true);
-        const calculatedFee = await getFeeStructure(
-          chainId,
-          token.erc20TokenAddress,
-          [token.erc20TokenAddress],
-          ExternalActionId.Transact,
-        );
-
-        setFeeStructure({
-          variableRate: calculatedFee.variableRate,
-          feeToken: token.erc20TokenAddress,
-          flatFee: calculatedFee.flatFee,
-        });
-        setFee(calculatedFee.flatFee);
-      } catch (err) {
-        console.error("Error calculating fee:", err);
-        setFee(null);
-        setFeeStructure(undefined);
-      } finally {
-        setIsFeeLoading(false);
-      }
-    },
-    [hinkal, chainId],
-  );
 
   const multiSend = useCallback(
     async (
@@ -62,6 +22,7 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
       address2: string,
       amount2: string,
       selectedScheduleDelay: ScheduleDelayOption,
+      feeStructure?: FeeStructure,
     ) => {
       if (!hinkal) throw new Error("Hinkal not initialized");
       if (!chainId) return;
@@ -73,15 +34,12 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
           getAmountInWei(token, amount1),
           getAmountInWei(token, amount2),
         ];
-
-        const filteredAddresses = [address1, address2];
-
         const txScheduleTime = getTxScheduleTime(selectedScheduleDelay);
 
         await hinkal.depositAndWithdraw(
           token,
           amountsInBigInt,
-          filteredAddresses,
+          [address1, address2],
           txScheduleTime,
           feeStructure,
         );
@@ -93,14 +51,11 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
         setIsProcessing(false);
       }
     },
-    [hinkal, chainId, feeStructure, onError, onSuccess],
+    [hinkal, chainId, onError, onSuccess],
   );
 
   return {
     multiSend,
     isProcessing,
-    fee,
-    isFeeLoading,
-    calculateFee,
   };
 };

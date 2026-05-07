@@ -17,7 +17,7 @@ import { FeeDisplay } from "../components/FeeDisplay";
 
 export const Transfer = () => {
   const { refreshBalances } = useAppContext();
-  const { fee, isFeeLoading, calculateFee } = useFee();
+  const { fee, isFeeLoading, feeStructure, calculateFee } = useFee();
 
   const { transfer, isProcessing } = useTransfer({
     onError: (err: Error) => {
@@ -41,8 +41,8 @@ export const Transfer = () => {
 
   const handleTransfer = useCallback(() => {
     if (!selectedToken) return;
-    transfer?.(selectedToken, transferAmount, transferAddress);
-  }, [selectedToken, transferAmount, transferAddress, transfer]);
+    transfer?.(selectedToken, transferAmount, transferAddress, feeStructure);
+  }, [selectedToken, transferAmount, transferAddress, transfer, feeStructure]);
 
   /**
    * recipient address onChange handler
