@@ -1,10 +1,11 @@
 import { useCallback, useState } from "react";
-import { ERC20Token } from "@gurg/hi-test";
+import { ERC20Token, Hinkal } from "@gurg/hi-test";
 import { getAmountInWei } from "../utils/amount.utils";
 import { useAppContext } from "../AppContext";
+import { Connector } from "wagmi";
 
 interface UseWithdrawProps {
-  hinkal: any;
+  hinkal: Hinkal<Connector>;
   onSuccess?: () => void;
   onError?: (err: unknown) => void;
 }
@@ -27,6 +28,9 @@ export const useWithdraw = ({
       if (!hinkal) {
         throw new Error("Hinkal instance not initialized");
       }
+      if (!chainId) {
+        throw new Error("Chain ID not available");
+      }
 
       try {
         setIsProcessing(true);
@@ -38,10 +42,6 @@ export const useWithdraw = ({
           [-amountInWei],
           recipientAddress,
           isRelayerOff,
-          undefined,
-          undefined,
-          undefined,
-          false,
         );
 
         if (typeof tx === "bigint") {
