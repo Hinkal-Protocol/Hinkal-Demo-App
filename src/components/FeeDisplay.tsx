@@ -18,7 +18,7 @@ export const FeeDisplay = ({
       Fee:{" "}
       {isFeeLoading
         ? "Loading..."
-        : `${(Number(fee) / 10 ** (selectedToken.decimals || 18)).toFixed(4)} ${
+        : `${(Number(fee) / 10 ** (selectedToken.decimals || 18)).toFixed(8)} ${
             selectedToken.symbol
           }`}
     </div>
