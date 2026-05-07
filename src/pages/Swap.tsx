@@ -1,4 +1,10 @@
-import { SyntheticEvent, useCallback, useMemo, useState } from "react";
+import {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import toast from "react-hot-toast";
 import { InfoPanel } from "../components/InfoPanel";
 import { Spinner } from "../components/Spinner";
@@ -10,6 +16,8 @@ import { useSwap } from "../hooks/useSwap";
 import { useAppContext } from "../AppContext";
 import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
 import { getAmountInToken } from "../utils/amount.utils";
+import { useFee } from "../hooks/useFee";
+import { FeeDisplay } from "../components/FeeDisplay";
 
 export const Swap = () => {
   const { hinkal, refreshBalances } = useAppContext();
@@ -29,6 +37,8 @@ export const Swap = () => {
     inSwapToken,
     outSwapToken,
   });
+
+  const { fee: swapFee, isFeeLoading, calculateFee } = useFee();
 
   const { swap, isProcessing } = useSwap({
     onError: (err) => {
@@ -83,6 +93,10 @@ export const Swap = () => {
   };
 
   const handleSubmit = (e: SyntheticEvent) => e.preventDefault();
+
+  useEffect(() => {
+    if (inSwapToken && inSwapAmount) calculateFee(inSwapToken);
+  }, [inSwapToken, inSwapAmount, calculateFee]);
 
   return (
     <form onSubmit={handleSubmit} className="text-white">
@@ -174,6 +188,11 @@ export const Swap = () => {
           </div>
         )}
       </div>
+      <FeeDisplay
+        fee={swapFee}
+        isFeeLoading={isFeeLoading}
+        selectedToken={inSwapToken}
+      />
       <div
         onClick={() => setRelayerInfoShown((prev) => !prev)}
         className="bg-[#272b3000] w-[88%] mx-auto rounded-xl py-1 flex items-center justify-between"

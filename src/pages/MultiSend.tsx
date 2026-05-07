@@ -11,15 +11,13 @@ import { SelectToken } from "../components/swap/SelectToken";
 import { ERC20Token, getErc20Token } from "@gurg/hi-test";
 import { useAppContext } from "../AppContext";
 import { useMultiSend } from "../hooks/useMultiSend";
-import {
-  SCHEDULE_OPTIONS,
-  ScheduleOption,
-} from "../constants/schedule.constants";
+import { SCHEDULE_OPTIONS } from "../constants/schedule.constants";
 import { ButtonGroupWithLabel } from "../utils/buttonGroupWithLabel";
 import { RecipientInputRow } from "../utils/recipientInfoRow";
 import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
 import { zeroAddress } from "../constants";
 import { getTokenData } from "../constants/token-data";
+import { ScheduleDelayOption } from "../types";
 
 const NON_NATIVE_GAS_TOKENS = ["USDC", "USDT", "DAI"];
 
@@ -76,9 +74,8 @@ export const MultiSend = () => {
   const [address2, setAddress2] = useState<string>("");
   const [amount2, setAmount2] = useState<string>("");
 
-  const [schedule, setSchedule] = useState<ScheduleOption>("instantly");
-  const [intervalBetweenTxs, setIntervalBetweenTxs] =
-    useState<ScheduleOption>("instantly");
+  const [selectedScheduleDelay, setSelectedScheduleDelay] =
+    useState<ScheduleDelayOption>(ScheduleDelayOption.INSTANTLY);
 
   const { multiSend, isProcessing, fee, isFeeLoading, calculateFee } =
     useMultiSend({
@@ -134,7 +131,7 @@ export const MultiSend = () => {
       amount1,
       address2,
       amount2,
-      schedule,
+      selectedScheduleDelay,
     );
   }, [
     multiSend,
@@ -143,7 +140,7 @@ export const MultiSend = () => {
     amount1,
     address2,
     amount2,
-    schedule,
+    selectedScheduleDelay,
   ]);
 
   const handleSubmit = (event: SyntheticEvent) => {
@@ -197,12 +194,25 @@ export const MultiSend = () => {
         />
 
         <ButtonGroupWithLabel
-          label="Interval Between Transactions"
+          label="Transaction Schedule"
           options={SCHEDULE_OPTIONS}
-          selected={intervalBetweenTxs}
-          onSelect={(option) => setIntervalBetweenTxs(option as ScheduleOption)}
+          selected={selectedScheduleDelay}
+          onSelect={(option) =>
+            setSelectedScheduleDelay(option as ScheduleDelayOption)
+          }
           disabled={isProcessing}
         />
+
+        {fee !== null && selectedToken && (
+          <div className="w-[90%] mx-auto mb-2 text-sm text-gray-400 text-right">
+            Fee:{" "}
+            {isFeeLoading
+              ? "Loading..."
+              : `${(Number(fee) / 10 ** (selectedToken.decimals || 18)).toFixed(
+                  4,
+                )} ${selectedToken.symbol}`}
+          </div>
+        )}
 
         <div className="border-solid">
           <button

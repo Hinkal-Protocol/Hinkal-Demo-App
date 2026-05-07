@@ -6,11 +6,9 @@ import {
   getFeeStructure,
 } from "@gurg/hi-test";
 import { useAppContext } from "../AppContext";
-import {
-  convertScheduleToMs,
-  ScheduleOption,
-} from "../constants/schedule.constants";
 import { getAmountInWei } from "../utils/amount.utils";
+import { getTxScheduleTime } from "../utils/getTxScheduleTime";
+import { ScheduleDelayOption } from "../types";
 
 interface UseMultiSendProps {
   onError: (err: Error) => void;
@@ -32,7 +30,7 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
 
       try {
         setIsFeeLoading(true);
-        const fee = await getFeeStructure(
+        const calculatedFee = await getFeeStructure(
           chainId,
           token.erc20TokenAddress,
           [token.erc20TokenAddress],
@@ -40,10 +38,11 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
         );
 
         setFeeStructure({
-          variableRate: fee.variableRate,
+          variableRate: calculatedFee.variableRate,
           feeToken: token.erc20TokenAddress,
-          flatFee: fee.flatFee,
+          flatFee: calculatedFee.flatFee,
         });
+        setFee(calculatedFee.flatFee);
       } catch (err) {
         console.error("Error calculating fee:", err);
         setFee(null);
@@ -52,7 +51,7 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
         setIsFeeLoading(false);
       }
     },
-    [hinkal],
+    [hinkal, chainId],
   );
 
   const multiSend = useCallback(
@@ -62,39 +61,30 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
       amount1: string,
       address2: string,
       amount2: string,
-      schedule: ScheduleOption,
+      selectedScheduleDelay: ScheduleDelayOption,
     ) => {
-      if (!hinkal) {
-        throw new Error("Hinkal not initialized");
-      }
+      if (!hinkal) throw new Error("Hinkal not initialized");
       if (!chainId) return;
 
       try {
         setIsProcessing(true);
 
-        const amount1Wei = getAmountInWei(token, amount1);
-        const amount2Wei = getAmountInWei(token, amount2);
+        const amountsInBigInt = [
+          getAmountInWei(token, amount1),
+          getAmountInWei(token, amount2),
+        ];
 
-        const recipientAmounts: Record<string, bigint> = {
-          [address1]: amount1Wei,
-          [address2]: amount2Wei,
-        };
+        const filteredAddresses = [address1, address2];
 
-        const txScheduleTime = Date.now() + convertScheduleToMs(schedule);
+        const txScheduleTime = getTxScheduleTime(selectedScheduleDelay);
 
-        console.log("token:", token);
-        console.log("recipientAmounts:", recipientAmounts);
-        console.log("txScheduleTime:", txScheduleTime);
-
-        const result = await hinkal.depositAndWithdraw(
+        await hinkal.depositAndWithdraw(
           token,
-          Object.values(recipientAmounts),
-          Object.keys(recipientAmounts),
+          amountsInBigInt,
+          filteredAddresses,
           txScheduleTime,
           feeStructure,
         );
-
-        if (result) await hinkal.waitForTransaction(chainId, result);
 
         onSuccess();
       } catch (err) {
@@ -103,7 +93,7 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
         setIsProcessing(false);
       }
     },
-    [hinkal, onError, onSuccess],
+    [hinkal, chainId, feeStructure, onError, onSuccess],
   );
 
   return {

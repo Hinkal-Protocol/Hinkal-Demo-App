@@ -1,3 +1,5 @@
+import { ScheduleDelayOption } from "../types";
+
 export const SCHEDULE_OPTIONS = [
   "instantly",
   "15m",
@@ -8,13 +10,11 @@ export const SCHEDULE_OPTIONS = [
 
 export type ScheduleOption = (typeof SCHEDULE_OPTIONS)[number];
 
-export const convertScheduleToMs = (schedule: ScheduleOption): number => {
-  const scheduleMap: Record<ScheduleOption, number> = {
-    instantly: 0,
-    "15m": 15 * 60 * 1000,
-    "30m": 30 * 60 * 1000,
-    "1h": 60 * 60 * 1000,
-    "24h": 24 * 60 * 60 * 1000,
-  };
-  return scheduleMap[schedule];
+export const SCHEDULE_DELAY_OPTIONS: Partial<
+  Record<ScheduleDelayOption, number | undefined>
+> = {
+  [ScheduleDelayOption.FIFTEEN_MINUTES]: 15 * 60, // 15 minutes
+  [ScheduleDelayOption.THIRTY_MINUTES]: 30 * 60, // 30 minutes
+  [ScheduleDelayOption.ONE_HOUR]: 60 * 60, // 1 hour
+  [ScheduleDelayOption.TWENTY_FOUR_HOURS]: 24 * 60 * 60, // 24 hours
 };

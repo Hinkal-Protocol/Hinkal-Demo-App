@@ -13,6 +13,8 @@ import { useAppContext } from "../AppContext";
 import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
 import { getAmountInToken, getAmountInWei } from "../utils/amount.utils";
 import { getPublicBalanceByTokenAddress } from "../utils/getPublicBalanceByToken";
+import { useFee } from "../hooks/useFee";
+import { FeeDisplay } from "../components/FeeDisplay";
 
 export const Deposit = () => {
   const { hinkal, refreshBalances, chainId } = useAppContext();
@@ -23,6 +25,7 @@ export const Deposit = () => {
   const [depositAmount, setDepositAmount] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [publicBalance, setPublicBalance] = useState<bigint | null>(null);
+  const { fee, isFeeLoading, calculateFee } = useFee();
 
   useEffect(() => {
     if (!selectedToken || !chainId) {
@@ -45,6 +48,10 @@ export const Deposit = () => {
     if (publicBalance === null || !selectedToken) return null;
     return Number(getAmountInToken(selectedToken, publicBalance)).toFixed(6);
   }, [publicBalance, selectedToken]);
+
+  useEffect(() => {
+    if (selectedToken && depositAmount) calculateFee(selectedToken);
+  }, [selectedToken, depositAmount, calculateFee]);
 
   const handleDeposit = useCallback(async () => {
     try {
@@ -86,10 +93,15 @@ export const Deposit = () => {
           setSelectedToken={setSelectedToken}
         />
         {publicBalanceDisplay !== null && (
-          <p className="text-gray-200 text-[12px] pl-[5%] mt-2">
+          <p className="text-gray-200 text-[12px] pl-[5%] mt-4">
             Available: {publicBalanceDisplay} {selectedToken?.symbol}
           </p>
         )}
+        <FeeDisplay
+          fee={fee}
+          isFeeLoading={isFeeLoading}
+          selectedToken={selectedToken}
+        />
         <div className="w-[90%] mx-auto mb-6 mt-6 h-[1px] bg-[#272B30]" />
         <div className="border-solid">
           <button
