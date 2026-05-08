@@ -81,7 +81,16 @@ export const MultiSend = () => {
 
   const { multiSend, isProcessing } = useMultiSend({
     onError: (err) => {
-      const message = err instanceof Error ? err.message : "Unknown error";
+      const raw = err instanceof Error ? err.message : "Unknown error";
+
+      let message = raw;
+      if (raw.includes("transfer amount exceeds balance")) {
+        message = "Insufficient balance";
+      } else if (raw.includes("execution reverted")) {
+        const match = raw.match(/reason="([^"]+)"/);
+        message = match ? match[1] : "Transaction reverted";
+      }
+
       toast.error(message, { id: message });
     },
     onSuccess: async () => {

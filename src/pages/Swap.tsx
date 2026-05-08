@@ -10,7 +10,7 @@ import { InfoPanel } from "../components/InfoPanel";
 import { Spinner } from "../components/Spinner";
 import { SelectToken } from "../components/swap/SelectToken";
 import { SwapInputTokensButton } from "../components/swap/SwapInputTokensButton";
-import { ERC20Token } from "@gurg/hi-test";
+import { ERC20Token, ExternalActionId } from "@gurg/hi-test";
 import { useUniswapPrice } from "../hooks/useUniswapPrice";
 import { useSwap } from "../hooks/useSwap";
 import { useAppContext } from "../AppContext";
@@ -110,8 +110,9 @@ export const Swap = () => {
   const handleSubmit = (e: SyntheticEvent) => e.preventDefault();
 
   useEffect(() => {
-    if (inSwapToken && inSwapAmount) calculateFee(inSwapToken);
-  }, [inSwapToken, inSwapAmount, calculateFee]);
+    if (inSwapToken && inSwapAmount && outSwapToken)
+      calculateFee(inSwapToken, ExternalActionId.Uniswap, outSwapToken);
+  }, [inSwapToken, inSwapAmount, outSwapToken, calculateFee]);
 
   return (
     <form onSubmit={handleSubmit} className="text-white">

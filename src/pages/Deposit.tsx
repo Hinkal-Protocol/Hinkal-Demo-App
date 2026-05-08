@@ -13,8 +13,6 @@ import { useAppContext } from "../AppContext";
 import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
 import { getAmountInToken, getAmountInWei } from "../utils/amount.utils";
 import { getPublicBalanceByTokenAddress } from "../utils/getPublicBalanceByToken";
-import { useFee } from "../hooks/useFee";
-import { FeeDisplay } from "../components/FeeDisplay";
 
 export const Deposit = () => {
   const { hinkal, refreshBalances, chainId } = useAppContext();
@@ -25,7 +23,6 @@ export const Deposit = () => {
   const [depositAmount, setDepositAmount] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [publicBalance, setPublicBalance] = useState<bigint | null>(null);
-  const { fee, isFeeLoading, calculateFee } = useFee();
 
   useEffect(() => {
     if (!selectedToken || !chainId) {
@@ -49,10 +46,6 @@ export const Deposit = () => {
     return Number(getAmountInToken(selectedToken, publicBalance)).toFixed(6);
   }, [publicBalance, selectedToken]);
 
-  useEffect(() => {
-    if (selectedToken && depositAmount) calculateFee(selectedToken);
-  }, [selectedToken, depositAmount, calculateFee]);
-
   const handleDeposit = useCallback(async () => {
     try {
       if (!chainId || !selectedToken) return;
@@ -63,6 +56,10 @@ export const Deposit = () => {
 
       if (result && typeof result === "object" && "hash" in result)
         await hinkal.waitForTransaction(chainId, result.hash);
+
+      toast.success(
+        "Deposit successful! Balance will update in several seconds",
+      );
       await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
@@ -97,11 +94,6 @@ export const Deposit = () => {
             Available: {publicBalanceDisplay} {selectedToken?.symbol}
           </p>
         )}
-        <FeeDisplay
-          fee={fee}
-          isFeeLoading={isFeeLoading}
-          selectedToken={selectedToken}
-        />
         <div className="w-[90%] mx-auto mb-6 mt-6 h-[1px] bg-[#272B30]" />
         <div className="border-solid">
           <button

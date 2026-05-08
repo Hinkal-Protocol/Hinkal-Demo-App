@@ -19,14 +19,18 @@ export const useFee = () => {
     async (
       token: ERC20Token,
       actionId: ExternalActionId = ExternalActionId.Transact,
+      outToken?: ERC20Token,
     ): Promise<FeeStructure | undefined> => {
       if (!chainId || !token) return undefined;
       try {
         setIsFeeLoading(true);
+        const tokenAddresses = outToken
+          ? [token.erc20TokenAddress, outToken.erc20TokenAddress]
+          : [token.erc20TokenAddress];
         const result = await getFeeStructure(
           chainId,
           token.erc20TokenAddress,
-          [token.erc20TokenAddress],
+          tokenAddresses,
           actionId,
         );
         setFee(result.flatFee);
