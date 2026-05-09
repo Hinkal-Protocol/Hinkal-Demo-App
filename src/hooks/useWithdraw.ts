@@ -47,13 +47,9 @@ export const useWithdraw = ({
           feeStructure,
         );
 
-        if (typeof tx === "bigint") {
-          onSuccess?.();
-          return;
-        }
+        const txHash = typeof tx === "string" ? tx : tx.hash;
 
-        if (typeof tx === "string")
-          await hinkal.waitForTransaction(chainId, tx);
+        await hinkal.waitForTransaction(chainId, txHash);
 
         onSuccess?.();
       } catch (err) {
