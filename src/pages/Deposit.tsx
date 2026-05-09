@@ -67,7 +67,7 @@ export const Deposit = () => {
       toast.success(
         "Deposit successful! Balance will update in several seconds",
       );
-      refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
+      await refreshBalances();
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       toast.error(errorMessage);

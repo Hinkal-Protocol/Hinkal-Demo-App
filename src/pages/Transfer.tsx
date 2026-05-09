@@ -27,7 +27,7 @@ export const Transfer = () => {
       toast.success(
         "You have successfully transferred. Balance will update in several seconds",
       );
-      await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
+      await refreshBalances();
     },
   });
 

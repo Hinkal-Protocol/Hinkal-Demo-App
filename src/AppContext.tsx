@@ -10,7 +10,6 @@ import {
   useMemo,
   useState,
   useCallback,
-  useRef,
 } from "react";
 import { Connector } from "wagmi";
 import { getTokenData } from "./constants/token-data";
@@ -29,11 +28,7 @@ type AppContextArgumnets = {
   erc20List: ERC20Token[];
   balances: TokenBalance[];
   setBalances: (balances: TokenBalance[]) => void;
-  refreshBalances: (
-    delayMs?: number,
-    force?: boolean,
-    chainId?: number,
-  ) => Promise<void>;
+  refreshBalances: () => Promise<void>;
 };
 
 const hinkalInstance = new Hinkal<Connector>();
@@ -69,7 +64,6 @@ export const AppContextProvider: FC<AppContextProps> = ({
 
   const [erc20List, setErc20List] = useState<ERC20Token[]>([]);
   const [balances, setBalances] = useState<TokenBalance[]>([]);
-  const isRefreshingRef = useRef(false);
 
   const networkList = useMemo(() => Object.values(networkRegistry), []);
 
@@ -105,29 +99,20 @@ export const AppContextProvider: FC<AppContextProps> = ({
     };
   }, [chainId]);
 
-  const refreshBalances = useCallback(
-    async (delayMs?: number, force = false) => {
-      if (!dataLoaded || (!force && isRefreshingRef.current) || !chainId) {
-        return;
-      }
-      try {
-        isRefreshingRef.current = true;
-        if (delayMs) await new Promise((res) => setTimeout(res, delayMs));
-        const bals = await hinkal.getTotalBalance(chainId);
-        const balancesArray = Array.from(bals.values());
-        setBalances(balancesArray);
-      } catch (error) {
-        console.error("Error refreshing balances:", error);
-      } finally {
-        isRefreshingRef.current = false;
-      }
-    },
-    [dataLoaded, hinkal, chainId],
-  );
+  const refreshBalances = useCallback(async () => {
+    if (!chainId) {
+      return;
+    }
+    try {
+      const bals = await hinkal.getTotalBalance(chainId);
+      const balancesArray = Array.from(bals.values());
+      setBalances(balancesArray);
+    } catch (error) {
+      console.error("Error refreshing balances:", error);
+    }
+  }, [hinkal, chainId]);
 
   useEffect(() => {
-    if (!dataLoaded) return;
-
     refreshBalances();
 
     const interval = setInterval(() => {
@@ -135,7 +120,7 @@ export const AppContextProvider: FC<AppContextProps> = ({
     }, BALANCE_REFRESH_INTERVAL);
 
     return () => clearInterval(interval);
-  }, [dataLoaded, refreshBalances]);
+  }, [refreshBalances]);
 
   return (
     <AppContext.Provider

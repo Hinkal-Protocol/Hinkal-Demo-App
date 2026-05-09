@@ -56,7 +56,7 @@ export const Swap = () => {
     onSuccess: async () => {
       toast.success("Swap successful! Balance will update in several seconds");
       setInSwapAmount("");
-      await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
+      await refreshBalances();
     },
   });
 

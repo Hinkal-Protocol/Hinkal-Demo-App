@@ -108,7 +108,7 @@ export const MultiSend = () => {
       setAmount1("");
       setAddress2("");
       setAmount2("");
-      await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
+      await refreshBalances();
     },
   });
 

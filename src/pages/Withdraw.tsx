@@ -30,7 +30,7 @@ export const Withdraw = () => {
       toast.success(
         "You have successfully withdrawn. Balance will update in several seconds",
       );
-      await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
+      await refreshBalances();
     },
   });
 
