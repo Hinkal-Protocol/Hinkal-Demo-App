@@ -17,7 +17,6 @@ import { FeeDisplay } from "../components/FeeDisplay";
 
 export const Transfer = () => {
   const { refreshBalances } = useAppContext();
-  const { isFeeLoading, feeStructure, calculateFee } = useFee();
 
   const { transfer, isProcessing } = useTransfer({
     onError: (err: Error) => {
@@ -38,6 +37,16 @@ export const Transfer = () => {
   );
   const [transferAmount, setTransferAmount] = useState<string>("");
   const [transferAddress, setTransferAddress] = useState<string>("");
+
+  const tokenAddresses = useMemo(() => {
+    return [selectedToken?.erc20TokenAddress];
+  }, [selectedToken]);
+
+  const { isFeeLoading, feeStructure } = useFee(
+    selectedToken,
+    ExternalActionId.Transact,
+    tokenAddresses,
+  );
 
   const handleTransfer = useCallback(() => {
     if (!selectedToken) return;
@@ -62,13 +71,6 @@ export const Transfer = () => {
     () => !selectedToken || !transferAmount || !transferAddress || isProcessing,
     [selectedToken, transferAmount, transferAddress, isProcessing],
   );
-
-  useEffect(() => {
-    if (selectedToken && transferAmount)
-      calculateFee(selectedToken, ExternalActionId.Transact, [
-        selectedToken.erc20TokenAddress,
-      ]);
-  }, [selectedToken, transferAmount, calculateFee]);
 
   return (
     <form className="rounded-lg" onSubmit={handleSubmit}>

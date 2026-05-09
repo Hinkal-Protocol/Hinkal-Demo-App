@@ -24,7 +24,6 @@ const NON_NATIVE_GAS_TOKENS = ["USDC", "USDT", "DAI"];
 
 export const MultiSend = () => {
   const { hinkal, refreshBalances, chainId } = useAppContext();
-  const { isFeeLoading, feeStructure, calculateFee } = useFee();
 
   const [allowedTokens, setAllowedTokens] = useState<ERC20Token[]>([]);
 
@@ -79,6 +78,16 @@ export const MultiSend = () => {
   const [selectedScheduleDelay, setSelectedScheduleDelay] =
     useState<ScheduleDelayOption>(ScheduleDelayOption.INSTANTLY);
 
+  const tokenAddresses = useMemo(() => {
+    return [selectedToken?.erc20TokenAddress];
+  }, [selectedToken]);
+
+  const { isFeeLoading, feeStructure } = useFee(
+    selectedToken,
+    ExternalActionId.Transact,
+    tokenAddresses,
+  );
+
   const { multiSend, isProcessing } = useMultiSend({
     onError: (err) => {
       const raw = err instanceof Error ? err.message : "Unknown error";
@@ -119,13 +128,6 @@ export const MultiSend = () => {
       if (!isTokenStillValid) setSelectedToken(allowedTokens[0] || undefined);
     }
   }, [chainId, allowedTokens, selectedToken]);
-
-  useEffect(() => {
-    if (selectedToken)
-      calculateFee(selectedToken, ExternalActionId.Transact, [
-        selectedToken.erc20TokenAddress,
-      ]);
-  }, [selectedToken, calculateFee]);
 
   const setAmountHandler = (
     event: React.ChangeEvent<HTMLInputElement>,

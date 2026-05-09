@@ -19,7 +19,6 @@ import { FeeDisplay } from "../components/FeeDisplay";
 
 export const Withdraw = () => {
   const { hinkal, refreshBalances } = useAppContext();
-  const { isFeeLoading, feeStructure, calculateFee } = useFee();
 
   const { withdraw, isProcessing } = useWithdraw({
     hinkal,
@@ -43,6 +42,16 @@ export const Withdraw = () => {
   const [isRelayerOff, setIsRelayerOff] = useState(false);
   const [showRelayerDetails, setShowRelayerDetails] = useState(false);
 
+  const tokenAddresses = useMemo(() => {
+    return [selectedToken?.erc20TokenAddress];
+  }, [selectedToken]);
+
+  const { isFeeLoading, feeStructure } = useFee(
+    selectedToken,
+    ExternalActionId.Transact,
+    tokenAddresses,
+  );
+
   const handleWithdraw = useCallback(() => {
     if (!selectedToken) return;
     withdraw(
@@ -60,13 +69,6 @@ export const Withdraw = () => {
     isRelayerOff,
     feeStructure,
   ]);
-
-  useEffect(() => {
-    if (selectedToken && withdrawAmount)
-      calculateFee(selectedToken, ExternalActionId.Transact, [
-        selectedToken.erc20TokenAddress,
-      ]);
-  }, [selectedToken, withdrawAmount, calculateFee]);
 
   const setRecipientAddressHandler = (
     event: React.ChangeEvent<HTMLInputElement>,

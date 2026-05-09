@@ -25,20 +25,27 @@ export const Deposit = () => {
   const [publicBalance, setPublicBalance] = useState<bigint | null>(null);
 
   useEffect(() => {
-    if (!selectedToken || !chainId) {
-      setPublicBalance(null);
-      return;
-    }
+    let isCancelled = false;
+
     const fetch = async () => {
+      if (!selectedToken || !chainId) {
+        if (!isCancelled) setPublicBalance(null);
+        return;
+      }
+
       const ethAddress = await hinkal.getEthereumAddress();
       const balance = await getPublicBalanceByTokenAddress(
         chainId,
         ethAddress,
         selectedToken.erc20TokenAddress,
       );
-      setPublicBalance(balance);
+      if (!isCancelled) setPublicBalance(balance);
     };
     fetch();
+
+    return () => {
+      isCancelled = true;
+    };
   }, [selectedToken, chainId, hinkal]);
 
   const publicBalanceDisplay = useMemo(() => {
@@ -60,13 +67,12 @@ export const Deposit = () => {
       toast.success(
         "Deposit successful! Balance will update in several seconds",
       );
-      await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
+      refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       toast.error(errorMessage);
     } finally {
       setIsProcessing(false);
-      refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
     }
   }, [hinkal, depositAmount, selectedToken, refreshBalances]);
 

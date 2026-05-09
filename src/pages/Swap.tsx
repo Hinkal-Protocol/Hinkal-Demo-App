@@ -38,7 +38,15 @@ export const Swap = () => {
     outSwapToken,
   });
 
-  const { isFeeLoading, feeStructure, calculateFee } = useFee();
+  const tokenAddresses = useMemo(() => {
+    return [inSwapToken?.erc20TokenAddress, outSwapToken?.erc20TokenAddress];
+  }, [inSwapToken, outSwapToken]);
+
+  const { isFeeLoading, feeStructure } = useFee(
+    inSwapToken,
+    ExternalActionId.Uniswap,
+    tokenAddresses,
+  );
 
   const { swap, isProcessing } = useSwap({
     onError: (err) => {
@@ -108,14 +116,6 @@ export const Swap = () => {
   };
 
   const handleSubmit = (e: SyntheticEvent) => e.preventDefault();
-
-  useEffect(() => {
-    if (inSwapToken && inSwapAmount && outSwapToken)
-      calculateFee(inSwapToken, ExternalActionId.Uniswap, [
-        inSwapToken.erc20TokenAddress,
-        outSwapToken.erc20TokenAddress,
-      ]);
-  }, [inSwapToken, inSwapAmount, outSwapToken, calculateFee]);
 
   return (
     <form onSubmit={handleSubmit} className="text-white">
