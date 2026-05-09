@@ -8,7 +8,7 @@ import {
 import toast from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { SelectToken } from "../components/swap/SelectToken";
-import { ERC20Token, getErc20Token } from "@gurg/hi-test";
+import { ERC20Token, ExternalActionId, getErc20Token } from "@gurg/hi-test";
 import { useAppContext } from "../AppContext";
 import { useMultiSend } from "../hooks/useMultiSend";
 import { SCHEDULE_OPTIONS } from "../constants/schedule.constants";
@@ -24,7 +24,7 @@ const NON_NATIVE_GAS_TOKENS = ["USDC", "USDT", "DAI"];
 
 export const MultiSend = () => {
   const { hinkal, refreshBalances, chainId } = useAppContext();
-  const { fee, isFeeLoading, feeStructure, calculateFee } = useFee();
+  const { isFeeLoading, feeStructure, calculateFee } = useFee();
 
   const [allowedTokens, setAllowedTokens] = useState<ERC20Token[]>([]);
 
@@ -121,7 +121,10 @@ export const MultiSend = () => {
   }, [chainId, allowedTokens, selectedToken]);
 
   useEffect(() => {
-    if (selectedToken) calculateFee(selectedToken);
+    if (selectedToken)
+      calculateFee(selectedToken, ExternalActionId.Transact, [
+        selectedToken.erc20TokenAddress,
+      ]);
   }, [selectedToken, calculateFee]);
 
   const setAmountHandler = (
@@ -215,14 +218,15 @@ export const MultiSend = () => {
           disabled={isProcessing}
         />
 
-        {fee !== null && selectedToken && (
+        {feeStructure !== undefined && selectedToken && (
           <div className="w-[90%] mx-auto mb-2 text-sm text-gray-400 text-right">
             Fee:{" "}
             {isFeeLoading
               ? "Loading..."
-              : `${(Number(fee) / 10 ** (selectedToken.decimals || 18)).toFixed(
-                  4,
-                )} ${selectedToken.symbol}`}
+              : `${(
+                  Number(feeStructure.flatFee) /
+                  10 ** (selectedToken.decimals || 18)
+                ).toFixed(4)} ${selectedToken.symbol}`}
           </div>
         )}
 

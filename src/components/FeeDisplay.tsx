@@ -1,7 +1,7 @@
 import { ERC20Token } from "@gurg/hi-test";
 
 interface FeeDisplayProps {
-  fee: bigint | null;
+  fee: bigint | undefined;
   isFeeLoading: boolean;
   selectedToken?: ERC20Token;
 }

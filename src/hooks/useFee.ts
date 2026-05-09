@@ -9,7 +9,6 @@ import { useAppContext } from "../AppContext";
 
 export const useFee = () => {
   const { chainId } = useAppContext();
-  const [fee, setFee] = useState<bigint | null>(null);
   const [feeStructure, setFeeStructure] = useState<FeeStructure | undefined>(
     undefined,
   );
@@ -17,27 +16,22 @@ export const useFee = () => {
 
   const calculateFee = useCallback(
     async (
-      token: ERC20Token,
-      actionId: ExternalActionId = ExternalActionId.Transact,
-      outToken?: ERC20Token,
+      feeToken: ERC20Token,
+      actionId: ExternalActionId,
+      tokenAddresses: string[],
     ): Promise<FeeStructure | undefined> => {
-      if (!chainId || !token) return undefined;
+      if (!chainId || !feeToken) return undefined;
       try {
         setIsFeeLoading(true);
-        const tokenAddresses = outToken
-          ? [token.erc20TokenAddress, outToken.erc20TokenAddress]
-          : [token.erc20TokenAddress];
         const result = await getFeeStructure(
           chainId,
-          token.erc20TokenAddress,
+          feeToken.erc20TokenAddress,
           tokenAddresses,
           actionId,
         );
-        setFee(result.flatFee);
         setFeeStructure(result);
         return result;
       } catch {
-        setFee(null);
         setFeeStructure(undefined);
         return undefined;
       } finally {
@@ -47,5 +41,5 @@ export const useFee = () => {
     [chainId],
   );
 
-  return { fee, feeStructure, isFeeLoading, calculateFee };
+  return { feeStructure, isFeeLoading, calculateFee };
 };

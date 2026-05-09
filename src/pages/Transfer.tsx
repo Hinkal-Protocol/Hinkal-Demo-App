@@ -8,7 +8,7 @@ import {
 import toast from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
-import { ERC20Token } from "@gurg/hi-test";
+import { ERC20Token, ExternalActionId } from "@gurg/hi-test";
 import { useTransfer } from "../hooks/useTransfer";
 import { useAppContext } from "../AppContext";
 import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
@@ -17,7 +17,7 @@ import { FeeDisplay } from "../components/FeeDisplay";
 
 export const Transfer = () => {
   const { refreshBalances } = useAppContext();
-  const { fee, isFeeLoading, feeStructure, calculateFee } = useFee();
+  const { isFeeLoading, feeStructure, calculateFee } = useFee();
 
   const { transfer, isProcessing } = useTransfer({
     onError: (err: Error) => {
@@ -64,7 +64,10 @@ export const Transfer = () => {
   );
 
   useEffect(() => {
-    if (selectedToken && transferAmount) calculateFee(selectedToken);
+    if (selectedToken && transferAmount)
+      calculateFee(selectedToken, ExternalActionId.Transact, [
+        selectedToken.erc20TokenAddress,
+      ]);
   }, [selectedToken, transferAmount, calculateFee]);
 
   return (
@@ -93,7 +96,7 @@ export const Transfer = () => {
         <br />
       </div>
       <FeeDisplay
-        fee={fee}
+        fee={feeStructure?.flatFee}
         isFeeLoading={isFeeLoading}
         selectedToken={selectedToken}
       />

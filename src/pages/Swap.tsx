@@ -38,7 +38,7 @@ export const Swap = () => {
     outSwapToken,
   });
 
-  const { fee: swapFee, isFeeLoading, feeStructure, calculateFee } = useFee();
+  const { isFeeLoading, feeStructure, calculateFee } = useFee();
 
   const { swap, isProcessing } = useSwap({
     onError: (err) => {
@@ -111,7 +111,10 @@ export const Swap = () => {
 
   useEffect(() => {
     if (inSwapToken && inSwapAmount && outSwapToken)
-      calculateFee(inSwapToken, ExternalActionId.Uniswap, outSwapToken);
+      calculateFee(inSwapToken, ExternalActionId.Uniswap, [
+        inSwapToken.erc20TokenAddress,
+        outSwapToken.erc20TokenAddress,
+      ]);
   }, [inSwapToken, inSwapAmount, outSwapToken, calculateFee]);
 
   return (
@@ -205,7 +208,7 @@ export const Swap = () => {
         )}
       </div>
       <FeeDisplay
-        fee={swapFee}
+        fee={feeStructure?.flatFee}
         isFeeLoading={isFeeLoading}
         selectedToken={inSwapToken}
       />

@@ -12,14 +12,14 @@ import { TokenAmountInput } from "../components/TokenAmountInput";
 import { ToggleSwitch } from "../components/withdraw/ToggleSwitch";
 import { useAppContext } from "../AppContext";
 import { useWithdraw } from "../hooks/useWithdraw";
-import { ERC20Token } from "@gurg/hi-test";
+import { ERC20Token, ExternalActionId } from "@gurg/hi-test";
 import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
 import { useFee } from "../hooks/useFee";
 import { FeeDisplay } from "../components/FeeDisplay";
 
 export const Withdraw = () => {
   const { hinkal, refreshBalances } = useAppContext();
-  const { fee, isFeeLoading, feeStructure, calculateFee } = useFee();
+  const { isFeeLoading, feeStructure, calculateFee } = useFee();
 
   const { withdraw, isProcessing } = useWithdraw({
     hinkal,
@@ -62,7 +62,10 @@ export const Withdraw = () => {
   ]);
 
   useEffect(() => {
-    if (selectedToken && withdrawAmount) calculateFee(selectedToken);
+    if (selectedToken && withdrawAmount)
+      calculateFee(selectedToken, ExternalActionId.Transact, [
+        selectedToken.erc20TokenAddress,
+      ]);
   }, [selectedToken, withdrawAmount, calculateFee]);
 
   const setRecipientAddressHandler = (
@@ -112,7 +115,7 @@ export const Withdraw = () => {
           />
         </div>
         <FeeDisplay
-          fee={fee}
+          fee={feeStructure?.flatFee}
           isFeeLoading={isFeeLoading}
           selectedToken={selectedToken}
         />
