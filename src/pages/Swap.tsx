@@ -31,7 +31,7 @@ export const Swap = () => {
   const {
     isPriceLoading,
     price: outSwapAmountWei,
-    swapData: fee,
+    swapData,
   } = useUniswapPrice({
     inSwapAmount,
     inSwapToken,
@@ -67,18 +67,18 @@ export const Swap = () => {
       outSwapAmountWei > 0n &&
       inSwapToken &&
       outSwapToken &&
-      fee,
-    [inSwapAmount, inSwapToken, outSwapToken, outSwapAmountWei, fee],
+      swapData,
+    [inSwapAmount, inSwapToken, outSwapToken, outSwapAmountWei, swapData],
   );
 
   const handleSwap = useCallback(async () => {
-    if (!inSwapToken || !outSwapToken || !outSwapAmountWei || !fee) return;
+    if (!inSwapToken || !outSwapToken || !outSwapAmountWei || !swapData) return;
     await swap(
       inSwapToken,
       outSwapToken,
       inSwapAmount,
       outSwapAmountWei,
-      fee,
+      swapData,
       feeStructure,
     );
   }, [
@@ -87,7 +87,7 @@ export const Swap = () => {
     outSwapToken,
     inSwapAmount,
     outSwapAmountWei,
-    fee,
+    swapData,
     feeStructure,
   ]);
 
