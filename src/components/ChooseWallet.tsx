@@ -8,7 +8,7 @@ import walletconnectLogo from "../assets/walletconnectWalletLogo.png";
 import { Modal } from "./Modal";
 import { Spinner } from "./Spinner";
 import { useAppContext } from "../AppContext";
-import { prepareWagmiHinkal } from "@gurg/hi-test";
+import { prepareWagmiHinkal } from "@gurg/hi-test/functions/providers/prepareWagmiHinkal";
 import toast from "react-hot-toast";
 
 interface ChooseWalletProps {
