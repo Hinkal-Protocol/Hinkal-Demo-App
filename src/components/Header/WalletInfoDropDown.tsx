@@ -23,8 +23,7 @@ const filterTokenBalances = (tokenBalances: TokenBalance[]) => {
 };
 
 export const WalletInfoDropDown = () => {
-  const { balances, hinkal, chainId, refreshBalances, erc20List } =
-    useAppContext();
+  const { balances, hinkal, erc20List } = useAppContext();
 
   const nativeToken = useMemo(
     () => erc20List.find((t) => t.erc20TokenAddress === zeroAddress),

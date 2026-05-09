@@ -1,7 +1,6 @@
 import {
   SyntheticEvent,
   useCallback,
-  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -10,13 +9,10 @@ import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
 import { ERC20Token, ExternalActionId } from "@gurg/hi-test";
 import { useTransfer } from "../hooks/useTransfer";
-import { useAppContext } from "../AppContext";
 import { useFee } from "../hooks/useFee";
 import { FeeDisplay } from "../components/FeeDisplay";
 
 export const Transfer = () => {
-  const { refreshBalances } = useAppContext();
-
   const { transfer, isProcessing } = useTransfer({
     onError: (err: Error) => {
       const message = err instanceof Error ? err.message : "Unknown error";
@@ -26,7 +22,6 @@ export const Transfer = () => {
       toast.success(
         "You have successfully transferred. Balance will update in several seconds",
       );
-      await refreshBalances();
     },
   });
 

@@ -11,7 +11,7 @@ interface NetworkSettingsDropdownProps {
 export const NetworkSettingsDropdown = ({
   close,
 }: NetworkSettingsDropdownProps) => {
-  const { hinkal, setChainId, refreshBalances, setBalances } = useAppContext();
+  const { hinkal, setChainId, setBalances } = useAppContext();
 
   const networkList = useMemo(
     () =>

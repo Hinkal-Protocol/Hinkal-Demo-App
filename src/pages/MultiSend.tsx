@@ -22,7 +22,7 @@ import { useFee } from "../hooks/useFee";
 const NON_NATIVE_GAS_TOKENS = ["USDC", "USDT", "DAI"];
 
 export const MultiSend = () => {
-  const { hinkal, refreshBalances, chainId } = useAppContext();
+  const { hinkal, chainId } = useAppContext();
 
   const [allowedTokens, setAllowedTokens] = useState<ERC20Token[]>([]);
 
@@ -107,7 +107,6 @@ export const MultiSend = () => {
       setAmount1("");
       setAddress2("");
       setAmount2("");
-      await refreshBalances();
     },
   });
 

@@ -19,7 +19,7 @@ import { useFee } from "../hooks/useFee";
 import { FeeDisplay } from "../components/FeeDisplay";
 
 export const Swap = () => {
-  const { hinkal, refreshBalances } = useAppContext();
+  const { hinkal } = useAppContext();
 
   const [inSwapAmount, setInSwapAmount] = useState("");
   const [inSwapToken, setInSwapToken] = useState<ERC20Token | undefined>();
@@ -55,7 +55,6 @@ export const Swap = () => {
     onSuccess: async () => {
       toast.success("Swap successful! Balance will update in several seconds");
       setInSwapAmount("");
-      await refreshBalances();
     },
   });
 

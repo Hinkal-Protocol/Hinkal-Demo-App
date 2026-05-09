@@ -28,7 +28,6 @@ type AppContextArgumnets = {
   erc20List: ERC20Token[];
   balances: TokenBalance[];
   setBalances: (balances: TokenBalance[]) => void;
-  refreshBalances: () => Promise<void>;
 };
 
 const hinkalInstance = new Hinkal<Connector>();
@@ -46,7 +45,6 @@ const AppContext = createContext<AppContextArgumnets>({
   erc20List: [],
   balances: [],
   setBalances: (balances: TokenBalance[]) => {},
-  refreshBalances: async (delayMs?: number, force?: boolean) => {},
 });
 
 type AppContextProps = { children: ReactNode };
@@ -114,13 +112,15 @@ export const AppContextProvider: FC<AppContextProps> = ({
 
   useEffect(() => {
     refreshBalances();
-
-    const interval = setInterval(() => {
-      refreshBalances();
-    }, BALANCE_REFRESH_INTERVAL);
-
-    return () => clearInterval(interval);
   }, [refreshBalances]);
+
+  useEffect(() => {
+    const unsubscribe = hinkal.onBalanceRefresh(refreshBalances);
+
+    return () => {
+      unsubscribe();
+    };
+  }, [hinkal, refreshBalances]);
 
   return (
     <AppContext.Provider
@@ -136,7 +136,6 @@ export const AppContextProvider: FC<AppContextProps> = ({
         erc20List,
         balances,
         setBalances,
-        refreshBalances,
       }}
     >
       {children}

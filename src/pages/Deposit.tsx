@@ -14,7 +14,7 @@ import { getAmountInToken, getAmountInWei } from "../utils/amount.utils";
 import { getPublicBalanceByTokenAddress } from "../utils/getPublicBalanceByToken";
 
 export const Deposit = () => {
-  const { hinkal, refreshBalances, chainId } = useAppContext();
+  const { hinkal, chainId } = useAppContext();
 
   const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
     undefined,
@@ -66,14 +66,13 @@ export const Deposit = () => {
       toast.success(
         "Deposit successful! Balance will update in several seconds",
       );
-      await refreshBalances();
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       toast.error(errorMessage);
     } finally {
       setIsProcessing(false);
     }
-  }, [hinkal, depositAmount, selectedToken, refreshBalances]);
+  }, [hinkal, depositAmount, selectedToken]);
 
   const handleSubmit = (event: SyntheticEvent) => {
     event.preventDefault();

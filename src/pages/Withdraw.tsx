@@ -17,7 +17,7 @@ import { useFee } from "../hooks/useFee";
 import { FeeDisplay } from "../components/FeeDisplay";
 
 export const Withdraw = () => {
-  const { hinkal, refreshBalances } = useAppContext();
+  const { hinkal } = useAppContext();
 
   const { withdraw, isProcessing } = useWithdraw({
     hinkal,
@@ -29,7 +29,6 @@ export const Withdraw = () => {
       toast.success(
         "You have successfully withdrawn. Balance will update in several seconds",
       );
-      await refreshBalances();
     },
   });
 
