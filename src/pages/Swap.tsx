@@ -14,7 +14,6 @@ import { ERC20Token, ExternalActionId } from "@gurg/hi-test";
 import { useUniswapPrice } from "../hooks/useUniswapPrice";
 import { useSwap } from "../hooks/useSwap";
 import { useAppContext } from "../AppContext";
-import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
 import { getAmountInToken } from "../utils/amount.utils";
 import { useFee } from "../hooks/useFee";
 import { FeeDisplay } from "../components/FeeDisplay";

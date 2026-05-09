@@ -13,7 +13,6 @@ import { ToggleSwitch } from "../components/withdraw/ToggleSwitch";
 import { useAppContext } from "../AppContext";
 import { useWithdraw } from "../hooks/useWithdraw";
 import { ERC20Token, ExternalActionId } from "@gurg/hi-test";
-import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
 import { useFee } from "../hooks/useFee";
 import { FeeDisplay } from "../components/FeeDisplay";
 

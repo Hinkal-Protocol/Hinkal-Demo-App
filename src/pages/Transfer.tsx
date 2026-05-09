@@ -11,7 +11,6 @@ import { TokenAmountInput } from "../components/TokenAmountInput";
 import { ERC20Token, ExternalActionId } from "@gurg/hi-test";
 import { useTransfer } from "../hooks/useTransfer";
 import { useAppContext } from "../AppContext";
-import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
 import { useFee } from "../hooks/useFee";
 import { FeeDisplay } from "../components/FeeDisplay";
 

@@ -14,7 +14,6 @@ import { useMultiSend } from "../hooks/useMultiSend";
 import { SCHEDULE_OPTIONS } from "../constants/schedule.constants";
 import { ButtonGroupWithLabel } from "../utils/buttonGroupWithLabel";
 import { RecipientInputRow } from "../utils/recipientInfoRow";
-import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
 import { zeroAddress } from "../constants";
 import { getTokenData } from "../constants/token-data";
 import { ScheduleDelayOption } from "../types";

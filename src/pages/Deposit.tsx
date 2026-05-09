@@ -10,7 +10,6 @@ import { toast } from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
 import { useAppContext } from "../AppContext";
-import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
 import { getAmountInToken, getAmountInWei } from "../utils/amount.utils";
 import { getPublicBalanceByTokenAddress } from "../utils/getPublicBalanceByToken";
 
