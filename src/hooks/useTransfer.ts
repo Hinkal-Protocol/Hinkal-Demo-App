@@ -12,7 +12,7 @@ export const useTransfer = ({
   onError,
   onSuccess,
 }: UseTransferOptions = {}) => {
-  const { hinkal, dataLoaded } = useAppContext();
+  const { hinkal, dataLoaded, chainId } = useAppContext();
   const [isProcessing, setIsProcessing] = useState(false);
 
   const transfer = useCallback(
@@ -25,19 +25,22 @@ export const useTransfer = ({
       try {
         setIsProcessing(true);
 
-        if (!dataLoaded || !hinkal) throw new Error("Hinkal not initialized");
+        if (!dataLoaded || !hinkal || !chainId)
+          throw new Error("Hinkal not initialized");
         if (!amount || parseFloat(amount) <= 0)
           throw new Error("Invalid amount");
         if (!recipientAddress) throw new Error("Recipient address is required");
 
         const amountInBigInt = getAmountInWei(token, amount);
-        await hinkal.transfer(
+        const txHash = await hinkal.transfer(
           [token],
           [-amountInBigInt],
           recipientAddress,
           undefined,
           feeStructure,
         );
+
+        await hinkal.waitForTransaction(chainId, txHash);
 
         onSuccess?.();
       } catch (err) {
@@ -47,7 +50,7 @@ export const useTransfer = ({
         setIsProcessing(false);
       }
     },
-    [hinkal, dataLoaded, onError, onSuccess],
+    [hinkal, dataLoaded, chainId, onError, onSuccess],
   );
 
   return { transfer, isProcessing };

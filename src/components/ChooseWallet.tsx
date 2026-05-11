@@ -36,12 +36,6 @@ export const ChooseWallet = ({
       try {
         setIsConnecting?.(true);
         setConnectingId(connector.id);
-        try {
-          await connector.disconnect();
-        } catch (disconnectError) {
-          console.log("Disconnect cleanup:", disconnectError);
-        }
-        await new Promise((resolve) => setTimeout(resolve, 200));
         const hinkal = await prepareWagmiHinkal(connector, config);
         setHinkal(hinkal);
         setShieldedAddress(hinkal.getShieldedPublicKey());
