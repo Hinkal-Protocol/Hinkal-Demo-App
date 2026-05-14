@@ -27,7 +27,7 @@ export const Deposit = () => {
     let isCancelled = false;
 
     const fetch = async () => {
-      if (!selectedToken || !chainId) {
+      if (!selectedToken || !chainId || !hinkal) {
         if (!isCancelled) setPublicBalance(null);
         return;
       }
@@ -54,7 +54,7 @@ export const Deposit = () => {
 
   const handleDeposit = useCallback(async () => {
     try {
-      if (!chainId || !selectedToken) return;
+      if (!hinkal || !chainId || !selectedToken) return;
       setIsProcessing(true);
       const amountInWei = getAmountInWei(selectedToken, depositAmount);
 
@@ -72,7 +72,7 @@ export const Deposit = () => {
     } finally {
       setIsProcessing(false);
     }
-  }, [hinkal, depositAmount, selectedToken]);
+  }, [hinkal, chainId, depositAmount, selectedToken]);
 
   const handleSubmit = (event: SyntheticEvent) => {
     event.preventDefault();

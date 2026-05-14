@@ -1,6 +1,6 @@
 import { TokenBalance } from "@gurg/hi-test";
 import toast from "react-hot-toast";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import Copy from "../../assets/Copy.svg";
 import Disconnect from "../../assets/Disconnect.svg";
 import { copyToClipboard } from "../../utils/copyToClipboard";
@@ -23,22 +23,23 @@ const filterTokenBalances = (tokenBalances: TokenBalance[]) => {
 };
 
 export const WalletInfoDropDown = () => {
-  const { balances, hinkal, erc20List } = useAppContext();
+  const { privateBalancesWithUSD, hinkal, erc20List, chainId } =
+    useAppContext();
 
   const nativeToken = useMemo(
     () => erc20List.find((t) => t.erc20TokenAddress === zeroAddress),
     [erc20List],
   );
 
-  const displayBalances = useMemo(
-    () =>
-      balances.length === 0 && nativeToken
-        ? [{ token: nativeToken, balance: 0n }]
-        : filterTokenBalances(balances),
-    [balances, nativeToken],
-  );
+  const displayBalances = useMemo(() => {
+    if (!chainId) return [];
+    return privateBalancesWithUSD[chainId]?.length === 0 && nativeToken
+      ? [{ token: nativeToken, balance: 0n }]
+      : filterTokenBalances(privateBalancesWithUSD[chainId] || []);
+  }, [privateBalancesWithUSD, nativeToken, chainId]);
 
   const handleCopyShieldedAddress = () => {
+    if (!hinkal) return;
     try {
       const shieldedAddress = hinkal.getShieldedPublicKey();
       if (!shieldedAddress) {
@@ -59,7 +60,7 @@ export const WalletInfoDropDown = () => {
         <p className="text-[#abaeaf] text-[12px] text-left">Balance</p>
       </div>
       <div className="flex flex-col justify-center gap-4 mb-[10%]">
-        {balances.length === 0 ? (
+        {chainId && privateBalancesWithUSD[chainId]?.length === 0 ? (
           <div className="flex items-center gap-2 animate-pulse">
             <div className="w-6 h-6 rounded-full bg-gray-100" />
             <div className="h-4 w-24 rounded bg-gray-100" />

@@ -11,7 +11,7 @@ interface NetworkSettingsDropdownProps {
 export const NetworkSettingsDropdown = ({
   close,
 }: NetworkSettingsDropdownProps) => {
-  const { hinkal, setChainId, setBalances } = useAppContext();
+  const { hinkal, setChainId } = useAppContext();
 
   const networkList = useMemo(
     () =>
@@ -23,11 +23,11 @@ export const NetworkSettingsDropdown = ({
 
   const switchNetwork = useCallback(
     async (chainId: number) => {
+      if (!hinkal) return;
       await hinkal.switchNetwork(chainId);
-      setChainId(chainId);
-      setBalances([]);
-      close();
       await hinkal.resetMerkle();
+      setChainId(chainId);
+      close();
     },
     [hinkal, setChainId, close],
   );

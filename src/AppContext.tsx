@@ -1,4 +1,10 @@
-import { ERC20Token, Hinkal, TokenBalance, getErc20Token } from "@gurg/hi-test";
+import {
+  ERC20Token,
+  Hinkal,
+  PrivateBalancesState,
+  getErc20Token,
+  refreshBalance,
+} from "@gurg/hi-test";
 import {
   Dispatch,
   FC,
@@ -9,16 +15,17 @@ import {
   useEffect,
   useMemo,
   useState,
-  useCallback,
+  useSyncExternalStore,
 } from "react";
-import { Connector } from "wagmi";
 import { getTokenData } from "./constants/token-data";
 import { Network } from "./types";
 import { networkRegistry } from "./constants/networkRegistry";
 
+const emptyPrivateBalances: PrivateBalancesState = {};
+
 type AppContextArgumnets = {
-  hinkal: Hinkal<Connector>;
-  setHinkal: Dispatch<SetStateAction<Hinkal<Connector>>>;
+  hinkal: Hinkal<unknown> | undefined;
+  setHinkal: Dispatch<SetStateAction<Hinkal<unknown> | undefined>>;
   chainId?: number;
   setChainId: (num: number) => void;
   selectedNetwork: Network | undefined;
@@ -26,16 +33,12 @@ type AppContextArgumnets = {
   dataLoaded: boolean;
   setDataLoaded: (val: boolean) => void;
   erc20List: ERC20Token[];
-  balances: TokenBalance[];
-  setBalances: (balances: TokenBalance[]) => void;
+  privateBalancesWithUSD: PrivateBalancesState;
 };
 
-const hinkalInstance = new Hinkal<Connector>();
-const BALANCE_REFRESH_INTERVAL = 100000;
-
 const AppContext = createContext<AppContextArgumnets>({
-  hinkal: hinkalInstance,
-  setHinkal: (hinkal: SetStateAction<Hinkal<Connector>>) => {},
+  hinkal: undefined,
+  setHinkal: (hinkal: SetStateAction<Hinkal<unknown> | undefined>) => {},
   chainId: undefined,
   setChainId: (num: number) => {},
   selectedNetwork: undefined,
@@ -43,8 +46,7 @@ const AppContext = createContext<AppContextArgumnets>({
   dataLoaded: false,
   setDataLoaded: (val: boolean) => {},
   erc20List: [],
-  balances: [],
-  setBalances: (balances: TokenBalance[]) => {},
+  privateBalancesWithUSD: emptyPrivateBalances,
 });
 
 type AppContextProps = { children: ReactNode };
@@ -52,7 +54,7 @@ type AppContextProps = { children: ReactNode };
 export const AppContextProvider: FC<AppContextProps> = ({
   children,
 }: AppContextProps) => {
-  const [hinkal, setHinkal] = useState<Hinkal<Connector>>(hinkalInstance);
+  const [hinkal, setHinkal] = useState<Hinkal<unknown> | undefined>(undefined);
   const [chainId, setChainId] = useState<number | undefined>();
   const [dataLoaded, setDataLoaded] = useState<boolean>(false);
 
@@ -61,7 +63,14 @@ export const AppContextProvider: FC<AppContextProps> = ({
   );
 
   const [erc20List, setErc20List] = useState<ERC20Token[]>([]);
-  const [balances, setBalances] = useState<TokenBalance[]>([]);
+
+  const privateBalancesWithUSD = useSyncExternalStore(
+    (onChange) => {
+      if (!hinkal) return () => {};
+      return hinkal.onPrivateBalancesWithUSDChange(() => onChange());
+    },
+    () => hinkal?.privateBalancesWithUSD ?? emptyPrivateBalances,
+  );
 
   const networkList = useMemo(() => Object.values(networkRegistry), []);
 
@@ -97,30 +106,10 @@ export const AppContextProvider: FC<AppContextProps> = ({
     };
   }, [chainId]);
 
-  const refreshBalances = useCallback(async () => {
-    if (!chainId) {
-      return;
-    }
-    try {
-      const bals = await hinkal.getTotalBalance(chainId);
-      const balancesArray = Array.from(bals.values());
-      setBalances(balancesArray);
-    } catch (error) {
-      console.error("Error refreshing balances:", error);
-    }
-  }, [hinkal, chainId]);
-
   useEffect(() => {
-    refreshBalances();
-  }, [refreshBalances]);
-
-  useEffect(() => {
-    const unsubscribe = hinkal.onBalanceRefresh(refreshBalances);
-
-    return () => {
-      unsubscribe();
-    };
-  }, [hinkal, refreshBalances]);
+    if (!chainId || !hinkal) return;
+    refreshBalance({ chainIdToUpdate: chainId });
+  }, [chainId, hinkal]);
 
   return (
     <AppContext.Provider
@@ -134,8 +123,7 @@ export const AppContextProvider: FC<AppContextProps> = ({
         dataLoaded,
         setDataLoaded,
         erc20List,
-        balances,
-        setBalances,
+        privateBalancesWithUSD,
       }}
     >
       {children}
