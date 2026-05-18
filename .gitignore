@@ -24,12 +24,3 @@ dist-ssr
 *.sw?
 
 *.gz
-
-# Yarn Berry
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
-.pnp.*
