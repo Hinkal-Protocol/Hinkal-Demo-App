@@ -1,5 +1,9 @@
 import { useCallback, useState } from "react";
-import { ERC20Token, getAmountInWei } from "@hinkal/common";
+import {
+  AdminTransactionType,
+  ERC20Token,
+  getAmountInWei,
+} from "@hinkal/common";
 
 interface UseWithdrawProps {
   hinkal: any;
@@ -37,8 +41,7 @@ export const useWithdraw = ({
           isRelayerOff,
           undefined,
           undefined,
-          undefined,
-          false,
+          AdminTransactionType.PayPrivateToPublicSend,
         );
 
         if (typeof tx === "bigint") {

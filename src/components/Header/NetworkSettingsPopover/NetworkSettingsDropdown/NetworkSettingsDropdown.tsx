@@ -1,6 +1,6 @@
 import { NetworkDropdownItem } from "./NetworkDropdownItem";
 import { useCallback, useMemo } from "react";
-import { networkRegistry } from "@hinkal/common";
+import { isTronLike, networkRegistry } from "@hinkal/common";
 import { useAppContext } from "../../../../AppContext";
 import { SUPPORTED_CHAIN_IDS } from "../../../../constants/supported-chain-ids.constants";
 
@@ -11,28 +11,35 @@ interface NetworkSettingsDropdownProps {
 export const NetworkSettingsDropdown = ({
   close,
 }: NetworkSettingsDropdownProps) => {
-  const { hinkal, setChainId, refreshBalances } = useAppContext();
+  const { hinkal, chainId, setChainId, refreshBalances } = useAppContext();
 
-  const networkList = useMemo(
-    () =>
-      Object.values(networkRegistry).filter((network) =>
-        SUPPORTED_CHAIN_IDS.includes(network.chainId),
-      ),
-    [],
-  );
+  const isTronConnection = !!chainId && isTronLike(chainId);
+
+  const networkList = useMemo(() => {
+    if (isTronConnection) {
+      return Object.values(networkRegistry).filter(
+        (network) => network.chainId === chainId,
+      );
+    }
+    return Object.values(networkRegistry).filter(
+      (network) =>
+        SUPPORTED_CHAIN_IDS.includes(network.chainId) &&
+        !isTronLike(network.chainId),
+    );
+  }, [isTronConnection, chainId]);
 
   const switchNetwork = useCallback(
-    async (chainId: number) => {
-      const network = networkList.find((net) => net.chainId === chainId);
-      if (network) {
-        await hinkal.switchNetwork(network);
-        setChainId(network.chainId);
-        close();
-        await hinkal.resetMerkle();
-        await refreshBalances();
-      }
+    async (targetChainId: number) => {
+      const network = networkList.find((net) => net.chainId === targetChainId);
+      if (!network || isTronLike(targetChainId)) return;
+
+      await hinkal.switchNetwork(network);
+      setChainId(network.chainId);
+      close();
+      await hinkal.resetMerkle();
+      await refreshBalances();
     },
-    [networkList, hinkal, setChainId, close],
+    [networkList, hinkal, setChainId, close, refreshBalances],
   );
 
   return (

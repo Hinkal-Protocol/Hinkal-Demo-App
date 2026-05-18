@@ -975,11 +975,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hinkal/common@npm:0.2.31":
-  version: 0.2.31
-  resolution: "@hinkal/common@npm:0.2.31"
+"@hinkal/common@file:../../hinkal/dist/libs/shared/common::locator=hinkal-demo-app%40workspace%3A.":
+  version: 0.11.10
+  resolution: "@hinkal/common@file:../../hinkal/dist/libs/shared/common#../../hinkal/dist/libs/shared/common::hash=eef216&locator=hinkal-demo-app%40workspace%3A."
   dependencies:
     "@coral-xyz/anchor": "npm:^0.31.0"
+    "@noble/curves": "npm:^1.9.7"
+    "@noble/hashes": "npm:^1.8.0"
     "@solana/spl-token": "npm:^0.4.14"
     "@solana/web3.js": "npm:^1.98.4"
     async-mutex: "npm:^0.4.0"
@@ -1008,7 +1010,7 @@ __metadata:
       optional: true
     wagmi:
       optional: true
-  checksum: 10c0/0705f9438536141eb61eb02ed4b325ae2e58e4e0107a10512258ed226a8539eed94b0b59210e23dd8585aea5f5799898f3a3b3b4099cddd28f2a409b062d06ca
+  checksum: 10c0/e901f632062e1645a598948517a74a6f431ab88b8e607300377649631469c675e0425f6e5928e747db8fab6bfb3b4d52adceae7ed03c5e7a66318a0080a6e8c6
   languageName: node
   linkType: hard
 
@@ -1425,6 +1427,13 @@ __metadata:
     "@metamask/utils": "npm:^8.3.0"
     readable-stream: "npm:^3.6.2"
   checksum: 10c0/5819e5cd1460046d309218110a76727d5b5b7b0fb379efd2e938e145905a359c2b6d4278d390760227ad5823e3f4bcaa001cbb5abeeeb014b08badbb1fa29f1f
+  languageName: node
+  linkType: hard
+
+"@metamask/multichain-api-client@npm:0.11.0":
+  version: 0.11.0
+  resolution: "@metamask/multichain-api-client@npm:0.11.0"
+  checksum: 10c0/4f6c6c002f1408324ba721b6257e0385a34c521c28b8d9218d7675e029f2b81d8478e502e18a89e1ebb90f9c9e2c4b98d73dbf1b5031248ed37ece8e55ca596a
   languageName: node
   linkType: hard
 
@@ -3205,6 +3214,68 @@ __metadata:
   version: 2.0.0
   resolution: "@tootallnate/once@npm:2.0.0"
   checksum: 10c0/073bfa548026b1ebaf1659eb8961e526be22fa77139b10d60e712f46d2f0f05f4e6c8bec62a087d41088ee9e29faa7f54838568e475ab2f776171003c3920858
+  languageName: node
+  linkType: hard
+
+"@tronweb3/tronwallet-abstract-adapter@npm:^1.1.12, @tronweb3/tronwallet-abstract-adapter@npm:^1.1.13":
+  version: 1.1.13
+  resolution: "@tronweb3/tronwallet-abstract-adapter@npm:1.1.13"
+  dependencies:
+    eventemitter3: "npm:4.0.7"
+    tronweb: "npm:6.2.2"
+  checksum: 10c0/48d55f3ffcf56523a8d875c0c65875f72c18cbd97319b9bb846330dea8522a3ec3207fd8bebbf81c5da54c9d7dbdf18b426b61cf523373e8b93ecacae3b4946e
+  languageName: node
+  linkType: hard
+
+"@tronweb3/tronwallet-adapter-metamask-tron@npm:^1.0.3":
+  version: 1.0.4
+  resolution: "@tronweb3/tronwallet-adapter-metamask-tron@npm:1.0.4"
+  dependencies:
+    "@metamask/multichain-api-client": "npm:0.11.0"
+    "@tronweb3/tronwallet-abstract-adapter": "npm:^1.1.13"
+  checksum: 10c0/384e1b7e947e2767e84eb2a951cb9901037659721f0aa63dfe925c4d553e3bbaaa0427dcf2a02497f9950a307237cfaa8befb9d4b015f3e3343a8400191b813b
+  languageName: node
+  linkType: hard
+
+"@tronweb3/tronwallet-adapter-okxwallet@npm:^1.0.8":
+  version: 1.0.8
+  resolution: "@tronweb3/tronwallet-adapter-okxwallet@npm:1.0.8"
+  dependencies:
+    "@tronweb3/tronwallet-abstract-adapter": "npm:^1.1.12"
+    "@tronweb3/tronwallet-adapter-tronlink": "npm:^1.1.14"
+  checksum: 10c0/c32c0004ca07115a6f03003062c90662b0ade553a701524f375b3e6e7410bc750b107e29900e97039cde9c7ff01a6c9daf456dc5b8833507f0584a457101c7ae
+  languageName: node
+  linkType: hard
+
+"@tronweb3/tronwallet-adapter-react-hooks@npm:^1.1.12":
+  version: 1.1.12
+  resolution: "@tronweb3/tronwallet-adapter-react-hooks@npm:1.1.12"
+  dependencies:
+    "@tronweb3/tronwallet-abstract-adapter": "npm:^1.1.12"
+    "@tronweb3/tronwallet-adapter-tronlink": "npm:^1.1.14"
+  peerDependencies:
+    react: "*"
+    react-dom: "*"
+  checksum: 10c0/78f16ebcccb8d75f8cbb28083ec08e5473ee7cf6b538d33ece124c344c7cef6ec6cf8eb83ff8bcc9e25922a2a01c2660affe1d074ad13dc403466da39704d0e7
+  languageName: node
+  linkType: hard
+
+"@tronweb3/tronwallet-adapter-tronlink@npm:^1.1.14":
+  version: 1.1.16
+  resolution: "@tronweb3/tronwallet-adapter-tronlink@npm:1.1.16"
+  dependencies:
+    "@tronweb3/tronwallet-abstract-adapter": "npm:^1.1.13"
+  checksum: 10c0/ef3b994a14bc30be89c18eff434bcb5b17623cb150cd55bf87aa3ef6f103618dd38a9e3ef2deb489ccb59c190d9de125fcc4dc5311a32f09a4286fd0280a2c3e
+  languageName: node
+  linkType: hard
+
+"@tronweb3/tronwallet-adapter-trust@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@tronweb3/tronwallet-adapter-trust@npm:1.0.3"
+  dependencies:
+    "@tronweb3/tronwallet-abstract-adapter": "npm:^1.1.12"
+    "@tronweb3/tronwallet-adapter-tronlink": "npm:^1.1.14"
+  checksum: 10c0/4f7c0904cce3d5f7df9ea7a4d35872c6f66b20896f5ab2095106de12bd052056828ca395f9ea10ba1746ca1f234630e9c8f03e4b410ae6fc0e0978f44952f3f7
   languageName: node
   linkType: hard
 
@@ -7118,17 +7189,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eventemitter3@npm:4.0.7, eventemitter3@npm:^4.0.7":
+  version: 4.0.7
+  resolution: "eventemitter3@npm:4.0.7"
+  checksum: 10c0/5f6d97cbcbac47be798e6355e3a7639a84ee1f7d9b199a07017f1d2f1e2fe236004d14fa5dfaeba661f94ea57805385e326236a6debbc7145c8877fbc0297c6b
+  languageName: node
+  linkType: hard
+
 "eventemitter3@npm:5.0.1, eventemitter3@npm:^5.0.1":
   version: 5.0.1
   resolution: "eventemitter3@npm:5.0.1"
   checksum: 10c0/4ba5c00c506e6c786b4d6262cfbce90ddc14c10d4667e5c83ae993c9de88aa856033994dd2b35b83e8dc1170e224e66a319fa80adc4c32adcd2379bbc75da814
-  languageName: node
-  linkType: hard
-
-"eventemitter3@npm:^4.0.7":
-  version: 4.0.7
-  resolution: "eventemitter3@npm:4.0.7"
-  checksum: 10c0/5f6d97cbcbac47be798e6355e3a7639a84ee1f7d9b199a07017f1d2f1e2fe236004d14fa5dfaeba661f94ea57805385e326236a6debbc7145c8877fbc0297c6b
   languageName: node
   linkType: hard
 
@@ -7881,8 +7952,14 @@ __metadata:
   resolution: "hinkal-demo-app@workspace:."
   dependencies:
     "@headlessui/react": "npm:^1.7.5"
-    "@hinkal/common": "npm:0.2.31"
+    "@hinkal/common": "file:../../hinkal/dist/libs/shared/common"
     "@tanstack/react-query": "npm:^5.0.0"
+    "@tronweb3/tronwallet-abstract-adapter": "npm:^1.1.12"
+    "@tronweb3/tronwallet-adapter-metamask-tron": "npm:^1.0.3"
+    "@tronweb3/tronwallet-adapter-okxwallet": "npm:^1.0.8"
+    "@tronweb3/tronwallet-adapter-react-hooks": "npm:^1.1.12"
+    "@tronweb3/tronwallet-adapter-tronlink": "npm:^1.1.14"
+    "@tronweb3/tronwallet-adapter-trust": "npm:^1.0.3"
     "@types/jest": "npm:^29.4.0"
     "@types/libsodium-wrappers": "npm:^0.7.10"
     "@types/node": "npm:18.14.2"
@@ -7923,6 +8000,7 @@ __metadata:
     react-hot-toast: "npm:^2.4.0"
     react-test-renderer: "npm:18.2.0"
     tailwindcss: "npm:^3.2.4"
+    tronweb: "npm:^6.2.0"
     ts-jest: "npm:^29.0.5"
     ts-node: "npm:10.9.1"
     typechain: "npm:^8.1.0"
@@ -12357,7 +12435,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tronweb@npm:^6.2.0":
+"tronweb@npm:6.2.2, tronweb@npm:^6.2.0":
   version: 6.2.2
   resolution: "tronweb@npm:6.2.2"
   dependencies:

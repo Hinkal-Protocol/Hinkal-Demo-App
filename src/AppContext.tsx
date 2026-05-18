@@ -20,6 +20,11 @@ import {
 } from "react";
 import { Connector } from "wagmi";
 
+export type TronConnection = {
+  address: string;
+  signerAdapter: any;
+};
+
 type AppContextArgumnets = {
   hinkal: Hinkal<Connector>;
   setHinkal: Dispatch<SetStateAction<Hinkal<Connector>>>;
@@ -32,6 +37,8 @@ type AppContextArgumnets = {
   erc20List: ERC20Token[];
   balances: TokenBalance[];
   refreshBalances: (interval?: number) => Promise<void>;
+  tronConnection?: TronConnection;
+  setTronConnection: (c: TronConnection | undefined) => void;
 };
 
 const hinkalInstance = new Hinkal<Connector>();
@@ -49,6 +56,8 @@ const AppContext = createContext<AppContextArgumnets>({
   erc20List: [],
   balances: [],
   refreshBalances: async () => {},
+  tronConnection: undefined,
+  setTronConnection: (_c: TronConnection | undefined) => {},
 });
 
 type AppContextProps = { children: ReactNode };
@@ -66,6 +75,9 @@ export const AppContextProvider: FC<AppContextProps> = ({
 
   const [balances, setBalances] = useState<TokenBalance[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [tronConnection, setTronConnection] = useState<
+    TronConnection | undefined
+  >(undefined);
 
   const networkList = useMemo(() => Object.values(networkRegistry), []);
 
@@ -79,11 +91,15 @@ export const AppContextProvider: FC<AppContextProps> = ({
     [chainId],
   );
 
-  const refreshBalances = useCallback(async () => {
+  const refreshBalances = useCallback(async (delayMs?: number) => {
     if (!dataLoaded || isRefreshing || !chainId) return;
 
     try {
       setIsRefreshing(true);
+
+      if (delayMs) await new Promise((r) => setTimeout(r, delayMs));
+
+      await hinkal.resetMerkle([chainId]);
 
       const ethAddress = await hinkal.getEthereumAddress();
 
@@ -101,7 +117,7 @@ export const AppContextProvider: FC<AppContextProps> = ({
     } finally {
       setIsRefreshing(false);
     }
-  }, [dataLoaded, hinkal, chainId]);
+  }, [dataLoaded, isRefreshing, hinkal, chainId]);
 
   useEffect(() => {
     if (!dataLoaded) return;
@@ -129,6 +145,8 @@ export const AppContextProvider: FC<AppContextProps> = ({
         erc20List,
         balances,
         refreshBalances,
+        tronConnection,
+        setTronConnection,
       }}
     >
       {children}

@@ -1,4 +1,10 @@
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
 import { isMobile } from "react-device-detect";
 import { useConfig, useConnectors } from "wagmi";
 import type { Connector } from "wagmi";
@@ -9,6 +15,10 @@ import { Modal } from "./Modal";
 import { Spinner } from "./Spinner";
 import { useAppContext } from "../AppContext";
 import { prepareWagmiHinkal } from "@hinkal/common/providers/prepareWagmiHinkal";
+import { prepareTronHinkal } from "@hinkal/common/providers/prepareTronHinkal";
+import { TRON_CHAIN_ID } from "../constants/tron-chain.constants";
+import { useWallet } from "@tronweb3/tronwallet-adapter-react-hooks";
+import { AdapterState } from "@tronweb3/tronwallet-abstract-adapter";
 import toast from "react-hot-toast";
 
 interface ChooseWalletProps {
@@ -26,10 +36,28 @@ export const ChooseWallet = ({
 }: ChooseWalletProps) => {
   const connectors = useConnectors();
   const config = useConfig();
+  const { wallets } = useWallet();
 
-  const { setHinkal, setChainId, setDataLoaded } = useAppContext();
+  const { setHinkal, setChainId, setDataLoaded, setTronConnection } =
+    useAppContext();
 
   const [connectingId, setConnectingId] = useState<string | null>(null);
+
+  const tronWallets = useMemo(
+    () => wallets.filter((w) => w.state !== AdapterState.NotFound),
+    [wallets],
+  );
+
+  const finalize = useCallback(
+    (hinkal: any, chainId: number) => {
+      setHinkal(hinkal);
+      setShieldedAddress(hinkal.userKeys.getShieldedPublicKey());
+      setChainId(chainId);
+      setDataLoaded(true);
+      onHide();
+    },
+    [setHinkal, setShieldedAddress, setChainId, setDataLoaded, onHide],
+  );
 
   const handleSelectConnector = useCallback(
     async (connector: Connector) => {
@@ -43,15 +71,10 @@ export const ChooseWallet = ({
         }
         await new Promise((resolve) => setTimeout(resolve, 200));
         const hinkal = await prepareWagmiHinkal(connector, config);
-        setHinkal(hinkal);
-        setShieldedAddress(hinkal.userKeys.getShieldedPublicKey());
         const providerAdapter = hinkal.getProviderAdapter();
         const chainId = providerAdapter.getChainId();
         if (!chainId) throw new Error("Chain id not found");
-        setChainId(chainId);
-
-        setDataLoaded(true);
-        onHide();
+        finalize(hinkal, chainId);
       } catch (err) {
         toast.error(`Wallet connection failed: ${err || "Unknown error"}`);
       } finally {
@@ -59,15 +82,39 @@ export const ChooseWallet = ({
         setIsConnecting?.(false);
       }
     },
-    [
-      setIsConnecting,
-      config,
-      setHinkal,
-      setShieldedAddress,
-      setChainId,
-      setDataLoaded,
-      onHide,
-    ],
+    [setIsConnecting, config, finalize],
+  );
+
+  const handleSelectTronAdapter = useCallback(
+    async (walletItem: (typeof tronWallets)[number]) => {
+      const tronId = `tron-${walletItem.adapter.name}`;
+      try {
+        setIsConnecting?.(true);
+        setConnectingId(tronId);
+        await walletItem.adapter.connect();
+        const { address } = walletItem.adapter;
+        if (!address) throw new Error("Tron address not available");
+
+        const hinkal = await prepareTronHinkal(
+          {
+            address,
+            signerAdapter: walletItem.adapter,
+          } as any,
+          { tronChainOverride: TRON_CHAIN_ID },
+        );
+        setTronConnection({
+          address,
+          signerAdapter: walletItem.adapter,
+        });
+        finalize(hinkal, TRON_CHAIN_ID);
+      } catch (err) {
+        toast.error(`Tron wallet connection failed: ${err || "Unknown error"}`);
+      } finally {
+        setConnectingId(null);
+        setIsConnecting?.(false);
+      }
+    },
+    [finalize, setIsConnecting, setTronConnection],
   );
 
   return (
@@ -118,6 +165,33 @@ export const ChooseWallet = ({
               {connectingId === connector.id && <Spinner />}
             </button>
           ))}
+
+        {tronWallets.length > 0 && (
+          <>
+            {tronWallets.map((walletItem) => {
+              const tronId = `tron-${walletItem.adapter.name}`;
+              return (
+                <button
+                  className="bg-modal px-4 py-2 min-w-[180px] w-[80%] rounded-lg border-[2.5px] border-[#f0f0f0] hover:border-[#9c9c9c] font-bold duration-150 flex items-center justify-center gap-x-3"
+                  type="button"
+                  disabled={!!connectingId}
+                  key={tronId}
+                  onClick={() => handleSelectTronAdapter(walletItem)}
+                >
+                  {walletItem.adapter.icon && (
+                    <img
+                      src={walletItem.adapter.icon}
+                      alt="Logo"
+                      className="w-[26px] h-[26px]"
+                    />
+                  )}
+                  <span>{walletItem.adapter.name} (Tron)</span>
+                  {connectingId === tronId && <Spinner />}
+                </button>
+              );
+            })}
+          </>
+        )}
       </div>
     </Modal>
   );

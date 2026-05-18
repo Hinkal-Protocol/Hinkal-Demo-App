@@ -10,7 +10,6 @@ import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
 import { useAppContext } from "../AppContext";
 import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
-import { ethers } from "ethers";
 
 export const Deposit = () => {
   const { hinkal, refreshBalances, chainId } = useAppContext();
@@ -38,7 +37,7 @@ export const Deposit = () => {
     } finally {
       setIsProcessing(false);
     }
-  }, [hinkal, depositAmount, selectedToken, refreshBalances]);
+  }, [hinkal, depositAmount, selectedToken, chainId, refreshBalances]);
 
   const handleSubmit = (event: SyntheticEvent) => {
     event.preventDefault();
