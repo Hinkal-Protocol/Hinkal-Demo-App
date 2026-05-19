@@ -20,11 +20,6 @@ import {
 } from "react";
 import { Connector } from "wagmi";
 
-export type TronConnection = {
-  address: string;
-  signerAdapter: any;
-};
-
 type AppContextArgumnets = {
   hinkal: Hinkal<Connector>;
   setHinkal: Dispatch<SetStateAction<Hinkal<Connector>>>;
