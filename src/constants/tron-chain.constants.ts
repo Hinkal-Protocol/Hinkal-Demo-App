@@ -2,7 +2,7 @@
  * Pick which Tron chain the demo app targets.
  * Toggle USE_TRON_TESTNET to switch between Nile (testnet) and Mainnet.
  * Passed to `prepareTronHinkal` as `tronChainOverride` so the SDK seeds
- * the right chain maps regardless of how the SDK package was built.
+ * the right chain maps regardless of deployment mode.
  */
 const USE_TRON_TESTNET = true;
 

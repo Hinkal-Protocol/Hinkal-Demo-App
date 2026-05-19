@@ -4,7 +4,7 @@ import {
   ERC20Token,
   getErrorMessage,
   ErrorCategory,
-} from "@hinkal/common";
+} from "@sabaaa1/common";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
@@ -30,6 +30,8 @@ export const Deposit = () => {
 
       if (result && typeof result === "object" && "hash" in result)
         await hinkal.waitForTransaction(chainId, result.hash);
+
+      toast.success("Deposit successful! Your balances will update shortly.");
       await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
     } catch (err) {
       const errorMessage = getErrorMessage(err, ErrorCategory.DEPOSIT);

@@ -1,4 +1,4 @@
-import { ERC20Token } from "@hinkal/common";
+import { ERC20Token } from "@sabaaa1/common";
 import { SetStateAction } from "react";
 
 interface TokenDropdownProps {

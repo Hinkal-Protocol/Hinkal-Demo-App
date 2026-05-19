@@ -5,7 +5,7 @@ import {
   TokenBalance,
   getERC20Registry,
   networkRegistry,
-} from "@hinkal/common";
+} from "@sabaaa1/common";
 import {
   Dispatch,
   FC,
@@ -37,8 +37,6 @@ type AppContextArgumnets = {
   erc20List: ERC20Token[];
   balances: TokenBalance[];
   refreshBalances: (interval?: number) => Promise<void>;
-  tronConnection?: TronConnection;
-  setTronConnection: (c: TronConnection | undefined) => void;
 };
 
 const hinkalInstance = new Hinkal<Connector>();
@@ -56,8 +54,6 @@ const AppContext = createContext<AppContextArgumnets>({
   erc20List: [],
   balances: [],
   refreshBalances: async () => {},
-  tronConnection: undefined,
-  setTronConnection: (_c: TronConnection | undefined) => {},
 });
 
 type AppContextProps = { children: ReactNode };
@@ -75,9 +71,6 @@ export const AppContextProvider: FC<AppContextProps> = ({
 
   const [balances, setBalances] = useState<TokenBalance[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [tronConnection, setTronConnection] = useState<
-    TronConnection | undefined
-  >(undefined);
 
   const networkList = useMemo(() => Object.values(networkRegistry), []);
 
@@ -91,33 +84,36 @@ export const AppContextProvider: FC<AppContextProps> = ({
     [chainId],
   );
 
-  const refreshBalances = useCallback(async (delayMs?: number) => {
-    if (!dataLoaded || isRefreshing || !chainId) return;
+  const refreshBalances = useCallback(
+    async (delayMs?: number) => {
+      if (!dataLoaded || isRefreshing || !chainId) return;
 
-    try {
-      setIsRefreshing(true);
+      try {
+        setIsRefreshing(true);
 
-      if (delayMs) await new Promise((r) => setTimeout(r, delayMs));
+        if (delayMs) await new Promise((r) => setTimeout(r, delayMs));
 
-      await hinkal.resetMerkle([chainId]);
+        await hinkal.resetMerkle([chainId]);
 
-      const ethAddress = await hinkal.getEthereumAddress();
+        const ethAddress = await hinkal.getEthereumAddress();
 
-      const bals = await hinkal.getBalances(
-        chainId,
-        hinkal.userKeys.getShieldedPrivateKey(),
-        hinkal.userKeys.getShieldedPublicKey(),
-        ethAddress,
-      );
+        const bals = await hinkal.getBalances(
+          chainId,
+          hinkal.userKeys.getShieldedPrivateKey(),
+          hinkal.userKeys.getShieldedPublicKey(),
+          ethAddress,
+        );
 
-      const balancesArray = Array.from(bals.values());
-      setBalances(balancesArray);
-    } catch (error) {
-      console.error("Error refreshing balances:", error);
-    } finally {
-      setIsRefreshing(false);
-    }
-  }, [dataLoaded, isRefreshing, hinkal, chainId]);
+        const balancesArray = Array.from(bals.values());
+        setBalances(balancesArray);
+      } catch (error) {
+        console.error("Error refreshing balances:", error);
+      } finally {
+        setIsRefreshing(false);
+      }
+    },
+    [dataLoaded, isRefreshing, hinkal, chainId],
+  );
 
   useEffect(() => {
     if (!dataLoaded) return;
@@ -145,8 +141,6 @@ export const AppContextProvider: FC<AppContextProps> = ({
         erc20List,
         balances,
         refreshBalances,
-        tronConnection,
-        setTronConnection,
       }}
     >
       {children}

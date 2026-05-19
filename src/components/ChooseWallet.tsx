@@ -14,10 +14,10 @@ import walletconnectLogo from "../assets/walletconnectWalletLogo.png";
 import { Modal } from "./Modal";
 import { Spinner } from "./Spinner";
 import { useAppContext } from "../AppContext";
-import { prepareWagmiHinkal } from "@hinkal/common/providers/prepareWagmiHinkal";
-import { prepareTronHinkal } from "@hinkal/common/providers/prepareTronHinkal";
+import { prepareWagmiHinkal } from "@sabaaa1/common/providers/prepareWagmiHinkal";
+import { prepareTronHinkal } from "@sabaaa1/common/providers/prepareTronHinkal";
 import { TRON_CHAIN_ID } from "../constants/tron-chain.constants";
-import { useWallet } from "@tronweb3/tronwallet-adapter-react-hooks";
+import { Wallet, useWallet } from "@tronweb3/tronwallet-adapter-react-hooks";
 import { AdapterState } from "@tronweb3/tronwallet-abstract-adapter";
 import toast from "react-hot-toast";
 
@@ -38,8 +38,7 @@ export const ChooseWallet = ({
   const config = useConfig();
   const { wallets } = useWallet();
 
-  const { setHinkal, setChainId, setDataLoaded, setTronConnection } =
-    useAppContext();
+  const { setHinkal, setChainId, setDataLoaded } = useAppContext();
 
   const [connectingId, setConnectingId] = useState<string | null>(null);
 
@@ -86,7 +85,7 @@ export const ChooseWallet = ({
   );
 
   const handleSelectTronAdapter = useCallback(
-    async (walletItem: (typeof tronWallets)[number]) => {
+    async (walletItem: Wallet) => {
       const tronId = `tron-${walletItem.adapter.name}`;
       try {
         setIsConnecting?.(true);
@@ -102,10 +101,6 @@ export const ChooseWallet = ({
           } as any,
           { tronChainOverride: TRON_CHAIN_ID },
         );
-        setTronConnection({
-          address,
-          signerAdapter: walletItem.adapter,
-        });
         finalize(hinkal, TRON_CHAIN_ID);
       } catch (err) {
         toast.error(`Tron wallet connection failed: ${err || "Unknown error"}`);
@@ -114,7 +109,7 @@ export const ChooseWallet = ({
         setIsConnecting?.(false);
       }
     },
-    [finalize, setIsConnecting, setTronConnection],
+    [finalize, setIsConnecting],
   );
 
   return (
