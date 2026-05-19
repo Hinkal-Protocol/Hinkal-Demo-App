@@ -12,7 +12,7 @@ import { TokenAmountInput } from "../components/TokenAmountInput";
 import { ToggleSwitch } from "../components/withdraw/ToggleSwitch";
 import { useAppContext } from "../AppContext";
 import { useWithdraw } from "../hooks/useWithdraw";
-import { ERC20Token, ErrorCategory, getErrorMessage } from "@sabaaa1/common";
+import { ERC20Token, ErrorCategory, getErrorMessage } from "@hinkal/common";
 import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
 
 export const Withdraw = () => {

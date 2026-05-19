@@ -4,7 +4,7 @@ import {
   ERC20Token,
   getErrorMessage,
   ErrorCategory,
-} from "@sabaaa1/common";
+} from "@hinkal/common";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";

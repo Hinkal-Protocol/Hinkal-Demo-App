@@ -2091,9 +2091,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sabaaa1/common@npm:0.11.11":
+"@hinkal/common@npm:0.11.11":
   version: 0.11.11
-  resolution: "@sabaaa1/common@npm:0.11.11"
+  resolution: "@hinkal/common@npm:0.11.11"
   dependencies:
     "@coral-xyz/anchor": "npm:^0.31.0"
     "@noble/curves": "npm:^1.9.7"
@@ -7952,7 +7952,7 @@ __metadata:
   resolution: "hinkal-demo-app@workspace:."
   dependencies:
     "@headlessui/react": "npm:^1.7.5"
-    "@sabaaa1/common": "npm:0.11.11"
+    "@hinkal/common": "npm:0.11.11"
     "@tanstack/react-query": "npm:^5.0.0"
     "@tronweb3/tronwallet-abstract-adapter": "npm:^1.1.12"
     "@tronweb3/tronwallet-adapter-metamask-tron": "npm:^1.0.3"

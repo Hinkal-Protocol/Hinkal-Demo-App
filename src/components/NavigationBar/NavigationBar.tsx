@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useMemo } from "react";
-import { isTronLike } from "@sabaaa1/common";
+import { isTronLike } from "@hinkal/common";
 import { AppTab } from "../../types";
 import { TabButton } from "./TabButton";
 import { useAppContext } from "../../AppContext";

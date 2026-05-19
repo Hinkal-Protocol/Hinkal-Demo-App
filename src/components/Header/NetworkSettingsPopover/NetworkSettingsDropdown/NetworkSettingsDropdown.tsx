@@ -1,6 +1,6 @@
 import { NetworkDropdownItem } from "./NetworkDropdownItem";
 import { useCallback, useMemo } from "react";
-import { isTronLike, networkRegistry } from "@sabaaa1/common";
+import { isTronLike, networkRegistry } from "@hinkal/common";
 import { useAppContext } from "../../../../AppContext";
 import { SUPPORTED_CHAIN_IDS } from "../../../../constants/supported-chain-ids.constants";
 

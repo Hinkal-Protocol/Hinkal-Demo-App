@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { ERC20Token, Hinkal, getAmountInWei } from "@sabaaa1/common";
+import { ERC20Token, Hinkal, getAmountInWei } from "@hinkal/common";
 import { useAppContext } from "../AppContext";
 
 interface UseWithdrawProps {
