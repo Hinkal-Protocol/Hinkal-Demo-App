@@ -107,7 +107,7 @@ export const AppContextProvider: FC<AppContextProps> = ({
         setIsRefreshing(false);
       }
     },
-    [dataLoaded, isRefreshing, hinkal, chainId],
+    [dataLoaded, hinkal, chainId],
   );
 
   useEffect(() => {
