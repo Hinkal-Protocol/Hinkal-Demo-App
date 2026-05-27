@@ -12,6 +12,7 @@ export default defineConfig({
         global: true,
         process: true,
       },
+      protocolImports: true,
     }),
     svgr({ exportAsDefault: true }),
     react(),
@@ -20,6 +21,7 @@ export default defineConfig({
   resolve: {
     alias: {},
   },
+
   server: {
     port: 4240,
     host: "localhost",
@@ -33,7 +35,9 @@ export default defineConfig({
     plugins: () => [],
   },
 
+  // Target moved here — correct location for Vite 5.x / Rolldown
   build: {
+    target: "es2022",
     sourcemap: false,
     commonjsOptions: {
       transformMixedEsModules: true,
@@ -42,11 +46,9 @@ export default defineConfig({
       plugins: [],
     },
   },
+
+  // Minimal optimizeDeps to avoid validation errors
   optimizeDeps: {
-    esbuildOptions: {
-      tsconfig: "./tsconfig.json",
-      // Limit target browsers due to issue: Big integer literals are not available in the configured target environment ("chrome87", "edge88", "es2020", "firefox78", "safari13" + 2 overrides)'
-      target: "ES2022",
-    },
+    // Leaving empty — plugin will handle its own settings
   },
 });
