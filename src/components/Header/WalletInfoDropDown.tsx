@@ -57,10 +57,10 @@ export const WalletInfoDropDown = () => {
   };
 
   return (
-    <div className="absolute min-w-max top-20 md:top-2 left-0 md:left-auto right-0 bg-[#272B30] rounded-xl shadow-metamask font-pubsans p-4 items-center max-content">
+    <div className="absolute min-w-max top-20 md:top-2 left-0 md:left-auto right-0 bg-hinkal-blue-900 rounded-xl shadow-metamask font-generalSans p-4 items-center max-content">
       <div className="flex items-center space-x-4">
         <div className="w-[26px]" />
-        <p className="text-[#abaeaf] text-[12px] text-left">Balance</p>
+        <p className="text-hinkal-white-300 text-[12px] text-left">Balance</p>
       </div>
       <div className="flex flex-col justify-center gap-4 mb-[10%]">
         {filterTokenBalances(balances).map((tokenBalance) => (
@@ -71,7 +71,7 @@ export const WalletInfoDropDown = () => {
         ))}
       </div>
 
-      <div className="border-t-2 md:text-[15px] border-[#36393D] flex flex-col">
+      <div className="border-t-2 md:text-[15px] border-hinkal-blue-900 flex flex-col">
         <button type="button" onClick={handleCopyPublicAddress}>
           <div className="flex items-center mt-2 text-white text-[14px] md:w-[9.5rem]">
             <div className="flex justify-center items-center w-[25px] h-[25px]">

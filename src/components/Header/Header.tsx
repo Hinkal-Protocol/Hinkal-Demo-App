@@ -12,7 +12,7 @@ export const Header = () => {
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
 
   return (
-    <header className="md:bg-[#1A1D1F] pt-4 md:pt-0 pb-4 relative z-20">
+    <header className="md:bg-hinkal-blue-200 pt-4 md:pt-0 pb-4 relative z-20">
       <ChooseWallet
         isOpen={chooseWalletShown}
         onHide={() => setChooseWalletShown(false)}
@@ -38,7 +38,7 @@ export const Header = () => {
             type="button"
             onClick={() => setChooseWalletShown(true)}
             disabled={isConnecting}
-            className="text-white font-[700] md:font-[500] text-[16px] rounded-[12px] px-4 py-3 border-[2px] bg-primary md:bg-transparent border-primary font-pubsans flex items-center justify-center gap-2 w-[160px] h-12"
+            className="text-white font-[700] md:font-[500] text-[16px] rounded-[12px] px-4 py-3 border-[2px] bg-primary md:bg-transparent border-primary font-generalSans flex items-center justify-center gap-2 w-[160px] h-12 transition-all duration-300 hover:bg-hinkal-purple-200 hover:border-hinkal-purple-200"
           >
             {isConnecting ? <Spinner /> : "Connect"}
           </button>
