@@ -707,10 +707,10 @@
     "@tanstack/react-virtual" "^3.0.0-beta.60"
     client-only "^0.0.1"
 
-"@hinkal/common@0.2.33":
-  version "0.2.33"
-  resolved "https://registry.yarnpkg.com/@hinkal/common/-/common-0.2.33.tgz#402f02620b988df3659d0085a6830fa846a6b206"
-  integrity sha512-vbvMo4w26Se0LJqWGS9FJtUDrI9m8KvB/Z0QVNngm35NLCfEP9EbA5iQoUZKV4/i9wdtV/5iWRUvH6Mln5wRcg==
+"@hinkal/common@0.2.34":
+  version "0.2.34"
+  resolved "https://registry.yarnpkg.com/@hinkal/common/-/common-0.2.34.tgz#9796585bce78da6faba49b8512192c72e95ef6a4"
+  integrity sha512-Gib+/4jN0VCeK0CFyayUWNvMy4ObmZgE99nulxlNkNSFbEEQsGZRhn1Xp+bbdsIb9/VroanYNtZWS88I2SmqwA==
   dependencies:
     "@coral-xyz/anchor" "^0.31.0"
     "@noble/curves" "^1.9.7"
