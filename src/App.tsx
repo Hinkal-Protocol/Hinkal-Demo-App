@@ -3,6 +3,7 @@ import { Toaster } from "react-hot-toast";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
 import { NavigationBar } from "./components/NavigationBar";
+import { BalanceSummary } from "./components/BalanceSummary";
 import { Deposit } from "./pages/Deposit";
 import { AppTab } from "./types";
 import "./App.css";
@@ -14,7 +15,7 @@ import { MultiSend } from "./pages/MultiSend";
 const App = () => {
   const [activeTab, setActiveTab] = useState(AppTab.Deposit);
   return (
-    <div className="bg-bgColor h-screen font-pubsans">
+    <div className="bg-bgColor h-screen font-generalSans">
       <div className="bg-bgColor flex flex-col min-h-screen">
         <Header />
         <div className={"flex flex-col justify-between grow"}>
@@ -22,6 +23,7 @@ const App = () => {
             className={"flex justify-center md:gap-x-[9%] flex-col md:flex-row"}
           >
             <section className="bg-modalBgColor rounded-xl w-[87%] md:w-[40%] min-w-[300px] md:mt-[120px] md:h-fit mx-auto md:mx-0 md:mb-20 pt-2">
+              <BalanceSummary />
               <NavigationBar
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}

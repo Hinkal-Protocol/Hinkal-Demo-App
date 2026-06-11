@@ -9,8 +9,7 @@ interface NavigationBarProps {
   setActiveTab: Dispatch<SetStateAction<AppTab>>;
 }
 
-const buttonClassName =
-  "xl:flex w-1/4 block place-self-end xl:place-self-start max-xl:w-[50%] xl:space-x-0 space-y-3";
+const buttonClassName = "flex-1 min-w-0";
 
 export const NavigationBar = ({
   activeTab,
@@ -22,7 +21,7 @@ export const NavigationBar = ({
     [chainId],
   );
   return (
-    <div className="mt-[4%] xl:flex h-12 mb-4 text-[15px] font-semibold border-b border-[#3e3c3c] block relative">
+    <div className="mt-[4%] xl:flex h-12 mb-4 text-[15px] font-semibold border-b border-hinkal-blue-200 block relative">
       <div className="flex xl:h-full h-1 xl:py-0 py-2 w-full align-top">
         <div className={buttonClassName}>
           <TabButton
@@ -57,7 +56,7 @@ export const NavigationBar = ({
         <div className={buttonClassName}>
           <TabButton
             isActive={activeTab === AppTab.MultiSend}
-            title="MultiSend"
+            title="Multi Send"
             onClick={() => setActiveTab(AppTab.MultiSend)}
           />
         </div>

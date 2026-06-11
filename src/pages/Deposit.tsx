@@ -1,4 +1,10 @@
-import { SyntheticEvent, useCallback, useState, useMemo } from "react";
+import {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useState,
+  useMemo,
+} from "react";
 import {
   getAmountInWei,
   ERC20Token,
@@ -20,6 +26,12 @@ export const Deposit = () => {
   const [depositAmount, setDepositAmount] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
 
+  useEffect(() => {
+    if (!chainId) return;
+    setSelectedToken(undefined);
+    setDepositAmount("");
+  }, [chainId]);
+
   const handleDeposit = useCallback(async () => {
     try {
       if (!chainId || !selectedToken) return;
@@ -31,7 +43,7 @@ export const Deposit = () => {
       if (result && typeof result === "object" && "hash" in result)
         await hinkal.waitForTransaction(chainId, result.hash);
 
-      toast.success("Deposit successful! Your balances will update shortly.");
+      toast.success("Deposit confirmed");
       await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
     } catch (err) {
       const errorMessage = getErrorMessage(err, ErrorCategory.DEPOSIT);
@@ -60,7 +72,7 @@ export const Deposit = () => {
           selectedToken={selectedToken}
           setSelectedToken={setSelectedToken}
         />
-        <div className="w-[90%] mx-auto mb-6 mt-6 h-[1px] bg-[#272B30]" />
+        <div className="w-[90%] mx-auto mb-6 mt-6 h-[1px] bg-hinkal-blue-900" />
         <div className="border-solid">
           <button
             type="submit"
@@ -68,8 +80,8 @@ export const Deposit = () => {
             onClick={handleDeposit}
             className={`w-[90%] ml-[5%] mb-3 md:mx-[5%] rounded-lg h-10 text-sm font-semibold outline-none ${
               !isDisabled
-                ? "bg-primary text-white hover:bg-[#4d32fa] duration-200"
-                : "bg-[#37363d] text-[#848688] cursor-not-allowed"
+                ? "bg-primary text-white hover:bg-hinkal-purple-200 transition-all duration-300"
+                : "bg-hinkal-blue-900 text-hinkal-gray-200 cursor-not-allowed"
             } `}
           >
             {isProcessing ? (
