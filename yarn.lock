@@ -975,9 +975,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hinkal/common@npm:0.2.33":
-  version: 0.2.33
-  resolution: "@hinkal/common@npm:0.2.33"
+"@hinkal/common@npm:0.2.34":
+  version: 0.2.34
+  resolution: "@hinkal/common@npm:0.2.34"
   dependencies:
     "@coral-xyz/anchor": "npm:^0.31.0"
     "@noble/curves": "npm:^1.9.7"
@@ -1011,7 +1011,7 @@ __metadata:
       optional: true
     wagmi:
       optional: true
-  checksum: 10c0/3ae8a4aec19f96d7765fdb25acdf0ac1c2256f383a4be1af3835b4d89d0adfac6b12f7005976d06ae1727eaf879b6a12969da6e9d27df82a02db2523f4e62d12
+  checksum: 10c0/978262b77d58884ee872d2cd9f88b4b8b90e0540e4cf0191fa8cc303365ecbe18ca7c14146efe165b6a664f80e614def0fcc7c16d7fb01185ec6e1b236d2d9ba
   languageName: node
   linkType: hard
 
@@ -7913,7 +7913,7 @@ __metadata:
   resolution: "hinkal-demo-app@workspace:."
   dependencies:
     "@headlessui/react": "npm:^1.7.5"
-    "@hinkal/common": "npm:0.2.33"
+    "@hinkal/common": "npm:0.2.34"
     "@tanstack/query-core": "npm:^5.0.0"
     "@tanstack/react-query": "npm:^5.0.0"
     "@types/jest": "npm:^29.4.0"
