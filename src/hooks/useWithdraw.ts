@@ -1,8 +1,9 @@
 import { useCallback, useState } from "react";
-import { ERC20Token, getAmountInWei } from "@hinkal/common";
+import { ERC20Token, Hinkal, getAmountInWei } from "@hinkal/common";
+import { useAppContext } from "../AppContext";
 
 interface UseWithdrawProps {
-  hinkal: any;
+  hinkal: Hinkal<unknown> | undefined;
   onSuccess?: () => void;
   onError?: (err: unknown) => void;
 }
@@ -12,6 +13,7 @@ export const useWithdraw = ({
   onSuccess,
   onError,
 }: UseWithdrawProps) => {
+  const { chainId } = useAppContext();
   const [isProcessing, setIsProcessing] = useState(false);
 
   const withdraw = useCallback(
@@ -23,6 +25,9 @@ export const useWithdraw = ({
     ) => {
       if (!hinkal) {
         throw new Error("Hinkal instance not initialized");
+      }
+      if (!chainId) {
+        throw new Error("Chain ID not available");
       }
 
       try {
@@ -38,15 +43,11 @@ export const useWithdraw = ({
           undefined,
           undefined,
           undefined,
-          false,
         );
 
-        if (typeof tx === "bigint") {
-          onSuccess?.();
-          return;
-        }
+        const txHash = typeof tx === "string" ? tx : tx.hash;
 
-        if ("hash" in tx) await hinkal.waitForTransaction(tx.hash);
+        await hinkal.waitForTransaction(chainId, txHash);
 
         onSuccess?.();
       } catch (err) {
