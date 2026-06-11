@@ -32,6 +32,7 @@ type AppContextArgumnets = {
   erc20List: ERC20Token[];
   balances: TokenBalance[];
   refreshBalances: (interval?: number) => Promise<void>;
+  recipientInfo: string;
 };
 
 const hinkalInstance = new Hinkal<Connector>();
@@ -49,6 +50,7 @@ const AppContext = createContext<AppContextArgumnets>({
   erc20List: [],
   balances: [],
   refreshBalances: async () => {},
+  recipientInfo: "",
 });
 
 type AppContextProps = { children: ReactNode };
@@ -66,6 +68,7 @@ export const AppContextProvider: FC<AppContextProps> = ({
 
   const [balances, setBalances] = useState<TokenBalance[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [recipientInfo, setRecipientInfo] = useState<string>("");
 
   const networkList = useMemo(() => Object.values(networkRegistry), []);
 
@@ -112,6 +115,15 @@ export const AppContextProvider: FC<AppContextProps> = ({
 
   useEffect(() => {
     if (!dataLoaded) return;
+    try {
+      setRecipientInfo(hinkal.getRecipientInfo());
+    } catch (error) {
+      console.error("Error getting recipient info:", error);
+    }
+  }, [dataLoaded, hinkal]);
+
+  useEffect(() => {
+    if (!dataLoaded) return;
 
     refreshBalances();
 
@@ -136,6 +148,7 @@ export const AppContextProvider: FC<AppContextProps> = ({
         erc20List,
         balances,
         refreshBalances,
+        recipientInfo,
       }}
     >
       {children}
