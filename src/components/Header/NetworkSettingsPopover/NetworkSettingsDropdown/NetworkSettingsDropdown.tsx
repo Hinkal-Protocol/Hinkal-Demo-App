@@ -3,6 +3,7 @@ import { useCallback, useMemo } from "react";
 import { useAppContext } from "../../../../AppContext";
 import { SUPPORTED_CHAIN_IDS } from "../../../../constants/supported-chain-ids.constants";
 import { networkRegistry } from "../../../../constants/networkRegistry";
+import { isTronLike } from "../../../../constants/tron-chain.constants";
 
 interface NetworkSettingsDropdownProps {
   close: () => void;
@@ -11,25 +12,43 @@ interface NetworkSettingsDropdownProps {
 export const NetworkSettingsDropdown = ({
   close,
 }: NetworkSettingsDropdownProps) => {
-  const { hinkal, setChainId } = useAppContext();
+  const { hinkal, chainId, setChainId } = useAppContext();
 
-  const networkList = useMemo(
-    () =>
-      Object.values(networkRegistry).filter((network) =>
-        SUPPORTED_CHAIN_IDS.includes(network.chainId),
-      ),
-    [],
+  const isTronConnection = useMemo(
+    () => !!chainId && isTronLike(chainId),
+    [chainId],
   );
 
+  const networkList = useMemo(() => {
+    if (isTronConnection) {
+      return Object.values(networkRegistry).filter(
+        (network) => network.chainId === chainId,
+      );
+    }
+    return Object.values(networkRegistry).filter(
+      (network) =>
+        SUPPORTED_CHAIN_IDS.includes(network.chainId) &&
+        !isTronLike(network.chainId),
+    );
+  }, [isTronConnection, chainId]);
+
   const switchNetwork = useCallback(
-    async (chainId: number) => {
-      if (!hinkal) return;
-      await hinkal.switchNetwork(chainId);
-      await hinkal.resetMerkle();
-      setChainId(chainId);
-      close();
+    async (targetChainId: number) => {
+      try {
+        const network = networkList.find(
+          (net) => net.chainId === targetChainId,
+        );
+        if (!network || isTronLike(targetChainId) || !hinkal) return;
+
+        await hinkal.switchNetwork(targetChainId);
+        await hinkal.resetMerkle();
+        setChainId(network.chainId);
+        close();
+      } catch (err) {
+        console.error("Network switch failed:", err);
+      }
     },
-    [hinkal, setChainId, close],
+    [hinkal, setChainId, close, networkList],
   );
 
   return (

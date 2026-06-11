@@ -34,6 +34,7 @@ type AppContextArgumnets = {
   setDataLoaded: (val: boolean) => void;
   erc20List: ERC20Token[];
   privateBalancesWithUSD: PrivateBalancesState;
+  recipientInfo: string;
 };
 
 const AppContext = createContext<AppContextArgumnets>({
@@ -47,6 +48,7 @@ const AppContext = createContext<AppContextArgumnets>({
   setDataLoaded: (val: boolean) => {},
   erc20List: [],
   privateBalancesWithUSD: emptyPrivateBalances,
+  recipientInfo: "",
 });
 
 type AppContextProps = { children: ReactNode };
@@ -71,6 +73,7 @@ export const AppContextProvider: FC<AppContextProps> = ({
     },
     () => hinkal?.privateBalancesWithUSD ?? emptyPrivateBalances,
   );
+  const [recipientInfo, setRecipientInfo] = useState<string>("");
 
   const networkList = useMemo(() => Object.values(networkRegistry), []);
 
@@ -107,6 +110,15 @@ export const AppContextProvider: FC<AppContextProps> = ({
   }, [chainId]);
 
   useEffect(() => {
+    if (!dataLoaded) return;
+    try {
+      setRecipientInfo(hinkal?.getRecipientInfo() ?? "");
+    } catch (error) {
+      console.error("Error getting recipient info:", error);
+    }
+  }, [dataLoaded, hinkal]);
+
+  useEffect(() => {
     if (!chainId || !hinkal) return;
     refreshBalance({ chainIdToUpdate: chainId });
   }, [chainId, hinkal]);
@@ -124,6 +136,7 @@ export const AppContextProvider: FC<AppContextProps> = ({
         setDataLoaded,
         erc20List,
         privateBalancesWithUSD,
+        recipientInfo,
       }}
     >
       {children}

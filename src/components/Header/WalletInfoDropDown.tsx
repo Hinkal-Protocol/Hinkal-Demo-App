@@ -23,7 +23,7 @@ const filterTokenBalances = (tokenBalances: TokenBalance[]) => {
 };
 
 export const WalletInfoDropDown = () => {
-  const { privateBalancesWithUSD, hinkal, erc20List, chainId } =
+  const { privateBalancesWithUSD, hinkal, erc20List, chainId, recipientInfo } =
     useAppContext();
 
   const nativeToken = useMemo(
@@ -38,18 +38,31 @@ export const WalletInfoDropDown = () => {
       : filterTokenBalances(privateBalancesWithUSD[chainId] || []);
   }, [privateBalancesWithUSD, nativeToken, chainId]);
 
-  const handleCopyShieldedAddress = () => {
-    if (!hinkal) return;
+  const handleCopyPublicAddress = async () => {
     try {
-      const shieldedAddress = hinkal.getShieldedPublicKey();
-      if (!shieldedAddress) {
-        toast.error("No shielded address found");
+      if (!hinkal) return;
+      const publicAddress = await hinkal.getEthereumAddress();
+      if (!publicAddress) {
+        toast.error("No public address found");
         return;
       }
-      copyToClipboard(shieldedAddress);
-      toast.success("Shielded address copied to clipboard");
+      copyToClipboard(publicAddress);
+      toast.success("Public address copied to clipboard");
     } catch (err: any) {
-      toast.error(err?.message || "Failed to copy shielded address");
+      toast.error(err?.message || "Failed to copy public address");
+    }
+  };
+
+  const handleCopyPrivateAddress = () => {
+    try {
+      if (!recipientInfo) {
+        toast.error("No private address found");
+        return;
+      }
+      copyToClipboard(recipientInfo);
+      toast.success("Private address copied to clipboard");
+    } catch (err: any) {
+      toast.error(err?.message || "Failed to copy private address");
     }
   };
 
@@ -75,13 +88,21 @@ export const WalletInfoDropDown = () => {
         )}
       </div>
 
-      <div className="border-t-2 md:text-[15px] border-[#36393D]">
-        <button type="button" onClick={handleCopyShieldedAddress}>
+      <div className="border-t-2 md:text-[15px] border-[#36393D] flex flex-col">
+        <button type="button" onClick={handleCopyPublicAddress}>
           <div className="flex items-center mt-2 text-white text-[14px] md:w-[9.5rem]">
             <div className="flex justify-center items-center w-[25px] h-[25px]">
               <Copy />
             </div>
-            <div className="pl-2">Copy Address</div>
+            <div className="pl-2 text-nowrap">Copy Public Address</div>
+          </div>
+        </button>
+        <button type="button" onClick={handleCopyPrivateAddress}>
+          <div className="flex items-center mt-2 text-white text-[14px] md:w-[9.5rem]">
+            <div className="flex justify-center items-center w-[25px] h-[25px]">
+              <Copy />
+            </div>
+            <div className="pl-2 text-nowrap">Copy Private Address</div>
           </div>
         </button>
         <div>
