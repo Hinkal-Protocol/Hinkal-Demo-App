@@ -2,9 +2,9 @@ import {
   ERC20Token,
   Hinkal,
   PrivateBalancesState,
-  getErc20Token,
+  getERC20Token,
   refreshBalance,
-} from "@gurg/hi-test";
+} from "@gurge/sdk";
 import {
   Dispatch,
   FC,
@@ -91,7 +91,7 @@ export const AppContextProvider: FC<AppContextProps> = ({
       const tokenData = getTokenData(chainId);
       const tokens = await Promise.all(
         tokenData.map((token) =>
-          getErc20Token(chainId, token.erc20TokenAddress),
+          getERC20Token(chainId, token.erc20TokenAddress),
         ),
       );
 

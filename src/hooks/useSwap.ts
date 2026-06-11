@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { ERC20Token, ExternalActionId, FeeStructure } from "@gurg/hi-test";
+import { ERC20Token, ExternalActionId, FeeStructure } from "@gurge/sdk";
 import { useAppContext } from "../AppContext";
 import { getAmountInWei } from "../utils/amount.utils";
 

@@ -1,4 +1,4 @@
-import { ERC20Token } from "@gurg/hi-test";
+import { ERC20Token } from "@gurge/sdk";
 import { ethers } from "ethers";
 
 export const getAmountInToken = (token: ERC20Token, amount: bigint): string =>

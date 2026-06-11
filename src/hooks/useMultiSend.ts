@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { ERC20Token, FeeStructure } from "@gurg/hi-test";
+import { ERC20Token, FeeStructure } from "@gurge/sdk";
 import { useAppContext } from "../AppContext";
 import { getAmountInWei } from "../utils/amount.utils";
 import { getTxScheduleTime } from "../utils/getTxScheduleTime";

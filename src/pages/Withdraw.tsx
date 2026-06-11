@@ -12,7 +12,7 @@ import { TokenAmountInput } from "../components/TokenAmountInput";
 import { ToggleSwitch } from "../components/withdraw/ToggleSwitch";
 import { useAppContext } from "../AppContext";
 import { useWithdraw } from "../hooks/useWithdraw";
-import { ERC20Token, ExternalActionId } from "@gurg/hi-test";
+import { ERC20Token, ExternalActionId } from "@gurge/sdk";
 import { useFee } from "../hooks/useFee";
 import { FeeDisplay } from "../components/FeeDisplay";
 

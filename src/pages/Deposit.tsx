@@ -5,7 +5,7 @@ import {
   useMemo,
   useEffect,
 } from "react";
-import { ERC20Token } from "@gurg/hi-test";
+import { ERC20Token } from "@gurge/sdk";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";

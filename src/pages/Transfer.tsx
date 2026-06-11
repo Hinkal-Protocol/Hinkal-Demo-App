@@ -1,13 +1,8 @@
-import {
-  SyntheticEvent,
-  useCallback,
-  useMemo,
-  useState,
-} from "react";
+import { SyntheticEvent, useCallback, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
-import { ERC20Token, ExternalActionId } from "@gurg/hi-test";
+import { ERC20Token, ExternalActionId } from "@gurge/sdk";
 import { useTransfer } from "../hooks/useTransfer";
 import { useFee } from "../hooks/useFee";
 import { FeeDisplay } from "../components/FeeDisplay";

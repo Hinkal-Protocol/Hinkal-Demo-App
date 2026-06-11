@@ -1,4 +1,4 @@
-import { ERC20Token } from "@gurg/hi-test";
+import { ERC20Token } from "@gurge/sdk";
 import { ReactNode, SetStateAction, useEffect, useState } from "react";
 import { Modal } from "../Modal";
 import { TokenDropdownButton } from "./TokenDropdownButton";

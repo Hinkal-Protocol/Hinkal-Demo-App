@@ -10,7 +10,7 @@ import { InfoPanel } from "../components/InfoPanel";
 import { Spinner } from "../components/Spinner";
 import { SelectToken } from "../components/swap/SelectToken";
 import { SwapInputTokensButton } from "../components/swap/SwapInputTokensButton";
-import { ERC20Token, ExternalActionId } from "@gurg/hi-test";
+import { ERC20Token, ExternalActionId } from "@gurge/sdk";
 import { useUniswapPrice } from "../hooks/useUniswapPrice";
 import { useSwap } from "../hooks/useSwap";
 import { useAppContext } from "../AppContext";

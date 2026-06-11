@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { ERC20Token, FeeStructure, Hinkal } from "@gurg/hi-test";
+import { ERC20Token, FeeStructure, Hinkal } from "@gurge/sdk";
 import { getAmountInWei } from "../utils/amount.utils";
 import { useAppContext } from "../AppContext";
 

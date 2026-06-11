@@ -1,4 +1,4 @@
-import { ERC20Token } from "@gurg/hi-test";
+import { ERC20Token } from "@gurge/sdk";
 
 interface FeeDisplayProps {
   fee: bigint | undefined;

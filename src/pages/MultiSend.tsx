@@ -8,7 +8,7 @@ import {
 import toast from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { SelectToken } from "../components/swap/SelectToken";
-import { ERC20Token, ExternalActionId, getErc20Token } from "@gurg/hi-test";
+import { ERC20Token, ExternalActionId, getERC20Token } from "@gurge/sdk";
 import { useAppContext } from "../AppContext";
 import { useMultiSend } from "../hooks/useMultiSend";
 import { SCHEDULE_OPTIONS } from "../constants/schedule.constants";
@@ -35,7 +35,7 @@ export const MultiSend = () => {
         return;
       }
 
-      const nativeToken = await getErc20Token(chainId, zeroAddress);
+      const nativeToken = await getERC20Token(chainId, zeroAddress);
 
       const tokenData = getTokenData(chainId);
 
@@ -46,7 +46,7 @@ export const MultiSend = () => {
       const stablecoins = (
         await Promise.all(
           stablecoinsData.map((token) =>
-            getErc20Token(chainId, token.erc20TokenAddress),
+            getERC20Token(chainId, token.erc20TokenAddress),
           ),
         )
       ).filter((token) => token !== undefined);

@@ -1,5 +1,5 @@
 import { Listbox } from "@headlessui/react";
-import { ERC20Token } from "@gurg/hi-test";
+import { ERC20Token } from "@gurge/sdk";
 import { SetStateAction, useEffect } from "react";
 import VectorDown from "../assets/VectorDown.svg";
 import { useAppContext } from "../AppContext";

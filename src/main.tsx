@@ -4,7 +4,7 @@ import { WagmiProvider } from "wagmi";
 import App from "./App";
 import { getWagmiConfig } from "./wagmi.config";
 import { AppContextProvider } from "./AppContext";
-import { preProcessing } from "@gurg/hi-test";
+import { preProcessing } from "@gurge/sdk";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 preProcessing();

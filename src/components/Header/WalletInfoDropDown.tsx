@@ -1,4 +1,4 @@
-import { TokenBalance } from "@gurg/hi-test";
+import { TokenBalance } from "@gurge/sdk";
 import toast from "react-hot-toast";
 import { useMemo } from "react";
 import Copy from "../../assets/Copy.svg";

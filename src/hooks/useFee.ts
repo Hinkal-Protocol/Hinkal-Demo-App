@@ -4,7 +4,7 @@ import {
   ExternalActionId,
   FeeStructure,
   getFeeStructure,
-} from "@gurg/hi-test";
+} from "@gurge/sdk";
 import { useAppContext } from "../AppContext";
 
 export const useFee = (

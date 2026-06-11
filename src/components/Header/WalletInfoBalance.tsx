@@ -1,4 +1,4 @@
-import { TokenBalance } from "@gurg/hi-test";
+import { TokenBalance } from "@gurge/sdk";
 import { getAmountInToken } from "../../utils/amount.utils";
 
 interface WalletInfoBalanceProps {
