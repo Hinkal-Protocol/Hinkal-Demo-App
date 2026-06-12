@@ -10,25 +10,22 @@ import { InfoPanel } from "../components/InfoPanel";
 import { Spinner } from "../components/Spinner";
 import { SelectToken } from "../components/swap/SelectToken";
 import { SwapInputTokensButton } from "../components/swap/SwapInputTokensButton";
-import {
-  ERC20Token,
-  ErrorCategory,
-  getAmountInToken,
-  getAmountInWei,
-  getErrorMessage,
-} from "@hinkal/common";
+import { Token } from "../types";
+import { ExternalActionId } from "@gurge/sdk";
 import { useUniswapPrice } from "../hooks/useUniswapPrice";
 import { useSwap } from "../hooks/useSwap";
 import { useAppContext } from "../AppContext";
-import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
+import { getAmountInToken, getAmountInWei } from "../utils/amount.utils";
+import { useFee } from "../hooks/useFee";
+import { FeeDisplay } from "../components/FeeDisplay";
 import { getShieldedBalanceWei } from "../utils/balance.utils";
 
 export const Swap = () => {
-  const { hinkal, refreshBalances, chainId, balances } = useAppContext();
+  const { hinkal, chainId, chainBalances } = useAppContext();
 
   const [inSwapAmount, setInSwapAmount] = useState("");
-  const [inSwapToken, setInSwapToken] = useState<ERC20Token | undefined>();
-  const [outSwapToken, setOutSwapToken] = useState<ERC20Token | undefined>();
+  const [inSwapToken, setInSwapToken] = useState<Token | undefined>();
+  const [outSwapToken, setOutSwapToken] = useState<Token | undefined>();
   const [relayerInfoShown, setRelayerInfoShown] = useState(false);
 
   useEffect(() => {
@@ -39,36 +36,45 @@ export const Swap = () => {
   }, [chainId]);
 
   const exceedsBalance = useMemo(() => {
-    if (!inSwapToken || !inSwapAmount) return false;
+    if (!inSwapToken || !inSwapAmount || !chainId) return false;
     try {
       return (
         getAmountInWei(inSwapToken, inSwapAmount) >
-        getShieldedBalanceWei(balances, inSwapToken)
+        getShieldedBalanceWei(chainBalances, inSwapToken)
       );
     } catch {
       return false;
     }
-  }, [inSwapToken, inSwapAmount, balances]);
+  }, [inSwapToken, inSwapAmount, chainBalances, chainId]);
 
   const {
     isPriceLoading,
     price: outSwapAmountWei,
-    swapData: fee,
+    swapData,
   } = useUniswapPrice({
     inSwapAmount,
     inSwapToken,
     outSwapToken,
   });
 
+  const tokenAddresses = useMemo(() => {
+    return [inSwapToken?.erc20TokenAddress, outSwapToken?.erc20TokenAddress];
+  }, [inSwapToken, outSwapToken]);
+
+  const { isFeeLoading, feeStructure } = useFee(
+    inSwapToken,
+    ExternalActionId.Uniswap,
+    tokenAddresses,
+  );
+
   const { swap, isProcessing } = useSwap({
     onError: (err) => {
-      const message = getErrorMessage(err, ErrorCategory.SWAP);
-      if (message !== "Swap failed") toast.error(message);
+      const message = err instanceof Error ? err.message : "Unknown error";
+      toast.error(message, { id: message });
     },
     onSuccess: async () => {
       toast.success("Swap confirmed");
       setInSwapAmount("");
-      await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
     },
   });
 
@@ -87,14 +93,29 @@ export const Swap = () => {
       outSwapAmountWei > 0n &&
       inSwapToken &&
       outSwapToken &&
-      fee,
-    [inSwapAmount, inSwapToken, outSwapToken, outSwapAmountWei, fee],
+      swapData,
+    [inSwapAmount, inSwapToken, outSwapToken, outSwapAmountWei, swapData],
   );
 
   const handleSwap = useCallback(async () => {
-    if (!inSwapToken || !outSwapToken || !outSwapAmountWei || !fee) return;
-    await swap(inSwapToken, outSwapToken, inSwapAmount, outSwapAmountWei, fee);
-  }, [swap, inSwapToken, outSwapToken, inSwapAmount, outSwapAmountWei, fee]);
+    if (!inSwapToken || !outSwapToken || !outSwapAmountWei || !swapData) return;
+    await swap(
+      inSwapToken,
+      outSwapToken,
+      inSwapAmount,
+      outSwapAmountWei,
+      swapData,
+      feeStructure,
+    );
+  }, [
+    swap,
+    inSwapToken,
+    outSwapToken,
+    inSwapAmount,
+    outSwapAmountWei,
+    swapData,
+    feeStructure,
+  ]);
 
   const setTokenAmountHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -197,6 +218,11 @@ export const Swap = () => {
           </div>
         )}
       </div>
+      <FeeDisplay
+        fee={feeStructure?.flatFee}
+        isFeeLoading={isFeeLoading}
+        selectedToken={inSwapToken}
+      />
       <div
         onClick={() => setRelayerInfoShown((prev) => !prev)}
         className="bg-[#272b3000] w-[88%] mx-auto rounded-xl py-1 flex items-center justify-between"

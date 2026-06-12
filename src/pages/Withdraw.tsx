@@ -12,39 +12,44 @@ import { TokenAmountInput } from "../components/TokenAmountInput";
 import { ToggleSwitch } from "../components/withdraw/ToggleSwitch";
 import { useAppContext } from "../AppContext";
 import { useWithdraw } from "../hooks/useWithdraw";
-import {
-  ERC20Token,
-  ErrorCategory,
-  getErrorMessage,
-  getAmountInWei,
-} from "@hinkal/common";
-import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
+import { Token } from "../types";
+import { ExternalActionId } from "@gurge/sdk";
+import { useFee } from "../hooks/useFee";
+import { FeeDisplay } from "../components/FeeDisplay";
 import { getShieldedBalanceWei } from "../utils/balance.utils";
+import { getAmountInWei } from "../utils/amount.utils";
 
 export const Withdraw = () => {
-  const { hinkal, refreshBalances, chainId, balances } = useAppContext();
+  const { hinkal, chainId, chainBalances } = useAppContext();
 
   const { withdraw, isProcessing } = useWithdraw({
     hinkal,
     onError: (err) => {
-      const message = getErrorMessage(err, ErrorCategory.WITHDRAW);
-      if (message !== "Send failed") {
-        toast.error(message, { id: message });
-      }
+      const message = err instanceof Error ? err.message : "Unknown error";
+      toast.error(message, { id: message });
     },
     onSuccess: async () => {
       toast.success("Withdraw confirmed");
-      await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
     },
   });
 
-  const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
+  const [selectedToken, setSelectedToken] = useState<Token | undefined>(
     undefined,
   );
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [recipientAddress, setRecipientAddress] = useState("");
   const [isRelayerOff, setIsRelayerOff] = useState(false);
   const [showRelayerDetails, setShowRelayerDetails] = useState(false);
+
+  const tokenAddresses = useMemo(() => {
+    return [selectedToken?.erc20TokenAddress];
+  }, [selectedToken]);
+
+  const { isFeeLoading, feeStructure } = useFee(
+    selectedToken,
+    ExternalActionId.Transact,
+    tokenAddresses,
+  );
 
   useEffect(() => {
     if (!chainId) return;
@@ -55,21 +60,34 @@ export const Withdraw = () => {
   }, [chainId]);
 
   const exceedsBalance = useMemo(() => {
-    if (!selectedToken || !withdrawAmount) return false;
+    if (!selectedToken || !withdrawAmount || !chainId) return false;
     try {
       return (
         getAmountInWei(selectedToken, withdrawAmount) >
-        getShieldedBalanceWei(balances, selectedToken)
+        getShieldedBalanceWei(chainBalances, selectedToken)
       );
     } catch {
       return false;
     }
-  }, [selectedToken, withdrawAmount, balances]);
+  }, [selectedToken, withdrawAmount, chainBalances, chainId]);
 
   const handleWithdraw = useCallback(() => {
     if (!selectedToken) return;
-    withdraw?.(selectedToken, withdrawAmount, recipientAddress, isRelayerOff);
-  }, [withdraw, selectedToken, withdrawAmount, recipientAddress, isRelayerOff]);
+    withdraw(
+      selectedToken,
+      withdrawAmount,
+      recipientAddress,
+      isRelayerOff,
+      feeStructure,
+    );
+  }, [
+    withdraw,
+    selectedToken,
+    withdrawAmount,
+    recipientAddress,
+    isRelayerOff,
+    feeStructure,
+  ]);
 
   const setRecipientAddressHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -126,6 +144,11 @@ export const Withdraw = () => {
             value={recipientAddress}
           />
         </div>
+        <FeeDisplay
+          fee={feeStructure?.flatFee}
+          isFeeLoading={isFeeLoading}
+          selectedToken={selectedToken}
+        />
         <div className="flex justify-between items-center mt-2 w-[90%] mx-auto">
           <InfoPanel
             cloudText="Relayers are secure and trustworthy anonymous nodes that

@@ -1,36 +1,54 @@
-import { TokenBalance, zeroAddress } from "@hinkal/common";
+import { TokenBalance } from "@gurge/sdk";
 import toast from "react-hot-toast";
-import { useEffect } from "react";
+import { useMemo } from "react";
 import Copy from "../../assets/Copy.svg";
 import Disconnect from "../../assets/Disconnect.svg";
 import { copyToClipboard } from "../../utils/copyToClipboard";
 import { reloadPage } from "../../utils/pageReload";
 import { WalletInfoBalance } from "./WalletInfoBalance";
 import { useAppContext } from "../../AppContext";
+import { zeroAddress } from "../../constants";
+import { findToken } from "../../utils/token.utils";
 
 const filterTokenBalances = (tokenBalances: TokenBalance[]) => {
   const nonZeroBalances = [...tokenBalances]
-    .sort((a, b) =>
-      a.token.erc20TokenAddress < b.token.erc20TokenAddress ? -1 : 1,
-    )
+    .sort((a, b) => (a.erc20Address < b.erc20Address ? -1 : 1))
     .filter((tokenBalance) => tokenBalance.balance !== 0n);
   if (nonZeroBalances.length === 0)
     return tokenBalances.filter(
-      (tokenBalance) => tokenBalance.token.erc20TokenAddress === zeroAddress,
+      (tokenBalance) => tokenBalance.erc20Address === zeroAddress,
     );
   return nonZeroBalances;
 };
 
 export const WalletInfoDropDown = () => {
-  const { balances, hinkal, chainId, refreshBalances, recipientInfo } =
+  const { chainBalances, hinkal, erc20List, chainId, recipientInfo } =
     useAppContext();
 
-  useEffect(() => {
-    if (chainId && refreshBalances) refreshBalances();
-  }, [chainId, refreshBalances]);
+  const nativeToken = useMemo(
+    () => findToken(erc20List, zeroAddress),
+    [erc20List],
+  );
+
+  const displayBalances = useMemo((): TokenBalance[] => {
+    if (!chainId) return [];
+
+    if (chainBalances.length === 0 && nativeToken) {
+      return [
+        {
+          chainId,
+          erc20Address: nativeToken.erc20TokenAddress,
+          balance: 0n,
+        },
+      ];
+    }
+
+    return filterTokenBalances(chainBalances);
+  }, [chainBalances, nativeToken, chainId]);
 
   const handleCopyPublicAddress = async () => {
     try {
+      if (!hinkal) return;
       const publicAddress = await hinkal.getEthereumAddress();
       if (!publicAddress) {
         toast.error("No public address found");
@@ -63,12 +81,19 @@ export const WalletInfoDropDown = () => {
         <p className="text-hinkal-white-300 text-[12px] text-left">Balance</p>
       </div>
       <div className="flex flex-col justify-center gap-4 mb-[10%]">
-        {filterTokenBalances(balances).map((tokenBalance) => (
-          <WalletInfoBalance
-            tokenBalance={tokenBalance}
-            key={tokenBalance.token.erc20TokenAddress}
-          />
-        ))}
+        {chainId && chainBalances.length === 0 ? (
+          <div className="flex items-center gap-2 animate-pulse">
+            <div className="w-6 h-6 rounded-full bg-gray-100" />
+            <div className="h-4 w-24 rounded bg-gray-100" />
+          </div>
+        ) : (
+          displayBalances.map((tokenBalance) => (
+            <WalletInfoBalance
+              tokenBalance={tokenBalance}
+              key={tokenBalance.erc20Address}
+            />
+          ))
+        )}
       </div>
 
       <div className="border-t-2 md:text-[15px] border-hinkal-blue-900 flex flex-col">

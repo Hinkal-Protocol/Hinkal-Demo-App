@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction, useMemo } from "react";
-import { isTronLike } from "@hinkal/common";
 import { AppTab } from "../../types";
 import { TabButton } from "./TabButton";
 import { useAppContext } from "../../AppContext";
+import { isTronLike } from "../../constants/tron-chain.constants";
 
 interface NavigationBarProps {
   activeTab: AppTab;
@@ -53,13 +53,15 @@ export const NavigationBar = ({
             disabledTooltip="Swap not available on Tron"
           />
         </div>
-        <div className={buttonClassName}>
-          <TabButton
-            isActive={activeTab === AppTab.MultiSend}
-            title="Multi Send"
-            onClick={() => setActiveTab(AppTab.MultiSend)}
-          />
-        </div>
+        {
+          <div className={buttonClassName}>
+            <TabButton
+              isActive={activeTab === AppTab.MultiSend}
+              title="Multi Send"
+              onClick={() => setActiveTab(AppTab.MultiSend)}
+            />
+          </div>
+        }
       </div>
     </div>
   );

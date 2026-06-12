@@ -1,17 +1,20 @@
 import { Listbox, Transition } from "@headlessui/react";
-import { ERC20Token, getAmountInToken } from "@hinkal/common";
 import { Fragment, SetStateAction, useEffect, useMemo } from "react";
 import VectorDown from "../assets/VectorDown.svg";
 import { useAppContext } from "../AppContext";
-import { useShieldedUsdBalances } from "../hooks/useShieldedUsdBalances";
-import { getShieldedBalanceWei } from "../utils/balance.utils";
+import {
+  getShieldedBalance,
+  getShieldedBalanceWei,
+} from "../utils/balance.utils";
+import { Token } from "../types";
+import { getAmountInToken } from "../utils/amount.utils";
 
 interface TokenAmountInputInterface {
   buttonWrapperStyles?: string;
   tokenAmount: string;
   setTokenAmount: (param: SetStateAction<string>) => void;
-  selectedToken: ERC20Token | undefined;
-  setSelectedToken: (param: SetStateAction<ERC20Token | undefined>) => void;
+  selectedToken: Token | undefined;
+  setSelectedToken: (param: SetStateAction<Token | undefined>) => void;
   withShieldedBalance?: boolean;
 }
 
@@ -23,8 +26,7 @@ export const TokenAmountInput = ({
   setSelectedToken,
   withShieldedBalance = false,
 }: TokenAmountInputInterface) => {
-  const { erc20List, balances, dataLoaded } = useAppContext();
-  const { prices, isLoading: isPricesLoading } = useShieldedUsdBalances();
+  const { erc20List, dataLoaded, chainBalances } = useAppContext();
 
   useEffect(() => {
     if (erc20List.length > 0) setSelectedToken(erc20List[0]);
@@ -32,12 +34,12 @@ export const TokenAmountInput = ({
 
   const shieldedBalanceDisplay = useMemo(() => {
     if (!selectedToken) return null;
-    const wei = getShieldedBalanceWei(balances, selectedToken);
+    const wei = getShieldedBalanceWei(chainBalances, selectedToken);
     if (wei <= 0n) return null;
     return `${Number(getAmountInToken(selectedToken, wei)).toFixed(4)} ${
       selectedToken.symbol
     }`;
-  }, [balances, selectedToken]);
+  }, [chainBalances, selectedToken]);
 
   const setTokenAmountHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -48,23 +50,18 @@ export const TokenAmountInput = ({
     }
   };
 
-  const renderOptionBalance = (token: ERC20Token) => {
-    const balanceWei = getShieldedBalanceWei(balances, token);
+  const renderOptionBalance = (token: Token) => {
+    const balanceWei = getShieldedBalanceWei(chainBalances, token);
     if (balanceWei <= 0n) return null;
     const amount = Number(getAmountInToken(token, balanceWei));
-    const price = prices[token.erc20TokenAddress.toLowerCase()] ?? 0;
+    const balance = getShieldedBalance(chainBalances, token);
+    const dollarValue = balance ? Number(balance.usdValue) : 0;
     return (
       <span className="ml-auto mr-3 flex flex-col items-end">
         <span className="text-[12px] text-white">{amount.toFixed(4)}</span>
-        {isPricesLoading ? (
-          <span className="mt-1 h-3 w-10 rounded bg-hinkal-gray-300/50 animate-pulse" />
-        ) : (
-          price > 0 && (
-            <span className="text-[11px] text-white/70">
-              ${(amount * price).toFixed(2)}
-            </span>
-          )
-        )}
+        <span className="text-[11px] text-white/70">
+          ${dollarValue.toFixed(2)}
+        </span>
       </span>
     );
   };
@@ -153,12 +150,14 @@ export const TokenAmountInput = ({
                           index === erc20List.length - 1 ? " rounded-b-lg" : ""
                         }  `}
                       >
-                        <img
-                          src={token?.logoURI}
-                          alt="tokenIcon"
-                          className="w-[26px]"
-                        />{" "}
-                        <span>{token?.symbol}</span>
+                        {token.logoURI && (
+                          <img
+                            src={token.logoURI}
+                            alt="tokenIcon"
+                            className="w-[26px]"
+                          />
+                        )}
+                        <span>{token.symbol}</span>
                         {token && renderOptionBalance(token)}
                       </Listbox.Option>
                     ))

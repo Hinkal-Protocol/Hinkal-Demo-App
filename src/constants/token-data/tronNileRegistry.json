@@ -1,0 +1,20 @@
+{
+  "networkRegistry": [
+    {
+      "chainId": 3448148188,
+      "erc20TokenAddress": "0x0000000000000000000000000000000000000000",
+      "name": "Tron (Nile)",
+      "symbol": "TRX",
+      "decimals": 6,
+      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/tron/info/logo.png"
+    },
+    {
+      "chainId": 3448148188,
+      "erc20TokenAddress": "0xECa9bC828A3005B9a3b909f2cc5c2a54794DE05F",
+      "name": "Tether USD (Nile)",
+      "symbol": "USDT",
+      "decimals": 6,
+      "logoURI": "https://storage.googleapis.com/hinkal-s3-assets/token-logos/USDT.avif"
+    }
+  ]
+}

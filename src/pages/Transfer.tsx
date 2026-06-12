@@ -8,34 +8,44 @@ import {
 import toast from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
-import { getErrorMessage, ERC20Token, getAmountInWei } from "@hinkal/common";
+import { Token } from "../types";
+import { ExternalActionId } from "@gurge/sdk";
 import { useTransfer } from "../hooks/useTransfer";
-import { useAppContext } from "../AppContext";
-import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
+import { useFee } from "../hooks/useFee";
 import { getShieldedBalanceWei } from "../utils/balance.utils";
+import { FeeDisplay } from "../components/FeeDisplay";
+import { getAmountInWei } from "../utils/amount.utils";
+import { useAppContext } from "../AppContext";
 
 export const Transfer = () => {
-  const { refreshBalances, chainId, balances } = useAppContext();
+  const { chainId, chainBalances } = useAppContext();
 
   const { transfer, isProcessing } = useTransfer({
     onError: (err: Error) => {
-      const message = getErrorMessage(err);
-      if (message !== "Transaction failed") {
-        toast.error(message);
-      }
+      const message = err instanceof Error ? err.message : "Unknown error";
+      toast.error(message, { id: message });
     },
     onSuccess: async () => {
       toast.success("Transfer confirmed");
-      await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
     },
   });
 
   // local states
-  const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
+  const [selectedToken, setSelectedToken] = useState<Token | undefined>(
     undefined,
   );
   const [transferAmount, setTransferAmount] = useState<string>("");
   const [transferAddress, setTransferAddress] = useState<string>("");
+
+  const tokenAddresses = useMemo(() => {
+    return [selectedToken?.erc20TokenAddress];
+  }, [selectedToken]);
+
+  const { isFeeLoading, feeStructure } = useFee(
+    selectedToken,
+    ExternalActionId.Transact,
+    tokenAddresses,
+  );
 
   useEffect(() => {
     if (!chainId) return;
@@ -45,21 +55,21 @@ export const Transfer = () => {
   }, [chainId]);
 
   const exceedsBalance = useMemo(() => {
-    if (!selectedToken || !transferAmount) return false;
+    if (!selectedToken || !transferAmount || !chainId) return false;
     try {
       return (
         getAmountInWei(selectedToken, transferAmount) >
-        getShieldedBalanceWei(balances, selectedToken)
+        getShieldedBalanceWei(chainBalances, selectedToken)
       );
     } catch {
       return false;
     }
-  }, [selectedToken, transferAmount, balances]);
+  }, [selectedToken, transferAmount, chainBalances, chainId]);
 
   const handleTransfer = useCallback(() => {
     if (!selectedToken) return;
-    transfer?.(selectedToken, transferAmount, transferAddress);
-  }, [selectedToken, transferAmount, transferAddress, transfer]);
+    transfer?.(selectedToken, transferAmount, transferAddress, feeStructure);
+  }, [selectedToken, transferAmount, transferAddress, transfer, feeStructure]);
 
   /**
    * recipient address onChange handler
@@ -117,6 +127,12 @@ export const Transfer = () => {
         />
         <br />
       </div>
+      <FeeDisplay
+        fee={feeStructure?.flatFee}
+        isFeeLoading={isFeeLoading}
+        selectedToken={selectedToken}
+      />
+
       {exceedsBalance && (
         <p className="w-[90%] mx-auto text-sm text-red-500">
           Insufficient balance

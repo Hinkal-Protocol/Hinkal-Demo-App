@@ -1,30 +1,56 @@
 import {
   SyntheticEvent,
   useCallback,
-  useEffect,
   useState,
   useMemo,
+  useEffect,
 } from "react";
-import {
-  getAmountInWei,
-  ERC20Token,
-  getErrorMessage,
-  ErrorCategory,
-} from "@hinkal/common";
+import { Token } from "../types";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
 import { useAppContext } from "../AppContext";
-import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
+import { getAmountInToken, getAmountInWei } from "../utils/amount.utils";
+import { getPublicBalanceByTokenAddress } from "../utils/getPublicBalanceByToken";
 
 export const Deposit = () => {
-  const { hinkal, refreshBalances, chainId } = useAppContext();
+  const { hinkal, chainId } = useAppContext();
 
-  const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
+  const [selectedToken, setSelectedToken] = useState<Token | undefined>(
     undefined,
   );
   const [depositAmount, setDepositAmount] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [publicBalance, setPublicBalance] = useState<bigint | null>(null);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    const fetch = async () => {
+      if (!selectedToken || !chainId || !hinkal) {
+        if (!isCancelled) setPublicBalance(null);
+        return;
+      }
+
+      const ethAddress = await hinkal.getEthereumAddress();
+      const balance = await getPublicBalanceByTokenAddress(
+        chainId,
+        ethAddress,
+        selectedToken.erc20TokenAddress,
+      );
+      if (!isCancelled) setPublicBalance(balance);
+    };
+    fetch();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [selectedToken, chainId, hinkal]);
+
+  const publicBalanceDisplay = useMemo(() => {
+    if (publicBalance === null || !selectedToken) return null;
+    return Number(getAmountInToken(selectedToken, publicBalance)).toFixed(6);
+  }, [publicBalance, selectedToken]);
 
   useEffect(() => {
     if (!chainId) return;
@@ -34,24 +60,29 @@ export const Deposit = () => {
 
   const handleDeposit = useCallback(async () => {
     try {
-      if (!chainId || !selectedToken) return;
+      if (!hinkal || !chainId || !selectedToken) return;
       setIsProcessing(true);
       const amountInWei = getAmountInWei(selectedToken, depositAmount);
 
-      const result = await hinkal.deposit([selectedToken], [amountInWei]);
+      const result = await hinkal.deposit(
+        chainId,
+        [selectedToken.erc20TokenAddress],
+        [amountInWei],
+      );
 
       if (result && typeof result === "object" && "hash" in result)
         await hinkal.waitForTransaction(chainId, result.hash);
 
-      toast.success("Deposit confirmed");
-      await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
+      toast.success(
+        "Deposit successful! Balance will update in several seconds",
+      );
     } catch (err) {
-      const errorMessage = getErrorMessage(err, ErrorCategory.DEPOSIT);
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
       toast.error(errorMessage);
     } finally {
       setIsProcessing(false);
     }
-  }, [hinkal, depositAmount, selectedToken, chainId, refreshBalances]);
+  }, [hinkal, chainId, depositAmount, selectedToken]);
 
   const handleSubmit = (event: SyntheticEvent) => {
     event.preventDefault();
@@ -72,6 +103,11 @@ export const Deposit = () => {
           selectedToken={selectedToken}
           setSelectedToken={setSelectedToken}
         />
+        {publicBalanceDisplay !== null && (
+          <p className="text-gray-200 text-[12px] pl-[5%] mt-4">
+            Available: {publicBalanceDisplay} {selectedToken?.symbol}
+          </p>
+        )}
         <div className="w-[90%] mx-auto mb-6 mt-6 h-[1px] bg-hinkal-blue-900" />
         <div className="border-solid">
           <button

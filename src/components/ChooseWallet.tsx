@@ -14,12 +14,13 @@ import walletconnectLogo from "../assets/walletconnectWalletLogo.png";
 import { Modal } from "./Modal";
 import { Spinner } from "./Spinner";
 import { useAppContext } from "../AppContext";
-import { prepareWagmiHinkal } from "@hinkal/common/providers/prepareWagmiHinkal";
-import { prepareTronHinkal } from "@hinkal/common/providers/prepareTronHinkal";
+import { prepareWagmiHinkal } from "@gurge/sdk/providers/prepareWagmiHinkal";
+import { prepareTronHinkal } from "@gurge/sdk/providers/prepareTronHinkal";
 import { TRON_CHAIN_ID } from "../constants/tron-chain.constants";
 import { Wallet, useWallet } from "@tronweb3/tronwallet-adapter-react-hooks";
 import { AdapterState } from "@tronweb3/tronwallet-abstract-adapter";
 import toast from "react-hot-toast";
+import { Hinkal } from "@gurge/sdk";
 
 interface ChooseWalletProps {
   isOpen: boolean;
@@ -48,9 +49,9 @@ export const ChooseWallet = ({
   );
 
   const finalize = useCallback(
-    (hinkal: any, chainId: number) => {
+    (hinkal: Hinkal<unknown>, chainId: number) => {
       setHinkal(hinkal);
-      setShieldedAddress(hinkal.userKeys.getShieldedPublicKey());
+      setShieldedAddress(hinkal.getShieldedPublicKey());
       setChainId(chainId);
       setDataLoaded(true);
       onHide();
@@ -63,12 +64,6 @@ export const ChooseWallet = ({
       try {
         setIsConnecting?.(true);
         setConnectingId(connector.id);
-        try {
-          await connector.disconnect();
-        } catch (disconnectError) {
-          console.log("Disconnect cleanup:", disconnectError);
-        }
-        await new Promise((resolve) => setTimeout(resolve, 200));
         const hinkal = await prepareWagmiHinkal(connector, config);
         const providerAdapter = hinkal.getProviderAdapter();
         const chainId = providerAdapter.getChainId();
@@ -157,7 +152,9 @@ export const ChooseWallet = ({
                 />
               )}
               <span>{connector.name}</span>
-              {connectingId === connector.id && <Spinner />}
+              {connectingId === connector.id && (
+                <Spinner styleSize="size-5 mr-0" />
+              )}
             </button>
           ))}
 

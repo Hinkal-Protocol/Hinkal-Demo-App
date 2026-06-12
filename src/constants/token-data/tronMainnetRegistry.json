@@ -1,0 +1,20 @@
+{
+  "networkRegistry": [
+    {
+      "chainId": 728126428,
+      "erc20TokenAddress": "0x0000000000000000000000000000000000000000",
+      "name": "Tron",
+      "symbol": "TRX",
+      "decimals": 6,
+      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/tron/info/logo.png"
+    },
+    {
+      "chainId": 728126428,
+      "erc20TokenAddress": "0xa614f803B6FD780986A42c78Ec9c7f77e6DeD13C",
+      "name": "Tether USD",
+      "symbol": "USDT",
+      "decimals": 6,
+      "logoURI": "https://storage.googleapis.com/hinkal-s3-assets/token-logos/USDT.avif"
+    }
+  ]
+}
