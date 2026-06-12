@@ -8,18 +8,19 @@ import solanaMainnetRegistryJson from "./solanaMainnetRegistry.json";
 import tronNileRegistryJson from "./tronNileRegistry.json";
 import tronMainnetRegistryJson from "./tronMainnetRegistry.json";
 import { chainIds } from "../chains.constants";
+import { Token } from "../../types";
 
-const ethMainnetRegistry = ethMainnetRegistryJson.networkRegistry;
-const arbMainnetRegistry = arbMainnetRegistryJson.networkRegistry;
-const polygonRegistry = polygonRegistryJson.networkRegistry;
-const optimismRegistry = optimismRegistryJson.networkRegistry;
-const baseRegistry = baseRegistryJson.networkRegistry;
-const tronNileRegistry = tronNileRegistryJson.networkRegistry;
-const tronMainnetRegistry = tronMainnetRegistryJson.networkRegistry;
-const arcTestnetRegistry = arcTestnetRegistryJson.networkRegistry;
-const solanaMainnetRegistry = solanaMainnetRegistryJson.networkRegistry;
+const ethMainnetRegistry = ethMainnetRegistryJson.networkRegistry as Token[];
+const arbMainnetRegistry = arbMainnetRegistryJson.networkRegistry as Token[];
+const polygonRegistry = polygonRegistryJson.networkRegistry as Token[];
+const optimismRegistry = optimismRegistryJson.networkRegistry as Token[];
+const baseRegistry = baseRegistryJson.networkRegistry as Token[];
+const tronNileRegistry = tronNileRegistryJson.networkRegistry as Token[];
+const tronMainnetRegistry = tronMainnetRegistryJson.networkRegistry as Token[];
+const arcTestnetRegistry = arcTestnetRegistryJson.networkRegistry as Token[];
+const solanaMainnetRegistry = solanaMainnetRegistryJson.networkRegistry as Token[];
 
-export const getTokenData = (chainId: number) => {
+export const getTokenData = (chainId: number): Token[] => {
   switch (chainId) {
     case chainIds.polygon:
       return polygonRegistry;

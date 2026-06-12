@@ -2,7 +2,8 @@ import { SyntheticEvent, useCallback, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
-import { ERC20Token, ExternalActionId } from "@gurge/sdk";
+import { Token } from "../types";
+import { ExternalActionId } from "@gurge/sdk";
 import { useTransfer } from "../hooks/useTransfer";
 import { useFee } from "../hooks/useFee";
 import { FeeDisplay } from "../components/FeeDisplay";
@@ -21,7 +22,7 @@ export const Transfer = () => {
   });
 
   // local states
-  const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
+  const [selectedToken, setSelectedToken] = useState<Token | undefined>(
     undefined,
   );
   const [transferAmount, setTransferAmount] = useState<string>("");

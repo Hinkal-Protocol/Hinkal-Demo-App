@@ -12,7 +12,8 @@ import { TokenAmountInput } from "../components/TokenAmountInput";
 import { ToggleSwitch } from "../components/withdraw/ToggleSwitch";
 import { useAppContext } from "../AppContext";
 import { useWithdraw } from "../hooks/useWithdraw";
-import { ERC20Token, ExternalActionId } from "@gurge/sdk";
+import { Token } from "../types";
+import { ExternalActionId } from "@gurge/sdk";
 import { useFee } from "../hooks/useFee";
 import { FeeDisplay } from "../components/FeeDisplay";
 
@@ -32,7 +33,7 @@ export const Withdraw = () => {
     },
   });
 
-  const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
+  const [selectedToken, setSelectedToken] = useState<Token | undefined>(
     undefined,
   );
   const [withdrawAmount, setWithdrawAmount] = useState("");

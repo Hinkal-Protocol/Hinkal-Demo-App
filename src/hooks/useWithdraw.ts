@@ -1,7 +1,8 @@
 import { useCallback, useState } from "react";
-import { ERC20Token, FeeStructure, Hinkal } from "@gurge/sdk";
+import { FeeStructure, Hinkal } from "@gurge/sdk";
 import { getAmountInWei } from "../utils/amount.utils";
 import { useAppContext } from "../AppContext";
+import { Token } from "../types";
 
 interface UseWithdrawProps {
   hinkal: Hinkal<unknown> | undefined;
@@ -19,7 +20,7 @@ export const useWithdraw = ({
 
   const withdraw = useCallback(
     async (
-      token: ERC20Token,
+      token: Token,
       amount: string,
       recipientAddress: string,
       isRelayerOff: boolean,
@@ -38,7 +39,8 @@ export const useWithdraw = ({
         const amountInWei = getAmountInWei(token, amount);
 
         const tx = await hinkal.withdraw(
-          [token],
+          chainId,
+          [token.erc20TokenAddress],
           [-amountInWei],
           recipientAddress,
           isRelayerOff,

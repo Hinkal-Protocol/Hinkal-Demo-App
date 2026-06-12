@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
-import { ERC20Token, FeeStructure } from "@gurge/sdk";
+import { FeeStructure } from "@gurge/sdk";
 import { useAppContext } from "../AppContext";
 import { getAmountInWei } from "../utils/amount.utils";
 import { getTxScheduleTime } from "../utils/getTxScheduleTime";
-import { ScheduleDelayOption } from "../types";
+import { Token, ScheduleDelayOption } from "../types";
 
 interface UseMultiSendProps {
   onError: (err: Error) => void;
@@ -16,7 +16,7 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
 
   const multiSend = useCallback(
     async (
-      token: ERC20Token,
+      token: Token,
       address1: string,
       amount1: string,
       address2: string,
@@ -37,7 +37,8 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
         const txScheduleTime = getTxScheduleTime(selectedScheduleDelay);
 
         await hinkal.depositAndWithdraw(
-          token,
+          chainId,
+          token.erc20TokenAddress,
           amountsInBigInt,
           [address1, address2],
           txScheduleTime,

@@ -1,7 +1,8 @@
 import { useState, useCallback } from "react";
-import { ERC20Token, FeeStructure } from "@gurge/sdk";
+import { FeeStructure } from "@gurge/sdk";
 import { useAppContext } from "../AppContext";
 import { getAmountInWei } from "../utils/amount.utils";
+import { Token } from "../types";
 
 type UseTransferOptions = {
   onError?: (error: Error) => void;
@@ -17,7 +18,7 @@ export const useTransfer = ({
 
   const transfer = useCallback(
     async (
-      token: ERC20Token,
+      token: Token,
       amount: string,
       recipientAddress: string,
       feeStructure?: FeeStructure,
@@ -33,7 +34,8 @@ export const useTransfer = ({
 
         const amountInBigInt = getAmountInWei(token, amount);
         const txHash = await hinkal.transfer(
-          [token],
+          chainId,
+          [token.erc20TokenAddress],
           [-amountInBigInt],
           recipientAddress,
           undefined,

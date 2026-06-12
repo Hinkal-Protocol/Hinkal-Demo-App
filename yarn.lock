@@ -962,9 +962,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gurge/sdk@npm:0.3.9":
-  version: 0.3.9
-  resolution: "@gurge/sdk@npm:0.3.9"
+"@gurge/sdk@npm:0.3.13":
+  version: 0.3.13
+  resolution: "@gurge/sdk@npm:0.3.13"
   dependencies:
     "@coral-xyz/anchor": "npm:^0.31.0"
     "@solana/spl-token": "npm:^0.4.14"
@@ -996,7 +996,7 @@ __metadata:
       optional: true
     wagmi:
       optional: true
-  checksum: 10c0/68be01bda712eab0a4928441d9e9b710abf529e024a6e052edb67def1658395c0d35373ce1f1d91e8baf8dba567e2f9e9a3b90fa432c3f728291a14f18ff5582
+  checksum: 10c0/a906b4b6487ef4d5a43b6437363eafc67d94e1186f33561c422690c330745df05309ea4c2163e7bfa4e241cf02b82830683494ea6e22a8c94e82f916ca1682b4
   languageName: node
   linkType: hard
 
@@ -9123,7 +9123,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "hinkal-demo-app@workspace:."
   dependencies:
-    "@gurge/sdk": "npm:0.3.9"
+    "@gurge/sdk": "npm:0.3.13"
     "@headlessui/react": "npm:^1.7.5"
     "@tanstack/react-query": "npm:^5.0.0"
     "@tronweb3/tronwallet-abstract-adapter": "npm:^1.1.12"

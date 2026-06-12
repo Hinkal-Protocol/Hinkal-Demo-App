@@ -1,15 +1,15 @@
 import { Listbox } from "@headlessui/react";
-import { ERC20Token } from "@gurge/sdk";
 import { SetStateAction, useEffect } from "react";
 import VectorDown from "../assets/VectorDown.svg";
 import { useAppContext } from "../AppContext";
+import { Token } from "../types";
 
 interface TokenAmountInputInterface {
   buttonWrapperStyles?: string;
   tokenAmount: string;
   setTokenAmount: (param: SetStateAction<string>) => void;
-  selectedToken: ERC20Token | undefined;
-  setSelectedToken: (param: SetStateAction<ERC20Token | undefined>) => void;
+  selectedToken: Token | undefined;
+  setSelectedToken: (param: SetStateAction<Token | undefined>) => void;
 }
 
 export const TokenAmountInput = ({
@@ -92,12 +92,14 @@ export const TokenAmountInput = ({
                       index === erc20List.length - 1 ? " rounded-b-lg" : ""
                     }  `}
                   >
-                    <img
-                      src={token?.logoURI}
-                      alt="tokenIcon"
-                      className="w-[26px]"
-                    />{" "}
-                    <span>{token?.symbol}</span>
+                    {token.logoURI && (
+                      <img
+                        src={token.logoURI}
+                        alt="tokenIcon"
+                        className="w-[26px]"
+                      />
+                    )}
+                    <span>{token.symbol}</span>
                   </Listbox.Option>
                 ))}
               </Listbox.Options>

@@ -1,7 +1,8 @@
 import { useState, useCallback } from "react";
-import { ERC20Token, ExternalActionId, FeeStructure } from "@gurge/sdk";
+import { ExternalActionId, FeeStructure } from "@gurge/sdk";
 import { useAppContext } from "../AppContext";
 import { getAmountInWei } from "../utils/amount.utils";
+import { Token } from "../types";
 
 type UseSwapOptions = {
   onError?: (error: Error) => void;
@@ -14,8 +15,8 @@ export const useSwap = ({ onError, onSuccess }: UseSwapOptions = {}) => {
 
   const swap = useCallback(
     async (
-      tokenIn: ERC20Token,
-      tokenOut: ERC20Token,
+      tokenIn: Token,
+      tokenOut: Token,
       amountIn: string,
       expectedAmountOut: bigint,
       swapData: string,
@@ -33,7 +34,8 @@ export const useSwap = ({ onError, onSuccess }: UseSwapOptions = {}) => {
         const amountInWei = getAmountInWei(tokenIn, amountIn);
 
         const txHash = await hinkal.swap(
-          [tokenIn, tokenOut],
+          chainId,
+          [tokenIn.erc20TokenAddress, tokenOut.erc20TokenAddress],
           [-amountInWei, expectedAmountOut],
           ExternalActionId.Uniswap,
           swapData,

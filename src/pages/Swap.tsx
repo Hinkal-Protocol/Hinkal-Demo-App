@@ -10,7 +10,8 @@ import { InfoPanel } from "../components/InfoPanel";
 import { Spinner } from "../components/Spinner";
 import { SelectToken } from "../components/swap/SelectToken";
 import { SwapInputTokensButton } from "../components/swap/SwapInputTokensButton";
-import { ERC20Token, ExternalActionId } from "@gurge/sdk";
+import { Token } from "../types";
+import { ExternalActionId } from "@gurge/sdk";
 import { useUniswapPrice } from "../hooks/useUniswapPrice";
 import { useSwap } from "../hooks/useSwap";
 import { useAppContext } from "../AppContext";
@@ -22,8 +23,8 @@ export const Swap = () => {
   const { hinkal } = useAppContext();
 
   const [inSwapAmount, setInSwapAmount] = useState("");
-  const [inSwapToken, setInSwapToken] = useState<ERC20Token | undefined>();
-  const [outSwapToken, setOutSwapToken] = useState<ERC20Token | undefined>();
+  const [inSwapToken, setInSwapToken] = useState<Token | undefined>();
+  const [outSwapToken, setOutSwapToken] = useState<Token | undefined>();
   const [priceDetailsShown, setPriceDetailsShown] = useState(false);
   const [relayerInfoShown, setRelayerInfoShown] = useState(false);
 
@@ -136,9 +137,7 @@ export const Swap = () => {
                 swapToken={inSwapToken}
                 onTokenChange={(prev, cur) => {
                   setInSwapToken(cur);
-                  if (
-                    outSwapToken?.erc20TokenAddress === cur?.erc20TokenAddress
-                  )
+                  if (outSwapToken?.erc20TokenAddress === cur?.erc20TokenAddress)
                     setOutSwapToken(prev);
                 }}
                 disabled={isProcessing}

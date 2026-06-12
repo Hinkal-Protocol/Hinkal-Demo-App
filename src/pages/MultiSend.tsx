@@ -8,64 +8,34 @@ import {
 import toast from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { SelectToken } from "../components/swap/SelectToken";
-import { ERC20Token, ExternalActionId, getERC20Token } from "@gurge/sdk";
+import { ExternalActionId } from "@gurge/sdk";
 import { useAppContext } from "../AppContext";
 import { useMultiSend } from "../hooks/useMultiSend";
 import { SCHEDULE_OPTIONS } from "../constants/schedule.constants";
 import { ButtonGroupWithLabel } from "../utils/buttonGroupWithLabel";
 import { RecipientInputRow } from "../utils/recipientInfoRow";
 import { zeroAddress } from "../constants";
-import { getTokenData } from "../constants/token-data";
-import { ScheduleDelayOption } from "../types";
+import { Token, ScheduleDelayOption } from "../types";
 import { useFee } from "../hooks/useFee";
+import { isSameTokenAddress } from "../utils/token.utils";
 
 const NON_NATIVE_GAS_TOKENS = ["USDC", "USDT", "DAI"];
 
 export const MultiSend = () => {
-  const { hinkal, chainId } = useAppContext();
+  const { hinkal, chainId, erc20List } = useAppContext();
 
-  const [allowedTokens, setAllowedTokens] = useState<ERC20Token[]>([]);
+  const allowedTokens = useMemo(() => {
+    const nativeToken = erc20List.find(
+      (token) => token.erc20TokenAddress === zeroAddress,
+    );
+    const stablecoins = erc20List.filter((token) =>
+      NON_NATIVE_GAS_TOKENS.includes(token.symbol),
+    );
 
-  useEffect(() => {
-    let isCancelled = false;
+    return nativeToken ? [nativeToken, ...stablecoins] : stablecoins;
+  }, [erc20List]);
 
-    const loadAllowedTokens = async () => {
-      if (!chainId) {
-        if (!isCancelled) setAllowedTokens([]);
-        return;
-      }
-
-      const nativeToken = await getERC20Token(chainId, zeroAddress);
-
-      const tokenData = getTokenData(chainId);
-
-      const stablecoinsData = tokenData.filter((token) =>
-        NON_NATIVE_GAS_TOKENS.includes(token.symbol),
-      );
-
-      const stablecoins = (
-        await Promise.all(
-          stablecoinsData.map((token) =>
-            getERC20Token(chainId, token.erc20TokenAddress),
-          ),
-        )
-      ).filter((token) => token !== undefined);
-
-      if (!isCancelled) {
-        setAllowedTokens(
-          nativeToken ? [nativeToken, ...stablecoins] : stablecoins,
-        );
-      }
-    };
-
-    loadAllowedTokens();
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [chainId]);
-
-  const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
+  const [selectedToken, setSelectedToken] = useState<Token | undefined>(
     undefined,
   );
 
@@ -117,10 +87,8 @@ export const MultiSend = () => {
     }
 
     if (selectedToken) {
-      const isTokenStillValid = allowedTokens.some(
-        (token) =>
-          token.erc20TokenAddress.toLowerCase() ===
-          selectedToken.erc20TokenAddress.toLowerCase(),
+      const isTokenStillValid = allowedTokens.some((token) =>
+        isSameTokenAddress(token.erc20TokenAddress, selectedToken.erc20TokenAddress),
       );
 
       if (!isTokenStillValid) setSelectedToken(allowedTokens[0] || undefined);
@@ -183,10 +151,11 @@ export const MultiSend = () => {
             onTokenChange={(prev, cur) => setSelectedToken(cur)}
             disabled={isProcessing}
             tokenFilter={(token) =>
-              allowedTokens.some(
-                (allowedToken) =>
-                  allowedToken.erc20TokenAddress.toLowerCase() ===
-                  token.erc20TokenAddress.toLowerCase(),
+              allowedTokens.some((allowedToken) =>
+                isSameTokenAddress(
+                  allowedToken.erc20TokenAddress,
+                  token.erc20TokenAddress,
+                ),
               )
             }
           />

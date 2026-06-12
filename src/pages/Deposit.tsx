@@ -5,7 +5,7 @@ import {
   useMemo,
   useEffect,
 } from "react";
-import { ERC20Token } from "@gurge/sdk";
+import { Token } from "../types";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
@@ -16,7 +16,7 @@ import { getPublicBalanceByTokenAddress } from "../utils/getPublicBalanceByToken
 export const Deposit = () => {
   const { hinkal, chainId } = useAppContext();
 
-  const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
+  const [selectedToken, setSelectedToken] = useState<Token | undefined>(
     undefined,
   );
   const [depositAmount, setDepositAmount] = useState<string>("");
@@ -58,7 +58,11 @@ export const Deposit = () => {
       setIsProcessing(true);
       const amountInWei = getAmountInWei(selectedToken, depositAmount);
 
-      const result = await hinkal.deposit([selectedToken], [amountInWei]);
+      const result = await hinkal.deposit(
+        chainId,
+        [selectedToken.erc20TokenAddress],
+        [amountInWei],
+      );
 
       if (result && typeof result === "object" && "hash" in result)
         await hinkal.waitForTransaction(chainId, result.hash);

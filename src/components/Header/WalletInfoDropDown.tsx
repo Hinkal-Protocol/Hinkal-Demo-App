@@ -8,16 +8,15 @@ import { reloadPage } from "../../utils/pageReload";
 import { WalletInfoBalance } from "./WalletInfoBalance";
 import { useAppContext } from "../../AppContext";
 import { zeroAddress } from "../../constants";
+import { findToken } from "../../utils/token.utils";
 
 const filterTokenBalances = (tokenBalances: TokenBalance[]) => {
   const nonZeroBalances = [...tokenBalances]
-    .sort((a, b) =>
-      a.token.erc20TokenAddress < b.token.erc20TokenAddress ? -1 : 1,
-    )
+    .sort((a, b) => (a.erc20Address < b.erc20Address ? -1 : 1))
     .filter((tokenBalance) => tokenBalance.balance !== 0n);
   if (nonZeroBalances.length === 0)
     return tokenBalances.filter(
-      (tokenBalance) => tokenBalance.token.erc20TokenAddress === zeroAddress,
+      (tokenBalance) => tokenBalance.erc20Address === zeroAddress,
     );
   return nonZeroBalances;
 };
@@ -27,15 +26,25 @@ export const WalletInfoDropDown = () => {
     useAppContext();
 
   const nativeToken = useMemo(
-    () => erc20List.find((t) => t.erc20TokenAddress === zeroAddress),
+    () => findToken(erc20List, zeroAddress),
     [erc20List],
   );
 
-  const displayBalances = useMemo(() => {
+  const displayBalances = useMemo((): TokenBalance[] => {
     if (!chainId) return [];
-    return privateBalancesWithUSD[chainId]?.length === 0 && nativeToken
-      ? [{ token: nativeToken, balance: 0n }]
-      : filterTokenBalances(privateBalancesWithUSD[chainId] || []);
+    const chainBalances = privateBalancesWithUSD[chainId] || [];
+
+    if (chainBalances.length === 0 && nativeToken) {
+      return [
+        {
+          chainId,
+          erc20Address: nativeToken.erc20TokenAddress,
+          balance: 0n,
+        },
+      ];
+    }
+
+    return filterTokenBalances(chainBalances);
   }, [privateBalancesWithUSD, nativeToken, chainId]);
 
   const handleCopyPublicAddress = async () => {
@@ -82,7 +91,7 @@ export const WalletInfoDropDown = () => {
           displayBalances.map((tokenBalance) => (
             <WalletInfoBalance
               tokenBalance={tokenBalance}
-              key={tokenBalance.token.erc20TokenAddress}
+              key={tokenBalance.erc20Address}
             />
           ))
         )}

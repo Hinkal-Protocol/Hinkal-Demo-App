@@ -1,10 +1,4 @@
-import {
-  ERC20Token,
-  Hinkal,
-  PrivateBalancesState,
-  getERC20Token,
-  refreshBalance,
-} from "@gurge/sdk";
+import { Hinkal, PrivateBalancesState, refreshBalance } from "@gurge/sdk";
 import {
   Dispatch,
   FC,
@@ -18,7 +12,7 @@ import {
   useSyncExternalStore,
 } from "react";
 import { getTokenData } from "./constants/token-data";
-import { Network } from "./types";
+import { Network, Token } from "./types";
 import { networkRegistry } from "./constants/networkRegistry";
 
 const emptyPrivateBalances: PrivateBalancesState = {};
@@ -32,7 +26,7 @@ type AppContextArgumnets = {
   setSelectedNetwork: (net: Network) => void;
   dataLoaded: boolean;
   setDataLoaded: (val: boolean) => void;
-  erc20List: ERC20Token[];
+  erc20List: Token[];
   privateBalancesWithUSD: PrivateBalancesState;
   recipientInfo: string;
 };
@@ -64,7 +58,10 @@ export const AppContextProvider: FC<AppContextProps> = ({
     undefined,
   );
 
-  const [erc20List, setErc20List] = useState<ERC20Token[]>([]);
+  const erc20List = useMemo(
+    () => (chainId ? getTokenData(chainId) : []),
+    [chainId],
+  );
 
   const privateBalancesWithUSD = useSyncExternalStore(
     (onChange) => {
@@ -81,33 +78,6 @@ export const AppContextProvider: FC<AppContextProps> = ({
     const network = networkList.find((net) => net.chainId === chainId);
     setSelectedNetwork(network);
   }, [chainId, networkList]);
-
-  useEffect(() => {
-    let isCancelled = false;
-
-    const loadErc20List = async () => {
-      if (!chainId) {
-        if (!isCancelled) setErc20List([]);
-        return;
-      }
-
-      const tokenData = getTokenData(chainId);
-      const tokens = await Promise.all(
-        tokenData.map((token) =>
-          getERC20Token(chainId, token.erc20TokenAddress),
-        ),
-      );
-
-      if (!isCancelled)
-        setErc20List(tokens.filter((token) => token !== undefined));
-    };
-
-    loadErc20List();
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [chainId]);
 
   useEffect(() => {
     if (!dataLoaded) return;

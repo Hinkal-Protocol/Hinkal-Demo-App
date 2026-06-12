@@ -1,15 +1,15 @@
-import { ERC20Token } from "@gurge/sdk";
 import { ReactNode, SetStateAction, useEffect, useState } from "react";
 import { Modal } from "../Modal";
 import { TokenDropdownButton } from "./TokenDropdownButton";
 import { useAppContext } from "../../AppContext";
+import { Token } from "../../types";
 
 interface TokenDropdownProps {
   isTokenSelectShown: boolean;
   setIsTokenSelectShown: (param: SetStateAction<boolean>) => void;
-  swapToken?: ERC20Token;
-  onTokenChange: (oldToken?: ERC20Token, newToken?: ERC20Token) => void;
-  tokenFilter?: (arg: ERC20Token) => boolean;
+  swapToken?: Token;
+  onTokenChange: (oldToken?: Token, newToken?: Token) => void;
+  tokenFilter?: (arg: Token) => boolean;
 }
 
 const splitTokenButtonsIntoRows = (

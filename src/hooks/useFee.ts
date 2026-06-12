@@ -1,14 +1,10 @@
-import { useState, useCallback, useEffect } from "react";
-import {
-  ERC20Token,
-  ExternalActionId,
-  FeeStructure,
-  getFeeStructure,
-} from "@gurge/sdk";
+import { useState, useEffect } from "react";
+import { ExternalActionId, FeeStructure, getFeeStructure } from "@gurge/sdk";
 import { useAppContext } from "../AppContext";
+import { Token } from "../types";
 
 export const useFee = (
-  feeToken: ERC20Token | undefined,
+  feeToken: Token | undefined,
   actionId: ExternalActionId,
   tokenAddresses: (string | undefined)[],
 ) => {
@@ -28,7 +24,9 @@ export const useFee = (
         const result = await getFeeStructure(
           chainId,
           feeToken.erc20TokenAddress,
-          tokenAddresses.filter((address) => address !== undefined),
+          tokenAddresses.filter(
+            (address): address is string => address !== undefined,
+          ),
           actionId,
         );
         if (!isCancelled) setFeeStructure(result);

@@ -1,9 +1,9 @@
-import { ERC20Token } from "@gurge/sdk";
+import { Token } from "../types";
 
 interface FeeDisplayProps {
   fee: bigint | undefined;
   isFeeLoading: boolean;
-  selectedToken?: ERC20Token;
+  selectedToken?: Token;
 }
 
 export const FeeDisplay = ({

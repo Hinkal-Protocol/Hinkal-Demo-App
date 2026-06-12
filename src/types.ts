@@ -19,3 +19,12 @@ export enum ScheduleDelayOption {
   ONE_HOUR = "1hr",
   TWENTY_FOUR_HOURS = "24hrs",
 }
+
+export type Token = {
+  chainId: number;
+  erc20TokenAddress: string;
+  name: string;
+  symbol: string;
+  decimals: number;
+  logoURI?: string;
+};

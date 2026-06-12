@@ -1,11 +1,12 @@
-import { ERC20Token, getUniswapPrice } from "@gurge/sdk";
+import { getUniswapPrice } from "@gurge/sdk";
 import { useEffect, useState } from "react";
 import { useAppContext } from "../AppContext";
+import { Token } from "../types";
 
 type UseSwapPriceParams = {
   inSwapAmount: string;
-  inSwapToken?: ERC20Token;
-  outSwapToken?: ERC20Token;
+  inSwapToken?: Token;
+  outSwapToken?: Token;
   enabled?: boolean;
 };
 
@@ -35,10 +36,9 @@ export const useUniswapPrice = ({
           hinkal,
           chainId,
           inSwapAmount,
-          inSwapToken,
-          outSwapToken,
+          inSwapToken.erc20TokenAddress,
+          outSwapToken.erc20TokenAddress,
         );
-        console.log({ priceDict });
         setPrice(priceDict.tokenPrice);
         setSwapData(priceDict.poolFee);
       } catch (err: unknown) {
