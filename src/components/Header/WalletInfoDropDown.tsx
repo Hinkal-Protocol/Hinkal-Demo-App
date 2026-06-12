@@ -22,7 +22,7 @@ const filterTokenBalances = (tokenBalances: TokenBalance[]) => {
 };
 
 export const WalletInfoDropDown = () => {
-  const { privateBalancesWithUSD, hinkal, erc20List, chainId, recipientInfo } =
+  const { chainBalances, hinkal, erc20List, chainId, recipientInfo } =
     useAppContext();
 
   const nativeToken = useMemo(
@@ -32,7 +32,6 @@ export const WalletInfoDropDown = () => {
 
   const displayBalances = useMemo((): TokenBalance[] => {
     if (!chainId) return [];
-    const chainBalances = privateBalancesWithUSD[chainId] || [];
 
     if (chainBalances.length === 0 && nativeToken) {
       return [
@@ -45,7 +44,7 @@ export const WalletInfoDropDown = () => {
     }
 
     return filterTokenBalances(chainBalances);
-  }, [privateBalancesWithUSD, nativeToken, chainId]);
+  }, [chainBalances, nativeToken, chainId]);
 
   const handleCopyPublicAddress = async () => {
     try {
@@ -76,13 +75,13 @@ export const WalletInfoDropDown = () => {
   };
 
   return (
-    <div className="absolute min-w-max top-20 md:top-2 left-0 md:left-auto right-0 bg-[#272B30] rounded-xl shadow-metamask font-pubsans p-4 items-center max-content">
+    <div className="absolute min-w-max top-20 md:top-2 left-0 md:left-auto right-0 bg-hinkal-blue-900 rounded-xl shadow-metamask font-generalSans p-4 items-center max-content">
       <div className="flex items-center space-x-4">
         <div className="w-[26px]" />
-        <p className="text-[#abaeaf] text-[12px] text-left">Balance</p>
+        <p className="text-hinkal-white-300 text-[12px] text-left">Balance</p>
       </div>
       <div className="flex flex-col justify-center gap-4 mb-[10%]">
-        {chainId && privateBalancesWithUSD[chainId]?.length === 0 ? (
+        {chainId && chainBalances.length === 0 ? (
           <div className="flex items-center gap-2 animate-pulse">
             <div className="w-6 h-6 rounded-full bg-gray-100" />
             <div className="h-4 w-24 rounded bg-gray-100" />
@@ -97,7 +96,7 @@ export const WalletInfoDropDown = () => {
         )}
       </div>
 
-      <div className="border-t-2 md:text-[15px] border-[#36393D] flex flex-col">
+      <div className="border-t-2 md:text-[15px] border-hinkal-blue-900 flex flex-col">
         <button type="button" onClick={handleCopyPublicAddress}>
           <div className="flex items-center mt-2 text-white text-[14px] md:w-[9.5rem]">
             <div className="flex justify-center items-center w-[25px] h-[25px]">

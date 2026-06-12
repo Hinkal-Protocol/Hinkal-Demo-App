@@ -52,6 +52,12 @@ export const Deposit = () => {
     return Number(getAmountInToken(selectedToken, publicBalance)).toFixed(6);
   }, [publicBalance, selectedToken]);
 
+  useEffect(() => {
+    if (!chainId) return;
+    setSelectedToken(undefined);
+    setDepositAmount("");
+  }, [chainId]);
+
   const handleDeposit = useCallback(async () => {
     try {
       if (!hinkal || !chainId || !selectedToken) return;
@@ -102,7 +108,7 @@ export const Deposit = () => {
             Available: {publicBalanceDisplay} {selectedToken?.symbol}
           </p>
         )}
-        <div className="w-[90%] mx-auto mb-6 mt-6 h-[1px] bg-[#272B30]" />
+        <div className="w-[90%] mx-auto mb-6 mt-6 h-[1px] bg-hinkal-blue-900" />
         <div className="border-solid">
           <button
             type="submit"
@@ -110,8 +116,8 @@ export const Deposit = () => {
             onClick={handleDeposit}
             className={`w-[90%] ml-[5%] mb-3 md:mx-[5%] rounded-lg h-10 text-sm font-semibold outline-none ${
               !isDisabled
-                ? "bg-primary text-white hover:bg-[#4d32fa] duration-200"
-                : "bg-[#37363d] text-[#848688] cursor-not-allowed"
+                ? "bg-primary text-white hover:bg-hinkal-purple-200 transition-all duration-300"
+                : "bg-hinkal-blue-900 text-hinkal-gray-200 cursor-not-allowed"
             } `}
           >
             {isProcessing ? (

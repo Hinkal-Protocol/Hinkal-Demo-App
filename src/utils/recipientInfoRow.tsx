@@ -23,12 +23,12 @@ export const RecipientInputRow: React.FC<RecipientInputRowProps> = ({
     <input
       type="text"
       placeholder={addressPlaceholder}
-      className="flex-1 bg-[#272B30] h-12 rounded-lg text-[16px] px-3 outline-none placeholder:text-[13.5px] text-white"
+      className="flex-1 bg-hinkal-blue-900 h-12 rounded-lg text-[16px] px-3 outline-none placeholder:text-[13.5px] text-white"
       disabled={disabled}
       onChange={onAddressChange}
       value={addressValue}
     />
-    <div className="flex items-center bg-[#272B30] h-12 rounded-lg px-3 min-w-[120px]">
+    <div className="flex items-center bg-hinkal-blue-900 h-12 rounded-lg px-3 min-w-[120px]">
       <input
         type="text"
         placeholder={amountPlaceholder}

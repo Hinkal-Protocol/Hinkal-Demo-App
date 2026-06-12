@@ -16,9 +16,11 @@ import { Token } from "../types";
 import { ExternalActionId } from "@gurge/sdk";
 import { useFee } from "../hooks/useFee";
 import { FeeDisplay } from "../components/FeeDisplay";
+import { getShieldedBalanceWei } from "../utils/balance.utils";
+import { getAmountInWei } from "../utils/amount.utils";
 
 export const Withdraw = () => {
-  const { hinkal } = useAppContext();
+  const { hinkal, chainId, chainBalances } = useAppContext();
 
   const { withdraw, isProcessing } = useWithdraw({
     hinkal,
@@ -27,9 +29,7 @@ export const Withdraw = () => {
       toast.error(message, { id: message });
     },
     onSuccess: async () => {
-      toast.success(
-        "You have successfully withdrawn. Balance will update in several seconds",
-      );
+      toast.success("Withdraw confirmed");
     },
   });
 
@@ -50,6 +50,26 @@ export const Withdraw = () => {
     ExternalActionId.Transact,
     tokenAddresses,
   );
+
+  useEffect(() => {
+    if (!chainId) return;
+    setSelectedToken(undefined);
+    setWithdrawAmount("");
+    setRecipientAddress("");
+    setIsRelayerOff(false);
+  }, [chainId]);
+
+  const exceedsBalance = useMemo(() => {
+    if (!selectedToken || !withdrawAmount || !chainId) return false;
+    try {
+      return (
+        getAmountInWei(selectedToken, withdrawAmount) >
+        getShieldedBalanceWei(chainBalances, selectedToken)
+      );
+    } catch {
+      return false;
+    }
+  }, [selectedToken, withdrawAmount, chainBalances, chainId]);
 
   const handleWithdraw = useCallback(() => {
     if (!selectedToken) return;
@@ -85,8 +105,16 @@ export const Withdraw = () => {
       !selectedToken ||
       !withdrawAmount ||
       !recipientAddress ||
+      isProcessing ||
+      exceedsBalance,
+    [
+      hinkal,
+      selectedToken,
+      withdrawAmount,
+      recipientAddress,
       isProcessing,
-    [hinkal, selectedToken, withdrawAmount, recipientAddress, isProcessing],
+      exceedsBalance,
+    ],
   );
 
   return (
@@ -97,6 +125,7 @@ export const Withdraw = () => {
           setTokenAmount={setWithdrawAmount}
           selectedToken={selectedToken}
           setSelectedToken={setSelectedToken}
+          withShieldedBalance
         />
         <div className="mt-[-15px] text-white">
           <label
@@ -109,7 +138,7 @@ export const Withdraw = () => {
           <input
             type="text"
             placeholder="Please paste address here"
-            className="bg-[#272B30] h-10 w-[90%] ml-[5%] rounded-lg mb-4 pl-2 outline-none placeholder:text-[13.5px] mt-1"
+            className="bg-hinkal-blue-900 h-10 w-[90%] ml-[5%] rounded-lg mb-4 pl-2 outline-none placeholder:text-[13.5px] mt-1 text-white"
             disabled={!withdraw}
             onChange={setRecipientAddressHandler}
             value={recipientAddress}
@@ -133,7 +162,12 @@ export const Withdraw = () => {
           />
           <ToggleSwitch isOff={isRelayerOff} setIsOff={setIsRelayerOff} />
         </div>
-        <div className="w-[90%] mx-auto mb-4 mt-6 h-[1px] bg-[#272B30]" />
+        {exceedsBalance && (
+          <p className="w-[90%] mx-auto mt-2 text-sm text-red-500">
+            Insufficient balance
+          </p>
+        )}
+        <div className="w-[90%] mx-auto mb-4 mt-6 h-[1px] bg-hinkal-blue-900" />
         <div className="border-solid">
           <button
             type="submit"
@@ -141,8 +175,8 @@ export const Withdraw = () => {
             onClick={handleWithdraw}
             className={`w-[90%] mb-3 mx-[5%] rounded-lg h-10 mt-3 text-sm font-semibold outline-none ${
               !isDisabled
-                ? "bg-primary text-white hover:bg-[#4d32fa] duration-200"
-                : "bg-[#37363d] text-[#848688] cursor-not-allowed"
+                ? "bg-primary text-white hover:bg-hinkal-purple-200 transition-all duration-300"
+                : "bg-hinkal-blue-900 text-hinkal-gray-200 cursor-not-allowed"
             } `}
           >
             {isProcessing ? (

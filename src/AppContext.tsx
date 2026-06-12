@@ -1,4 +1,9 @@
-import { Hinkal, PrivateBalancesState, refreshBalance } from "@gurge/sdk";
+import {
+  Hinkal,
+  PrivateBalancesState,
+  TokenBalanceWithUsd,
+  refreshBalance,
+} from "@gurge/sdk";
 import {
   Dispatch,
   FC,
@@ -28,6 +33,7 @@ type AppContextArgumnets = {
   setDataLoaded: (val: boolean) => void;
   erc20List: Token[];
   privateBalancesWithUSD: PrivateBalancesState;
+  chainBalances: TokenBalanceWithUsd[];
   recipientInfo: string;
 };
 
@@ -42,6 +48,7 @@ const AppContext = createContext<AppContextArgumnets>({
   setDataLoaded: (val: boolean) => {},
   erc20List: [],
   privateBalancesWithUSD: emptyPrivateBalances,
+  chainBalances: [],
   recipientInfo: "",
 });
 
@@ -70,6 +77,12 @@ export const AppContextProvider: FC<AppContextProps> = ({
     },
     () => hinkal?.privateBalancesWithUSD ?? emptyPrivateBalances,
   );
+
+  const chainBalances = useMemo(
+    () => (chainId ? privateBalancesWithUSD[chainId] ?? [] : []),
+    [chainId, privateBalancesWithUSD],
+  );
+
   const [recipientInfo, setRecipientInfo] = useState<string>("");
 
   const networkList = useMemo(() => Object.values(networkRegistry), []);
@@ -106,6 +119,7 @@ export const AppContextProvider: FC<AppContextProps> = ({
         setDataLoaded,
         erc20List,
         privateBalancesWithUSD,
+        chainBalances,
         recipientInfo,
       }}
     >

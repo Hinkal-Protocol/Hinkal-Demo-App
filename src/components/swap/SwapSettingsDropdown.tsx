@@ -36,7 +36,7 @@ export const SwapSettingsDropdown = ({
       styleProps="md:w-[24.9%] md:left-[22%] top-[50%] rounded-[13px] bg-transparent "
       stylePropsBg=" opacity-[0] "
     >
-      <div className="text-white font-poppins bg-[#202426] rounded-[13px] p-2">
+      <div className="text-white font-poppins bg-hinkal-blue-300 rounded-[13px] p-2">
         <p className="pl-2 text-[16px] font-[600]">Settings</p>
         <div className="p-2">
           <div className="flex gap-x-2">
@@ -94,7 +94,7 @@ export const SwapSettingsDropdown = ({
               type="text"
               placeholder="0.10"
               className={
-                'bg-[#272B30] w-full h-full text-white text-[14px] rounded-lg px-[25px] outline-none text-right '
+                'bg-hinkal-blue-900 w-full h-full text-white text-[14px] rounded-lg px-[25px] outline-none text-right '
               }
               onChange={(event) => setTokenAmountHandler(event, setSlippageTollerance)}
               value={slippageTolerance === '0.10' ? '' : slippageTolerance}

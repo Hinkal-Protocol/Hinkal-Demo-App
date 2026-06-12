@@ -15,18 +15,37 @@ import { ExternalActionId } from "@gurge/sdk";
 import { useUniswapPrice } from "../hooks/useUniswapPrice";
 import { useSwap } from "../hooks/useSwap";
 import { useAppContext } from "../AppContext";
-import { getAmountInToken } from "../utils/amount.utils";
+import { getAmountInToken, getAmountInWei } from "../utils/amount.utils";
 import { useFee } from "../hooks/useFee";
 import { FeeDisplay } from "../components/FeeDisplay";
+import { getShieldedBalanceWei } from "../utils/balance.utils";
 
 export const Swap = () => {
-  const { hinkal } = useAppContext();
+  const { hinkal, chainId, chainBalances } = useAppContext();
 
   const [inSwapAmount, setInSwapAmount] = useState("");
   const [inSwapToken, setInSwapToken] = useState<Token | undefined>();
   const [outSwapToken, setOutSwapToken] = useState<Token | undefined>();
-  const [priceDetailsShown, setPriceDetailsShown] = useState(false);
   const [relayerInfoShown, setRelayerInfoShown] = useState(false);
+
+  useEffect(() => {
+    if (!chainId) return;
+    setInSwapAmount("");
+    setInSwapToken(undefined);
+    setOutSwapToken(undefined);
+  }, [chainId]);
+
+  const exceedsBalance = useMemo(() => {
+    if (!inSwapToken || !inSwapAmount || !chainId) return false;
+    try {
+      return (
+        getAmountInWei(inSwapToken, inSwapAmount) >
+        getShieldedBalanceWei(chainBalances, inSwapToken)
+      );
+    } catch {
+      return false;
+    }
+  }, [inSwapToken, inSwapAmount, chainBalances, chainId]);
 
   const {
     isPriceLoading,
@@ -54,7 +73,7 @@ export const Swap = () => {
       toast.error(message, { id: message });
     },
     onSuccess: async () => {
-      toast.success("Swap successful! Balance will update in several seconds");
+      toast.success("Swap confirmed");
       setInSwapAmount("");
     },
   });
@@ -111,6 +130,7 @@ export const Swap = () => {
     if (!hinkal) return "Connect Wallet";
     if (!inSwapToken || !outSwapToken) return "Select a token";
     if (!inSwapAmount || Number(inSwapAmount) === 0) return "Enter an amount";
+    if (exceedsBalance) return "Insufficient balance";
     return "Swap";
   };
 
@@ -122,11 +142,11 @@ export const Swap = () => {
         <p className="">Swap</p>
       </div>
       <div className="flex flex-col gap-y-1 mb-4">
-        <div className="flex items-center justify-center bg-[#272B30] w-[96%] mx-auto rounded-xl py-5">
+        <div className="flex items-center justify-center bg-hinkal-blue-900 w-[96%] mx-auto rounded-xl py-5">
           <input
             type="text"
             placeholder="0"
-            className="w-[96%] grow bg-transparent rounded-lg ml-[5%] text-[16px] pl-2 outline-none placeholder:text-[13.5px] text-white text-4xl placeholder:text-4xl"
+            className="w-[96%] grow bg-transparent rounded-lg ml-[5%] text-[20px] pl-2 outline-none placeholder:text-[20px] text-white text-4xl placeholder:text-4xl"
             disabled={isProcessing}
             onChange={(event) => setTokenAmountHandler(event, setInSwapAmount)}
             value={inSwapAmount}
@@ -137,7 +157,9 @@ export const Swap = () => {
                 swapToken={inSwapToken}
                 onTokenChange={(prev, cur) => {
                   setInSwapToken(cur);
-                  if (outSwapToken?.erc20TokenAddress === cur?.erc20TokenAddress)
+                  if (
+                    outSwapToken?.erc20TokenAddress === cur?.erc20TokenAddress
+                  )
                     setOutSwapToken(prev);
                 }}
                 disabled={isProcessing}
@@ -151,7 +173,7 @@ export const Swap = () => {
             setOutSwapToken(inSwapToken);
           }}
         />
-        <div className="bg-[#272B30] flex w-[96%] mx-auto rounded-xl py-5">
+        <div className="bg-hinkal-blue-900 flex w-[96%] mx-auto rounded-xl py-5">
           <input
             type="text"
             placeholder="0"
@@ -177,10 +199,7 @@ export const Swap = () => {
           </div>
         </div>
         {(isReadyForSwap || isPriceLoading) && (
-          <div
-            onClick={() => setPriceDetailsShown((prev) => !prev)}
-            className="bg-[#272B30] w-[96%] mx-auto rounded-xl py-5"
-          >
+          <div className="bg-hinkal-blue-900 w-[96%] mx-auto rounded-xl py-5">
             <div className="flex justify-between items-center mr-[6%]">
               <div className="mx-[6%] flex items-center gap-x-2">
                 {isPriceLoading ? (
@@ -195,11 +214,6 @@ export const Swap = () => {
                   </span>
                 )}
               </div>
-              <i
-                className={`bi bi-chevron-${
-                  priceDetailsShown ? "up" : "down"
-                } font-bold`}
-              />
             </div>
           </div>
         )}
@@ -221,7 +235,7 @@ export const Swap = () => {
           setShowDetails={setRelayerInfoShown}
         />
       </div>
-      <div className="w-[90%] mx-auto mb-4 mt-[20px] h-[1px] bg-[#272B30]" />
+      <div className="w-[90%] mx-auto mb-4 mt-[20px] h-[1px] bg-hinkal-blue-900" />
       <div className="border-solid">
         <button
           type="button"
@@ -229,8 +243,8 @@ export const Swap = () => {
           onClick={handleSwap}
           className={`w-[90%] ml-[5%] mb-3 md:mx-[5%] rounded-lg h-10 mt-3 text-sm font-semibold outline-none ${
             swapButtonText() === "Swap" && !isProcessing
-              ? "bg-primary text-white hover:bg-[#4d32fa] duration-200"
-              : "bg-[#37363d] text-[#848688] cursor-not-allowed"
+              ? "bg-primary text-white hover:bg-hinkal-purple-200 transition-all duration-300"
+              : "bg-hinkal-blue-900 text-hinkal-gray-200 cursor-not-allowed"
           }`}
         >
           {isProcessing ? (

@@ -16,7 +16,7 @@ export const TabButton = ({
   if (disabled) {
     return (
       <div
-        className="flex-1 text-[#5a5a60] pb-1 opacity-60 cursor-not-allowed"
+        className="flex-1 text-hinkal-gray-300 pb-1 opacity-60 cursor-not-allowed"
         title={disabledTooltip}
       >
         <button
@@ -34,7 +34,7 @@ export const TabButton = ({
       className={`${
         isActive
           ? "text-white border-b-primary border-b-[2px] pb-1"
-          : "cursor-pointer hover:border-b-[2px] border-b-[#5f4ecd7b] text-[#bab9be] pb-1"
+          : "cursor-pointer hover:border-b-[2px] border-b-[#5f4ecd7b] text-hinkal-white-300 pb-1"
       } hover:border-b-[2px] flex-1 `}
     >
       <button

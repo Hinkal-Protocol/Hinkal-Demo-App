@@ -81,6 +81,13 @@ export const MultiSend = () => {
   });
 
   useEffect(() => {
+    setAddress1("");
+    setAmount1("");
+    setAddress2("");
+    setAmount2("");
+  }, [chainId]);
+
+  useEffect(() => {
     if (!chainId) {
       setSelectedToken(undefined);
       return;
@@ -88,7 +95,10 @@ export const MultiSend = () => {
 
     if (selectedToken) {
       const isTokenStillValid = allowedTokens.some((token) =>
-        isSameTokenAddress(token.erc20TokenAddress, selectedToken.erc20TokenAddress),
+        isSameTokenAddress(
+          token.erc20TokenAddress,
+          selectedToken.erc20TokenAddress,
+        ),
       );
 
       if (!isTokenStillValid) setSelectedToken(allowedTokens[0] || undefined);
@@ -206,8 +216,8 @@ export const MultiSend = () => {
             onClick={handleMultiSend}
             className={`w-[90%] mb-3 mx-[5%] rounded-lg h-10 text-sm font-semibold outline-none ${
               !isDisabled
-                ? "bg-primary text-white hover:bg-[#4d32fa] duration-200"
-                : "bg-[#37363d] text-[#848688] cursor-not-allowed"
+                ? "bg-primary text-white hover:bg-hinkal-purple-200 transition-all duration-300"
+                : "bg-hinkal-blue-900 text-hinkal-gray-200 cursor-not-allowed"
             }`}
           >
             {isProcessing ? (
