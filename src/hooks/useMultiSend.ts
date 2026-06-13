@@ -7,10 +7,7 @@ import {
   processGasEstimates,
 } from "@hinkal/common";
 import { useAppContext } from "../AppContext";
-import {
-  convertScheduleToMs,
-  ScheduleOption,
-} from "../constants/schedule.constants";
+import { getTxScheduleTime, ScheduleOption } from "../constants/schedule.constants";
 
 interface ScheduleTxStatus {
   status: string;
@@ -120,7 +117,7 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
         setScheduleStatuses([]);
         setIsDepositing(true);
 
-        const txScheduleTime = Date.now() + convertScheduleToMs(schedule);
+        const txScheduleTime = getTxScheduleTime(schedule);
 
         const { depositTxHash, scheduleId: newScheduleId } =
           await hinkal.depositAndWithdrawExtended(

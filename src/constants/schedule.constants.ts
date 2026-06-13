@@ -18,3 +18,11 @@ export const convertScheduleToMs = (schedule: ScheduleOption): number => {
   };
   return scheduleMap[schedule];
 };
+
+export const getTxScheduleTime = (
+  schedule: ScheduleOption,
+): number | undefined => {
+  const delayMs = convertScheduleToMs(schedule);
+  if (delayMs === 0) return undefined;
+  return Math.floor(Date.now() / 1000) + delayMs / 1000;
+};
