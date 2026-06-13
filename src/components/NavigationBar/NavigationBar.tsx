@@ -61,6 +61,13 @@ export const NavigationBar = ({
             onClick={() => setActiveTab(AppTab.MultiSend)}
           />
         </div>
+        <div className={buttonClassName}>
+          <TabButton
+            isActive={activeTab === AppTab.WdkTest}
+            title="WDK Test"
+            onClick={() => setActiveTab(AppTab.WdkTest)}
+          />
+        </div>
       </div>
     </div>
   );

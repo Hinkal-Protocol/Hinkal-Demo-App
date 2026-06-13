@@ -4,4 +4,5 @@ export enum AppTab {
   Withdraw,
   Swap,
   MultiSend,
+  WdkTest,
 }

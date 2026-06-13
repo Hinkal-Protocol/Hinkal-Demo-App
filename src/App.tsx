@@ -10,6 +10,7 @@ import { Swap } from "./pages/Swap";
 import { Withdraw } from "./pages/Withdraw";
 import { Transfer } from "./pages/Transfer";
 import { MultiSend } from "./pages/MultiSend";
+import { WdkTest } from "./pages/WdkTest";
 
 const App = () => {
   const [activeTab, setActiveTab] = useState(AppTab.Deposit);
@@ -31,6 +32,7 @@ const App = () => {
               {activeTab === AppTab.Withdraw && <Withdraw />}
               {activeTab === AppTab.Swap && <Swap />}
               {activeTab === AppTab.MultiSend && <MultiSend />}
+              {activeTab === AppTab.WdkTest && <WdkTest />}
             </section>
           </main>
           <Footer />

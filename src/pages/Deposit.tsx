@@ -1,4 +1,4 @@
-import { SyntheticEvent, useCallback, useState, useMemo } from "react";
+import { SyntheticEvent, useCallback, useEffect, useState, useMemo } from "react";
 import {
   getAmountInWei,
   ERC20Token,

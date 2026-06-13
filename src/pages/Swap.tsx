@@ -1,4 +1,4 @@
-import { SyntheticEvent, useCallback, useMemo, useState } from "react";
+import { SyntheticEvent, useCallback, useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { InfoPanel } from "../components/InfoPanel";
 import { Spinner } from "../components/Spinner";
