@@ -12,7 +12,6 @@ import {
   ERC20Token,
   getERC20TokenBySymbol,
   getERC20Token,
-  getAmountInToken,
   getErrorMessage,
   ErrorCategory,
 } from "@hinkal/common";
@@ -58,24 +57,29 @@ export const MultiSend = () => {
   const [intervalBetweenTxs, setIntervalBetweenTxs] =
     useState<ScheduleOption>("instantly");
 
-  const { multiSend, isProcessing, fee, isFeeLoading, calculateFee } =
-    useMultiSend({
-      onError: (err) => {
-        const message = getErrorMessage(err, ErrorCategory.DEPOSIT);
-        if (message !== "Multi send failed") {
-          toast.error(message);
-        }
-      },
-      onSuccess: async () => {
-        toast.success("Multi send scheduled");
-        setAddress1("");
-        setAmount1("");
-        setAddress2("");
-        setAmount2("");
-        setTotalAmount("");
-        await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
-      },
-    });
+  const {
+    multiSend,
+    isDepositing,
+    scheduleId,
+    scheduleStatuses,
+    calculateFee,
+  } = useMultiSend({
+    onError: (err) => {
+      const message = getErrorMessage(err, ErrorCategory.DEPOSIT);
+      if (message !== "Multi send failed") {
+        toast.error(message);
+      }
+    },
+    onSuccess: async () => {
+      toast.success("Deposit confirmed");
+      setAddress1("");
+      setAmount1("");
+      setAddress2("");
+      setAmount2("");
+      setTotalAmount("");
+      await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
+    },
+  });
 
   useEffect(() => {
     setAddress1("");
@@ -147,14 +151,9 @@ export const MultiSend = () => {
       !amount1 ||
       !address2 ||
       !amount2 ||
-      isProcessing,
-    [hinkal, selectedToken, address1, amount1, address2, amount2, isProcessing],
+      isDepositing,
+    [hinkal, selectedToken, address1, amount1, address2, amount2, isDepositing],
   );
-
-  const feeDisplay = useMemo(() => {
-    if (!fee || !selectedToken) return "0.00";
-    return getAmountInToken(selectedToken, fee);
-  }, [fee, selectedToken]);
 
   return (
     <div className="text-white">
@@ -163,7 +162,7 @@ export const MultiSend = () => {
           <SelectToken
             swapToken={selectedToken}
             onTokenChange={(prev, cur) => setSelectedToken(cur)}
-            disabled={isProcessing}
+            disabled={isDepositing}
             tokenFilter={(token) =>
               allowedTokens.some(
                 (allowedToken) =>
@@ -179,7 +178,7 @@ export const MultiSend = () => {
           amountValue={amount1}
           onAddressChange={(e) => setAddress1(e.target.value)}
           onAmountChange={(event) => setAmountHandler(event, setAmount1)}
-          disabled={isProcessing}
+          disabled={isDepositing}
         />
 
         <RecipientInputRow
@@ -187,7 +186,7 @@ export const MultiSend = () => {
           amountValue={amount2}
           onAddressChange={(e) => setAddress2(e.target.value)}
           onAmountChange={(event) => setAmountHandler(event, setAmount2)}
-          disabled={isProcessing}
+          disabled={isDepositing}
         />
 
         <ButtonGroupWithLabel
@@ -195,7 +194,7 @@ export const MultiSend = () => {
           options={SCHEDULE_OPTIONS}
           selected={schedule}
           onSelect={(option) => setSchedule(option as ScheduleOption)}
-          disabled={isProcessing}
+          disabled={isDepositing}
         />
 
         <ButtonGroupWithLabel
@@ -203,7 +202,7 @@ export const MultiSend = () => {
           options={SCHEDULE_OPTIONS}
           selected={intervalBetweenTxs}
           onSelect={(option) => setIntervalBetweenTxs(option as ScheduleOption)}
-          disabled={isProcessing}
+          disabled={isDepositing}
         />
 
         <div className="border-solid">
@@ -217,9 +216,9 @@ export const MultiSend = () => {
                 : "bg-hinkal-blue-900 text-hinkal-gray-200 cursor-not-allowed"
             }`}
           >
-            {isProcessing ? (
+            {isDepositing ? (
               <div className="flex items-center justify-center gap-x-2">
-                <span>Sending</span> <Spinner />
+                <span>Depositing</span> <Spinner />
               </div>
             ) : (
               <span>Send</span>
@@ -227,6 +226,22 @@ export const MultiSend = () => {
           </button>
         </div>
       </form>
+
+      {scheduleId && (
+        <div className="w-[90%] mx-[5%] mt-2 p-3 rounded-lg bg-hinkal-blue-900 text-sm">
+          <p className="font-semibold mb-2">Scheduled sends</p>
+          {scheduleStatuses.length === 0 ? (
+            <p className="text-hinkal-gray-200">Loading status...</p>
+          ) : (
+            scheduleStatuses.map((tx, i) => (
+              <p key={i} className="text-hinkal-gray-200">
+                Send {i + 1}: {tx.status}
+                {tx.txHash ? ` (${tx.txHash.slice(0, 10)}...)` : ""}
+              </p>
+            ))
+          )}
+        </div>
+      )}
     </div>
   );
 };
