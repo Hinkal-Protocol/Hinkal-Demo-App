@@ -14,6 +14,8 @@ import {
   getERC20Token,
   getErrorMessage,
   ErrorCategory,
+  isTempo,
+  TEMPO_GAS_COST_TOKEN_SYMBOL_OPTIONS,
 } from "@hinkal/common";
 import { useAppContext } from "../AppContext";
 import { useMultiSend } from "../hooks/useMultiSend";
@@ -36,9 +38,13 @@ export const MultiSend = () => {
 
     const nativeToken = getERC20Token(ZERO_ADDRESS, chainId);
 
-    const stablecoins = NON_NATIVE_GAS_TOKENS.map((symbol) =>
-      getERC20TokenBySymbol(symbol, chainId),
-    ).filter((token): token is ERC20Token => token !== undefined);
+    const tokenSymbols = isTempo(chainId)
+      ? TEMPO_GAS_COST_TOKEN_SYMBOL_OPTIONS
+      : NON_NATIVE_GAS_TOKENS;
+
+    const stablecoins = tokenSymbols
+      .map((symbol) => getERC20TokenBySymbol(symbol, chainId))
+      .filter((token): token is ERC20Token => token !== undefined);
 
     return nativeToken ? [nativeToken, ...stablecoins] : stablecoins;
   }, [chainId]);
@@ -54,8 +60,6 @@ export const MultiSend = () => {
   const [amount2, setAmount2] = useState<string>("");
 
   const [schedule, setSchedule] = useState<ScheduleOption>("instantly");
-  const [intervalBetweenTxs, setIntervalBetweenTxs] =
-    useState<ScheduleOption>("instantly");
 
   const {
     multiSend,
@@ -194,14 +198,6 @@ export const MultiSend = () => {
           options={SCHEDULE_OPTIONS}
           selected={schedule}
           onSelect={(option) => setSchedule(option as ScheduleOption)}
-          disabled={isDepositing}
-        />
-
-        <ButtonGroupWithLabel
-          label="Interval Between Transactions"
-          options={SCHEDULE_OPTIONS}
-          selected={intervalBetweenTxs}
-          onSelect={(option) => setIntervalBetweenTxs(option as ScheduleOption)}
           disabled={isDepositing}
         />
 

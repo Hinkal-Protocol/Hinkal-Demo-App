@@ -1,10 +1,5 @@
 import { useState, useCallback } from "react";
-import {
-  ERC20Token,
-  getAmountInWei,
-  hinkalSwap,
-  ExternalActionId,
-} from "@hinkal/common";
+import { ERC20Token, getAmountInWei, ExternalActionId } from "@hinkal/common";
 import { useAppContext } from "../AppContext";
 
 type UseSwapOptions = {
@@ -40,10 +35,12 @@ export const useSwap = ({ onError, onSuccess }: UseSwapOptions = {}) => {
           [-amountInWei, expectedAmountOut],
           ExternalActionId.Uniswap,
           fee,
+          tokenIn.erc20TokenAddress,
         );
 
         onSuccess?.();
       } catch (err) {
+        console.error("hinkal.swap failed:", err);
         const error = err instanceof Error ? err : new Error("Swap failed");
         onError?.(error);
       } finally {

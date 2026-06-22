@@ -71,6 +71,7 @@ export const Deposit = () => {
           setTokenAmount={setDepositAmount}
           selectedToken={selectedToken}
           setSelectedToken={setSelectedToken}
+          withWalletBalance
         />
         <div className="w-[90%] mx-auto mb-6 mt-6 h-[1px] bg-hinkal-blue-900" />
         <div className="border-solid">
