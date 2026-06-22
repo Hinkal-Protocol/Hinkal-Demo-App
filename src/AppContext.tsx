@@ -33,6 +33,7 @@ type AppContextArgumnets = {
   balances: TokenBalance[];
   refreshBalances: (interval?: number) => Promise<void>;
   recipientInfo: string;
+  walletAddress: string;
 };
 
 const hinkalInstance = new Hinkal<Connector>();
@@ -51,6 +52,7 @@ const AppContext = createContext<AppContextArgumnets>({
   balances: [],
   refreshBalances: async () => {},
   recipientInfo: "",
+  walletAddress: "",
 });
 
 type AppContextProps = { children: ReactNode };
@@ -69,6 +71,7 @@ export const AppContextProvider: FC<AppContextProps> = ({
   const [balances, setBalances] = useState<TokenBalance[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [recipientInfo, setRecipientInfo] = useState<string>("");
+  const [walletAddress, setWalletAddress] = useState<string>("");
 
   const networkList = useMemo(() => Object.values(networkRegistry), []);
 
@@ -123,6 +126,26 @@ export const AppContextProvider: FC<AppContextProps> = ({
   }, [dataLoaded, hinkal]);
 
   useEffect(() => {
+    if (!dataLoaded) {
+      setWalletAddress("");
+      return;
+    }
+    let cancelled = false;
+    hinkal
+      .getEthereumAddress()
+      .then((address) => {
+        if (!cancelled) setWalletAddress(address ?? "");
+      })
+      .catch((error) => {
+        console.error("Error getting wallet address:", error);
+        if (!cancelled) setWalletAddress("");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [dataLoaded, hinkal, chainId]);
+
+  useEffect(() => {
     if (!dataLoaded) return;
 
     refreshBalances();
@@ -149,6 +172,7 @@ export const AppContextProvider: FC<AppContextProps> = ({
         balances,
         refreshBalances,
         recipientInfo,
+        walletAddress,
       }}
     >
       {children}

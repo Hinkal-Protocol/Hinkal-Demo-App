@@ -42,6 +42,7 @@ export const useUniswapPrice = ({
         setPrice(priceDict.tokenPrice);
         setSwapData(priceDict.poolFee);
       } catch (err: unknown) {
+        console.error("getUniswapPrice failed:", err);
         setPrice(undefined);
         setSwapData("");
       } finally {

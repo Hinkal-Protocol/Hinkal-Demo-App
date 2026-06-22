@@ -30,6 +30,7 @@ export const useTransfer = ({
           [token],
           [-amountInBigInt],
           recipientAddress,
+          token.erc20TokenAddress,
         );
 
         onSuccess?.();

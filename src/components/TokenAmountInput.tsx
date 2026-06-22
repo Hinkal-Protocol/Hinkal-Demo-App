@@ -1,10 +1,21 @@
 import { Listbox, Transition } from "@headlessui/react";
-import { ERC20Token, getAmountInToken } from "@hinkal/common";
-import { Fragment, SetStateAction, useEffect, useMemo } from "react";
+import { ERC20Token, getAmountInToken, zeroAddress } from "@hinkal/common";
+import { ethers } from "ethers";
+import {
+  Fragment,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import VectorDown from "../assets/VectorDown.svg";
 import { useAppContext } from "../AppContext";
 import { useShieldedUsdBalances } from "../hooks/useShieldedUsdBalances";
 import { getShieldedBalanceWei } from "../utils/balance.utils";
+import {
+  getErc20Balance,
+  getNativeBalance,
+} from "../utils/wallet-balance.utils";
 
 interface TokenAmountInputInterface {
   buttonWrapperStyles?: string;
@@ -13,6 +24,7 @@ interface TokenAmountInputInterface {
   selectedToken: ERC20Token | undefined;
   setSelectedToken: (param: SetStateAction<ERC20Token | undefined>) => void;
   withShieldedBalance?: boolean;
+  withWalletBalance?: boolean;
 }
 
 export const TokenAmountInput = ({
@@ -22,13 +34,63 @@ export const TokenAmountInput = ({
   selectedToken,
   setSelectedToken,
   withShieldedBalance = false,
+  withWalletBalance = false,
 }: TokenAmountInputInterface) => {
-  const { erc20List, balances, dataLoaded } = useAppContext();
+  const { erc20List, balances, dataLoaded, walletAddress, chainId } =
+    useAppContext();
   const { prices, isLoading: isPricesLoading } = useShieldedUsdBalances();
+  const [walletBalanceDisplay, setWalletBalanceDisplay] = useState<
+    string | null
+  >(null);
 
   useEffect(() => {
     if (erc20List.length > 0) setSelectedToken(erc20List[0]);
   }, [erc20List, setSelectedToken]);
+
+  const isNative =
+    selectedToken?.erc20TokenAddress.toLowerCase() === zeroAddress;
+
+  useEffect(() => {
+    if (!withWalletBalance) return;
+    let cancelled = false;
+
+    const loadBalance = async () => {
+      if (!walletAddress || !selectedToken || !chainId) {
+        setWalletBalanceDisplay(null);
+        return;
+      }
+      try {
+        const balance = isNative
+          ? await getNativeBalance(chainId, walletAddress)
+          : await getErc20Balance(
+              chainId,
+              selectedToken.erc20TokenAddress,
+              walletAddress,
+            );
+        if (!cancelled) {
+          setWalletBalanceDisplay(
+            `${Number(
+              ethers.formatUnits(balance, selectedToken.decimals),
+            ).toFixed(4)} ${selectedToken.symbol}`,
+          );
+        }
+      } catch {
+        if (!cancelled) setWalletBalanceDisplay(null);
+      }
+    };
+
+    loadBalance();
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    withWalletBalance,
+    walletAddress,
+    selectedToken,
+    chainId,
+    isNative,
+    balances,
+  ]);
 
   const shieldedBalanceDisplay = useMemo(() => {
     if (!selectedToken) return null;
@@ -71,7 +133,16 @@ export const TokenAmountInput = ({
 
   return (
     <div className="flex flex-col item-center justify-center">
-      {withShieldedBalance ? (
+      {withWalletBalance ? (
+        <div className="flex justify-between items-center pl-[5%] pr-[5%]">
+          <label className="text-white text-[14px] font-[300]">Token</label>
+          {walletBalanceDisplay && (
+            <span className="text-hinkal-gray-100 text-[12px]">
+              Wallet: {walletBalanceDisplay}
+            </span>
+          )}
+        </div>
+      ) : withShieldedBalance ? (
         <div className="flex justify-between items-center pl-[5%] pr-[5%]">
           <label className="text-white text-[14px] font-[300]">Token</label>
           {shieldedBalanceDisplay && (
