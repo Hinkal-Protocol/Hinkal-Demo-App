@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { FeeStructure, Hinkal } from "@gurge/sdk";
 import { getAmountInWei } from "../utils/amount.utils";
+import { waitForTransaction } from "../utils/waitForTransaction";
 import { useAppContext } from "../AppContext";
 import { Token } from "../types";
 
@@ -50,7 +51,7 @@ export const useWithdraw = ({
 
         const txHash = typeof tx === "string" ? tx : tx.hash;
 
-        await hinkal.waitForTransaction(chainId, txHash);
+        await waitForTransaction(chainId, txHash);
 
         onSuccess?.();
       } catch (err) {

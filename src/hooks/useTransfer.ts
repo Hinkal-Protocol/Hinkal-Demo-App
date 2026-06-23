@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { FeeStructure } from "@gurge/sdk";
 import { useAppContext } from "../AppContext";
 import { getAmountInWei } from "../utils/amount.utils";
+import { waitForTransaction } from "../utils/waitForTransaction";
 import { Token } from "../types";
 
 type UseTransferOptions = {
@@ -42,7 +43,7 @@ export const useTransfer = ({
           feeStructure,
         );
 
-        await hinkal.waitForTransaction(chainId, txHash);
+        await waitForTransaction(chainId, txHash);
 
         onSuccess?.();
       } catch (err) {

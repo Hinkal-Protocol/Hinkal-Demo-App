@@ -4,11 +4,8 @@ import { WagmiProvider } from "wagmi";
 import App from "./App";
 import { getWagmiConfig } from "./wagmi.config";
 import { AppContextProvider } from "./AppContext";
-import { preProcessing } from "@gurge/sdk";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TronWalletProvider } from "./components/TronWalletProvider";
-
-preProcessing();
 
 const queryClient = new QueryClient();
 

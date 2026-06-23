@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { ExternalActionId, FeeStructure } from "@gurge/sdk";
 import { useAppContext } from "../AppContext";
 import { getAmountInWei } from "../utils/amount.utils";
+import { waitForTransaction } from "../utils/waitForTransaction";
 import { Token } from "../types";
 
 type UseSwapOptions = {
@@ -44,7 +45,7 @@ export const useSwap = ({ onError, onSuccess }: UseSwapOptions = {}) => {
           feeStructure,
         );
 
-        await hinkal.waitForTransaction(chainId, txHash);
+        await waitForTransaction(chainId, txHash);
 
         onSuccess?.();
       } catch (err) {

@@ -1,12 +1,6 @@
-import { ExternalActionId } from "@gurge/sdk";
+import { EvmSwapPrices, ExternalActionId } from "@gurge/sdk";
 
-type EvmSwapPrices = {
-  uniswap: { tokenPrice: bigint; poolFee: string } | null;
-  odos: { outSwapAmountValue: bigint; odosDataValue: string } | null;
-  oneInch: { outSwapAmountValue: bigint; oneInchDataValue: string } | null;
-};
-
-type BestSwapQuote = {
+export type BestSwapQuote = {
   outSwapAmount: bigint;
   swapData: string;
   externalActionId: ExternalActionId;

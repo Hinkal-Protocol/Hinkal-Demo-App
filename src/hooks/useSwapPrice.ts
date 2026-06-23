@@ -1,4 +1,4 @@
-import { ExternalActionId, getEvmSwapPrices } from "@gurge/sdk";
+import { ExternalActionId } from "@gurge/sdk";
 import { useEffect, useState } from "react";
 import { useAppContext } from "../AppContext";
 import { Token } from "../types";
@@ -38,8 +38,7 @@ export const useSwapPrice = ({
         }
 
         setIsPriceLoading(true);
-        const quotes = await getEvmSwapPrices(
-          hinkal,
+        const quotes = await hinkal.getEvmSwapPrices(
           chainId,
           inSwapAmount,
           inSwapToken.erc20TokenAddress,

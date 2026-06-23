@@ -2,7 +2,6 @@ import {
   Hinkal,
   PrivateBalancesState,
   TokenBalanceWithUsd,
-  refreshBalance,
 } from "@gurge/sdk";
 import {
   Dispatch,
@@ -103,7 +102,7 @@ export const AppContextProvider: FC<AppContextProps> = ({
 
   useEffect(() => {
     if (!chainId || !hinkal) return;
-    refreshBalance({ chainIdToUpdate: chainId });
+    hinkal.refreshBalance({ chainIdToUpdate: chainId });
   }, [chainId, hinkal]);
 
   return (

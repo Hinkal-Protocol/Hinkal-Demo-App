@@ -50,7 +50,7 @@
     "yarn": "1.22.x"
   },
   "dependencies": {
-    "@gurge/sdk": "0.3.46",
+    "@gurge/sdk": "0.3.48",
     "@headlessui/react": "^1.7.5",
     "@tanstack/react-query": "^5.0.0",
     "@tronweb3/tronwallet-abstract-adapter": "^1.1.12",

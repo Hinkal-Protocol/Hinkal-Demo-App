@@ -12,6 +12,7 @@ import { TokenAmountInput } from "../components/TokenAmountInput";
 import { useAppContext } from "../AppContext";
 import { getAmountInToken, getAmountInWei } from "../utils/amount.utils";
 import { getPublicBalanceByTokenAddress } from "../utils/getPublicBalanceByToken";
+import { waitForTransaction } from "../utils/waitForTransaction";
 
 export const Deposit = () => {
   const { hinkal, chainId } = useAppContext();
@@ -71,7 +72,7 @@ export const Deposit = () => {
       );
 
       if (result && typeof result === "object" && "hash" in result)
-        await hinkal.waitForTransaction(chainId, result.hash);
+        await waitForTransaction(chainId, result.hash);
 
       toast.success(
         "Deposit successful! Balance will update in several seconds",

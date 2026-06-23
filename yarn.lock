@@ -962,9 +962,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gurge/sdk@npm:0.3.46":
-  version: 0.3.46
-  resolution: "@gurge/sdk@npm:0.3.46"
+"@gurge/sdk@npm:0.3.48":
+  version: 0.3.48
+  resolution: "@gurge/sdk@npm:0.3.48"
   dependencies:
     "@coral-xyz/anchor": "npm:^0.31.0"
     "@solana/spl-token": "npm:^0.4.14"
@@ -982,6 +982,7 @@ __metadata:
     lodash: "npm:^4.17.21"
     multiformats: "npm:^9.4.2"
     node-forge: "npm:^1.3.1"
+    poseidon-lite: "npm:^0.3.0"
     process: "npm:0.11.10"
     snarkjs: "npm:0.7.5"
     tronweb: "npm:^6.2.0"
@@ -989,14 +990,20 @@ __metadata:
     ua-parser-js: "npm:^1.0.37"
     uuid: "npm:^9.0.1"
   peerDependencies:
+    "@react-native-async-storage/async-storage": ^2.2.0
     "@walletconnect/utils": ^2.17.2
+    react-native-get-random-values: ^1.11.0
     wagmi: 2.13.3
   peerDependenciesMeta:
+    "@react-native-async-storage/async-storage":
+      optional: true
     "@walletconnect/utils":
+      optional: true
+    react-native-get-random-values:
       optional: true
     wagmi:
       optional: true
-  checksum: 10c0/04febf3ee7289b84c060f4b29b2cef032eee2d50cb6a80e730d20969898b5ebb330db5dea5327c91c3af642a65816459fd770a6e846b5a056e8f7ea0f666308a
+  checksum: 10c0/47b62f673a0fe7fa4e271dbda401b5e36babb7c1153cc0dd3138f05a903be34ea90f834d9c582b620e863bbda4b3c3ce07ac93956dcbdd9e4ea0f3f95f04cb9a
   languageName: node
   linkType: hard
 
@@ -9118,7 +9125,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "hinkal-demo-app@workspace:."
   dependencies:
-    "@gurge/sdk": "npm:0.3.46"
+    "@gurge/sdk": "npm:0.3.48"
     "@headlessui/react": "npm:^1.7.5"
     "@tanstack/react-query": "npm:^5.0.0"
     "@tronweb3/tronwallet-abstract-adapter": "npm:^1.1.12"
@@ -11824,6 +11831,13 @@ __metadata:
   bin:
     porto: dist/cli/bin/index.js
   checksum: 10c0/5653121258775e462d41eac68b241239ceaa622e1fe8eb398db488f5353bec34acdd7678fb2e11cab6908898204dedfc413ac0be260654f230d189deb1480987
+  languageName: node
+  linkType: hard
+
+"poseidon-lite@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "poseidon-lite@npm:0.3.0"
+  checksum: 10c0/03494ea69be0dc3ced055b7f1505ff73848002c68332d52a5cf5f00d1a657693317e1ffc790b84ccaf9a0f5f61bf05e1a453eab60c385c98701a6580edead49c
   languageName: node
   linkType: hard
 

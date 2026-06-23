@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ExternalActionId, FeeStructure, getFeeStructure } from "@gurge/sdk";
+import { ExternalActionId, FeeStructure } from "@gurge/sdk";
 import { useAppContext } from "../AppContext";
 import { Token } from "../types";
 
@@ -8,7 +8,7 @@ export const useFee = (
   actionId: ExternalActionId,
   tokenAddresses: (string | undefined)[],
 ) => {
-  const { chainId } = useAppContext();
+  const { hinkal, chainId } = useAppContext();
   const [feeStructure, setFeeStructure] = useState<FeeStructure | undefined>(
     undefined,
   );
@@ -18,10 +18,10 @@ export const useFee = (
     let isCancelled = false;
 
     const fetch = async () => {
-      if (!chainId || !feeToken) return;
+      if (!hinkal || !chainId || !feeToken) return;
       try {
         setIsFeeLoading(true);
-        const result = await getFeeStructure(
+        const result = await hinkal.getFeeStructure(
           chainId,
           feeToken.erc20TokenAddress,
           tokenAddresses.filter(
@@ -41,7 +41,7 @@ export const useFee = (
     return () => {
       isCancelled = true;
     };
-  }, [chainId, feeToken, actionId, tokenAddresses]);
+  }, [hinkal, chainId, feeToken, actionId, tokenAddresses]);
 
   return { feeStructure, isFeeLoading };
 };
