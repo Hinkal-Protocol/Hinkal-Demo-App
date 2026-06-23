@@ -20,6 +20,7 @@ export const useSwap = ({ onError, onSuccess }: UseSwapOptions = {}) => {
       amountIn: string,
       expectedAmountOut: bigint,
       swapData: string,
+      externalActionId: ExternalActionId,
       feeStructure?: FeeStructure,
     ) => {
       try {
@@ -37,7 +38,7 @@ export const useSwap = ({ onError, onSuccess }: UseSwapOptions = {}) => {
           chainId,
           [tokenIn.erc20TokenAddress, tokenOut.erc20TokenAddress],
           [-amountInWei, expectedAmountOut],
-          ExternalActionId.Uniswap,
+          externalActionId,
           swapData,
           undefined,
           feeStructure,

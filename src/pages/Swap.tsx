@@ -12,7 +12,7 @@ import { SelectToken } from "../components/swap/SelectToken";
 import { SwapInputTokensButton } from "../components/swap/SwapInputTokensButton";
 import { Token } from "../types";
 import { ExternalActionId } from "@gurge/sdk";
-import { useUniswapPrice } from "../hooks/useUniswapPrice";
+import { useSwapPrice } from "../hooks/useSwapPrice";
 import { useSwap } from "../hooks/useSwap";
 import { useAppContext } from "../AppContext";
 import { getAmountInToken, getAmountInWei } from "../utils/amount.utils";
@@ -51,7 +51,8 @@ export const Swap = () => {
     isPriceLoading,
     price: outSwapAmountWei,
     swapData,
-  } = useUniswapPrice({
+    externalActionId,
+  } = useSwapPrice({
     inSwapAmount,
     inSwapToken,
     outSwapToken,
@@ -63,7 +64,7 @@ export const Swap = () => {
 
   const { isFeeLoading, feeStructure } = useFee(
     inSwapToken,
-    ExternalActionId.Uniswap,
+    externalActionId ?? ExternalActionId.Uniswap,
     tokenAddresses,
   );
 
@@ -93,18 +94,20 @@ export const Swap = () => {
       outSwapAmountWei > 0n &&
       inSwapToken &&
       outSwapToken &&
-      swapData,
-    [inSwapAmount, inSwapToken, outSwapToken, outSwapAmountWei, swapData],
+      swapData &&
+      externalActionId,
+    [inSwapAmount, inSwapToken, outSwapToken, outSwapAmountWei, swapData, externalActionId],
   );
 
   const handleSwap = useCallback(async () => {
-    if (!inSwapToken || !outSwapToken || !outSwapAmountWei || !swapData) return;
+    if (!inSwapToken || !outSwapToken || !outSwapAmountWei || !swapData || !externalActionId) return;
     await swap(
       inSwapToken,
       outSwapToken,
       inSwapAmount,
       outSwapAmountWei,
       swapData,
+      externalActionId,
       feeStructure,
     );
   }, [
@@ -114,6 +117,7 @@ export const Swap = () => {
     inSwapAmount,
     outSwapAmountWei,
     swapData,
+    externalActionId,
     feeStructure,
   ]);
 
