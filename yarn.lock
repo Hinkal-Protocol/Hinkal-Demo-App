@@ -962,9 +962,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gurge/sdk@npm:0.3.122":
-  version: 0.3.122
-  resolution: "@gurge/sdk@npm:0.3.122"
+"@gurge/sdk@npm:0.3.150":
+  version: 0.3.150
+  resolution: "@gurge/sdk@npm:0.3.150"
   dependencies:
     "@coral-xyz/anchor": "npm:^0.31.0"
     "@solana/spl-token": "npm:^0.4.14"
@@ -974,7 +974,7 @@ __metadata:
     axios: "npm:^1.15.0"
     bs58: "npm:^6.0.0"
     buffer: "npm:6.0.3"
-    circomlibjs-hinkal-fork: "npm:^0.0.10"
+    circomlibjs-hinkal-fork: "npm:^0.0.11"
     dotenv: "npm:^16.4.5"
     ethers: "npm:^6.15.0"
     idb-keyval: "npm:6.2.1"
@@ -982,7 +982,6 @@ __metadata:
     lodash: "npm:^4.17.21"
     multiformats: "npm:^9.4.2"
     node-forge: "npm:^1.3.1"
-    poseidon-lite: "npm:^0.3.0"
     process: "npm:0.11.10"
     snarkjs: "npm:0.7.5"
     tronweb: "npm:^6.2.0"
@@ -997,7 +996,7 @@ __metadata:
       optional: true
     wagmi:
       optional: true
-  checksum: 10c0/f233b2542101d810ead30fd15cea1a641169e68c5e6dbb288d9e79f196b55a667d9813fdbf38fcb5e10f90af621d847782d76c87e72e6d0c707513dbf92009a1
+  checksum: 10c0/9c81835ce85a9deebd949cefce83a6edda574dfaa2aaf3ce2c7eb9877b9889a509577e1e120cd460752a361b67fb6bb315e1ec3a612ac7341a5c199fa36289ee
   languageName: node
   linkType: hard
 
@@ -6641,13 +6640,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"circomlibjs-hinkal-fork@npm:^0.0.10":
-  version: 0.0.10
-  resolution: "circomlibjs-hinkal-fork@npm:0.0.10"
+"circomlibjs-hinkal-fork@npm:^0.0.11":
+  version: 0.0.11
+  resolution: "circomlibjs-hinkal-fork@npm:0.0.11"
   dependencies:
     "@noble/hashes": "npm:^2.2.0"
     ffjavascript: "npm:^0.3.0"
-  checksum: 10c0/91cfb5555d6a0fcb41a3e60583f70fa38c96d4160e3fe3a5da7dce0e2137cbe3e365763477c73c50f9b9062f48bca0895a3cd29ad1840ee762bc4ebce78a24bd
+    poseidon-lite: "npm:^0.3.0"
+  checksum: 10c0/b587ae83b50485df30e800722685ee2e7745c9f965c69831a8580884a6e26faa505560ac0d2d8e9b07f8d9220430189b3b22e9a9ca0f9d13deb30ccae9c64ac0
   languageName: node
   linkType: hard
 
@@ -9119,7 +9119,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "hinkal-demo-app@workspace:."
   dependencies:
-    "@gurge/sdk": "npm:0.3.122"
+    "@gurge/sdk": "npm:0.3.150"
     "@headlessui/react": "npm:^1.7.5"
     "@tanstack/react-query": "npm:^5.0.0"
     "@tronweb3/tronwallet-abstract-adapter": "npm:^1.1.12"
