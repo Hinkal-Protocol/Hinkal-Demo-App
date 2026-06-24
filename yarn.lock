@@ -962,9 +962,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gurge/sdk@npm:0.3.48":
-  version: 0.3.48
-  resolution: "@gurge/sdk@npm:0.3.48"
+"@gurge/sdk@npm:0.3.122":
+  version: 0.3.122
+  resolution: "@gurge/sdk@npm:0.3.122"
   dependencies:
     "@coral-xyz/anchor": "npm:^0.31.0"
     "@solana/spl-token": "npm:^0.4.14"
@@ -990,20 +990,14 @@ __metadata:
     ua-parser-js: "npm:^1.0.37"
     uuid: "npm:^9.0.1"
   peerDependencies:
-    "@react-native-async-storage/async-storage": ^2.2.0
     "@walletconnect/utils": ^2.17.2
-    react-native-get-random-values: ^1.11.0
     wagmi: 2.13.3
   peerDependenciesMeta:
-    "@react-native-async-storage/async-storage":
-      optional: true
     "@walletconnect/utils":
-      optional: true
-    react-native-get-random-values:
       optional: true
     wagmi:
       optional: true
-  checksum: 10c0/47b62f673a0fe7fa4e271dbda401b5e36babb7c1153cc0dd3138f05a903be34ea90f834d9c582b620e863bbda4b3c3ce07ac93956dcbdd9e4ea0f3f95f04cb9a
+  checksum: 10c0/f233b2542101d810ead30fd15cea1a641169e68c5e6dbb288d9e79f196b55a667d9813fdbf38fcb5e10f90af621d847782d76c87e72e6d0c707513dbf92009a1
   languageName: node
   linkType: hard
 
@@ -9125,7 +9119,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "hinkal-demo-app@workspace:."
   dependencies:
-    "@gurge/sdk": "npm:0.3.48"
+    "@gurge/sdk": "npm:0.3.122"
     "@headlessui/react": "npm:^1.7.5"
     "@tanstack/react-query": "npm:^5.0.0"
     "@tronweb3/tronwallet-abstract-adapter": "npm:^1.1.12"
