@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   BasicHttpClient,
   chainIds,
+  evmHexToTronBase58Address,
   getScheduledTransactions,
   hashEthereumAddress,
   httpClient,
@@ -46,6 +47,9 @@ type PrivateSendAccount = {
   }) => Promise<{ hashes: string[] }>;
   stuckUtxoBalances?: () => Promise<{ token: string; balance: bigint }[]>;
   _prepareHinkal?: (token: string) => Promise<SolanaHinkalBundle>;
+  // Base WDK (non-private) TRC-20 / token transfer. Used to compare against
+  // privateSend on a fresh, unstaked account (no energy).
+  transfer?: (options: PrivateSendParams) => Promise<{ hash: string }>;
 };
 
 const CHAIN_DEFAULTS: Record<
@@ -64,6 +68,9 @@ const CHAIN_DEFAULTS: Record<
   },
   tron: {
     rpcUrl: "https://nile.trongrid.io",
+    // Switch to mainnet: use "https://api.trongrid.io" above.
+    // The wallet detects the chain from this URL (nile -> testnet, otherwise mainnet),
+    // so no other change is needed.
     token: "0xECa9bC828A3005B9a3b909f2cc5c2a54794DE05F",
     amount: "1000000",
   },
@@ -212,8 +219,8 @@ export const WdkTest = () => {
       if (chain === "tron") configureTronChain(rpcUrl);
       const account = await accountFor();
       const result = await callPrivateSend(account, {
-        token,
-        recipient,
+        token: token.trim(),
+        recipient: recipient.trim(),
         amount: BigInt(amount),
       });
       setStatus(
@@ -226,6 +233,36 @@ export const WdkTest = () => {
       );
     } finally {
       httpClient.setHttpClient(base);
+      setBusy(false);
+    }
+  };
+
+  // Plain WDK transfer (non-private). Compares against privateSend on a fresh,
+  // unstaked account: if this also fails for lack of energy, the issue is the
+  // base WDK/Tron tx path, not Hinkal's private send.
+  const sendPublic = async () => {
+    setBusy(true);
+    setStatus("sending (WDK transfer, non-private)...");
+    try {
+      if (chain === "tron") configureTronChain(rpcUrl);
+      const account = await accountFor();
+      if (typeof account.transfer !== "function") {
+        throw new Error("Account has no base WDK transfer method");
+      }
+      const result = await account.transfer({
+        token: token.trim(),
+        recipient: recipient.trim(),
+        amount: BigInt(amount),
+      });
+      setStatus(
+        `OK (WDK transfer): ${JSON.stringify(result, (_k, v) =>
+          typeof v === "bigint" ? v.toString() : v,
+        )}`,
+      );
+    } catch (err) {
+      const e = err as Error;
+      setStatus(`FAILED (WDK transfer): ${e.message}\n\nSTACK:\n${e.stack ?? "(no stack)"}`);
+    } finally {
       setBusy(false);
     }
   };
@@ -373,6 +410,14 @@ export const WdkTest = () => {
         disabled={busy}
       >
         Send privately ({PRIVATE_SEND_METHOD[chain]})
+      </button>
+
+      <button
+        className="bg-green-700 rounded p-2"
+        onClick={sendPublic}
+        disabled={busy}
+      >
+        WDK send (non-private, transfer)
       </button>
 
       {chain === "solana" && (

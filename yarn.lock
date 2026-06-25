@@ -2563,28 +2563,7 @@
     "@solana/rpc-types" "5.5.1"
     "@solana/transaction-messages" "5.5.1"
 
-"@solana/web3.js@1.98.0":
-  version "1.98.0"
-  resolved "https://registry.yarnpkg.com/@solana/web3.js/-/web3.js-1.98.0.tgz#21ecfe8198c10831df6f0cfde7f68370d0405917"
-  integrity sha512-nz3Q5OeyGFpFCR+erX2f6JPt3sKhzhYcSycBCSPkWjzSVDh/Rr1FqTVMRe58FKO16/ivTUcuJjeS5MyBvpkbzA==
-  dependencies:
-    "@babel/runtime" "^7.25.0"
-    "@noble/curves" "^1.4.2"
-    "@noble/hashes" "^1.4.0"
-    "@solana/buffer-layout" "^4.0.1"
-    agentkeepalive "^4.5.0"
-    bigint-buffer "^1.1.5"
-    bn.js "^5.2.1"
-    borsh "^0.7.0"
-    bs58 "^4.0.1"
-    buffer "6.0.3"
-    fast-stable-stringify "^1.0.0"
-    jayson "^4.1.1"
-    node-fetch "^2.7.0"
-    rpc-websockets "^9.0.2"
-    superstruct "^2.0.2"
-
-"@solana/web3.js@^1.32.0", "@solana/web3.js@^1.69.0", "@solana/web3.js@^1.98.4":
+"@solana/web3.js@^1.32.0", "@solana/web3.js@^1.69.0", "@solana/web3.js@^1.98.0", "@solana/web3.js@^1.98.4":
   version "1.98.4"
   resolved "https://registry.yarnpkg.com/@solana/web3.js/-/web3.js-1.98.4.tgz#df51d78be9d865181ec5138b4e699d48e6895bbe"
   integrity sha512-vv9lfnvjUsRiq//+j5pBdXig0IQdtzA0BRZ3bXEP4KaIyF1CcaydWqgyzQgfZMNIsWNWmG+AUHwPy4AHOD6gpw==
@@ -2724,10 +2703,11 @@
   resolved "https://registry.yarnpkg.com/@tetherto/wdk-failover-provider/-/wdk-failover-provider-1.0.0-beta.2.tgz#56087c864bdb98d09b0f8ff5ca6999ed93c4d1bf"
   integrity sha512-G1KNpw11Hql7Q6Xy5oqO+8P+AkJi4QBTK4JZtZvcXmx8ze+d/lzSQSufWLE/k5YAvwJ+xDx7mRzy/teG4zaiOw==
 
-"@tetherto/wdk-wallet-evm@file:../../wdk/wdk-wallet-evm":
+"@tetherto/wdk-wallet-evm@^1.0.0-beta.13":
   version "1.0.0-beta.13"
+  resolved "https://registry.yarnpkg.com/@tetherto/wdk-wallet-evm/-/wdk-wallet-evm-1.0.0-beta.13.tgz#0ec4c38644386b93f59fd1bfccefbbd47ffc386c"
+  integrity sha512-urDlr0u4xxiFgC1/TaXmgntuLH939A8GIZNc8r0fmJX6u+iphnnmgrvw6E3mX1OIAnTB9Tqdr8N08QS1G6AhrQ==
   dependencies:
-    "@hinkal/common" "^0.2.36"
     "@noble/curves" "1.9.2"
     "@noble/hashes" "1.8.0"
     "@noble/secp256k1" "2.2.3"
@@ -2738,10 +2718,19 @@
     ethers "6.14.4"
     sodium-universal "5.0.1"
 
-"@tetherto/wdk-wallet-solana@file:../../wdk/wdk-wallet-solana":
-  version "1.0.0-beta.9"
+"@tetherto/wdk-wallet-evm@file:../../wdk-hinkal-modules/wdk-wallet-evm-hinkal":
+  version "1.0.0-beta.1"
   dependencies:
     "@hinkal/common" "^0.2.36"
+    "@tetherto/wdk-wallet-evm" "^1.0.0-beta.13"
+    ethers "^6.15.0"
+    viem "^2.21.0"
+
+"@tetherto/wdk-wallet-solana@^1.0.0-beta.10":
+  version "1.0.0-beta.10"
+  resolved "https://registry.yarnpkg.com/@tetherto/wdk-wallet-solana/-/wdk-wallet-solana-1.0.0-beta.10.tgz#f2e0fa734bb7ea297610f17cea3fa4a58d257cc0"
+  integrity sha512-MxNDxBP6hnYOTQ9rQb2atg9a0jKzW0GkQCIpzEAp0Jks0pSSiqSwes0cgqh3K6FKoapaY2ojYeflM7Dh6gXkyQ==
+  dependencies:
     "@noble/ed25519" "3.1.0"
     "@noble/hashes" "2.2.0"
     "@solana-program/system" "0.9.0"
@@ -2754,19 +2743,27 @@
     "@solana/signers" "3.0.3"
     "@solana/transaction-messages" "3.0.3"
     "@solana/transactions" "3.0.3"
-    "@solana/web3.js" "1.98.0"
     "@tetherto/wdk-failover-provider" "1.0.0-beta.2"
-    "@tetherto/wdk-wallet" "1.0.0-beta.7"
-    bare-node-runtime "^1.1.4"
+    "@tetherto/wdk-wallet" "1.0.0-beta.10"
+    bare-node-runtime "^1.4.0"
     bip39 "3.1.0"
     micro-key-producer "0.7.6"
     sodium-universal "5.0.1"
-    tweetnacl "1.0.3"
 
-"@tetherto/wdk-wallet-tron@file:../../wdk/wdk-wallet-tron":
-  version "1.0.0-beta.6"
+"@tetherto/wdk-wallet-solana@file:../../wdk-hinkal-modules/wdk-wallet-solana-hinkal":
+  version "1.0.0-beta.1"
   dependencies:
     "@hinkal/common" "^0.2.36"
+    "@solana/web3.js" "^1.98.0"
+    "@tetherto/wdk-wallet-solana" "^1.0.0-beta.10"
+    tweetnacl "^1.0.3"
+    viem "^2.21.0"
+
+"@tetherto/wdk-wallet-tron@^1.0.0-beta.6":
+  version "1.0.0-beta.6"
+  resolved "https://registry.yarnpkg.com/@tetherto/wdk-wallet-tron/-/wdk-wallet-tron-1.0.0-beta.6.tgz#58be738d080b6af7467064f2a708d5a563a791bb"
+  integrity sha512-Ppi7oj4vJtx7ZoFTxhhT4F3RJVbdjX1tF34whtaexs9gOWHqd6PK9kkGJs3TDNxhTDlAcxwTnaIbPk+Kw5ypGQ==
+  dependencies:
     "@noble/curves" "1.9.2"
     "@noble/hashes" "1.3.3"
     "@noble/secp256k1" "2.2.3"
@@ -2778,12 +2775,19 @@
     sodium-universal "5.0.1"
     tronweb "6.3.0"
 
-"@tetherto/wdk-wallet@1.0.0-beta.7":
-  version "1.0.0-beta.7"
-  resolved "https://registry.yarnpkg.com/@tetherto/wdk-wallet/-/wdk-wallet-1.0.0-beta.7.tgz#4960f7de84dc8438b3af9368d2c53ed2e1213db3"
-  integrity sha512-QJJPhA+adCImQ/nMymmMeW4x0Ey65vEgWfoDjuXtdaD7LnFdCChFvZXcyDQUH3ghSTnve6MDutMmvfDIxhipVg==
+"@tetherto/wdk-wallet-tron@file:../../wdk-hinkal-modules/wdk-wallet-tron-hinkal":
+  version "1.0.0-beta.1"
   dependencies:
-    bare-node-runtime "^1.1.4"
+    "@hinkal/common" "^0.2.36"
+    "@tetherto/wdk-wallet-tron" "^1.0.0-beta.6"
+    viem "^2.21.0"
+
+"@tetherto/wdk-wallet@1.0.0-beta.10":
+  version "1.0.0-beta.10"
+  resolved "https://registry.yarnpkg.com/@tetherto/wdk-wallet/-/wdk-wallet-1.0.0-beta.10.tgz#3d490b42ca5dd0ee06db86875f80f0517d3d23c6"
+  integrity sha512-qCOxvNIltfwwMhOjWAgk2DN/0TZ+RjNOk10BXKQM2XMmq6KR8yJZV3Yc5FoJ+AFsCHZBhVJR6k6eF0/ZMI1pIA==
+  dependencies:
+    bare-node-runtime "^1.4.0"
     bip39 "3.1.0"
 
 "@tetherto/wdk-wallet@1.0.0-beta.8":
@@ -10362,7 +10366,7 @@ tty-browserify@0.0.1:
   resolved "https://registry.yarnpkg.com/tty-browserify/-/tty-browserify-0.0.1.tgz#3f05251ee17904dfd0677546670db9651682b811"
   integrity sha512-C3TaO7K81YvjCgQH9Q1S3R3P3BtN3RIM8n+OvX4il1K1zgE8ZhI0op7kClgkxtutIE8hQrcrHBXvIheqKUUCxw==
 
-tweetnacl@1.0.3, tweetnacl@^1.0.3:
+tweetnacl@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-1.0.3.tgz#ac0af71680458d8a6378d0d0d050ab1407d35596"
   integrity sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==
@@ -10700,6 +10704,20 @@ viem@>=2.29.0, viem@^2.0.0, viem@^2.1.1, viem@^2.27.2, viem@^2.31.7, viem@^2.47.
   version "2.52.2"
   resolved "https://registry.yarnpkg.com/viem/-/viem-2.52.2.tgz#b5f2899463ddc1cc2039bd804311a67c2c4806e6"
   integrity sha512-HSU12p5aD/kAPZfrlbCUqdiP4P/c6hQ9AhfTS51VbLUQIjkWd1d5EjrCx/SCxZ0zhZVRn4Iv5X5WDqXPG8Ubew==
+  dependencies:
+    "@noble/curves" "1.9.1"
+    "@noble/hashes" "1.8.0"
+    "@scure/bip32" "1.7.0"
+    "@scure/bip39" "1.6.0"
+    abitype "1.2.3"
+    isows "1.0.7"
+    ox "0.14.29"
+    ws "8.20.1"
+
+viem@^2.21.0:
+  version "2.53.1"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.53.1.tgz#8f8dff96b0c85317ce7ce54d282bd7b27798a695"
+  integrity sha512-FhfJ/SW73CVosiyVLmIMVgKDRKYV1AGCLzZoHYvmNayyVff63Qi1ocPCk59LqC/cNw244RbBJjHnmxqXkE7NpA==
   dependencies:
     "@noble/curves" "1.9.1"
     "@noble/hashes" "1.8.0"
