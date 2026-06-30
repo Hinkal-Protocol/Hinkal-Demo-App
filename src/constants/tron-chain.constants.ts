@@ -12,3 +12,7 @@ export const TRON_NILE_CHAIN_ID = 3448148188;
 export const TRON_CHAIN_ID = USE_TRON_TESTNET
   ? TRON_NILE_CHAIN_ID
   : TRON_MAINNET_CHAIN_ID;
+
+export const isTronLike = (chainId: number) => {
+  return chainId === TRON_MAINNET_CHAIN_ID || chainId === TRON_NILE_CHAIN_ID;
+};
