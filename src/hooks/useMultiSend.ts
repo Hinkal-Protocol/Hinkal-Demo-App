@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { FeeStructure } from "@gurge/sdk";
+import { FeeStructure } from "@hinkal/common";
 import { useAppContext } from "../AppContext";
 import { getAmountInWei } from "../utils/amount.utils";
 import { getTxScheduleTime } from "../utils/getTxScheduleTime";

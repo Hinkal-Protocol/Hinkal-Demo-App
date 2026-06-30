@@ -8,7 +8,7 @@ import {
 import toast from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { SelectToken } from "../components/swap/SelectToken";
-import { ExternalActionId } from "@gurge/sdk";
+import { ExternalActionId } from "@hinkal/common";
 import { useAppContext } from "../AppContext";
 import { useMultiSend } from "../hooks/useMultiSend";
 import { SCHEDULE_OPTIONS } from "../constants/schedule.constants";

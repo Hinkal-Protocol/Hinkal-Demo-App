@@ -962,9 +962,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gurge/sdk@npm:0.3.150":
-  version: 0.3.150
-  resolution: "@gurge/sdk@npm:0.3.150"
+"@headlessui/react@npm:^1.7.5":
+  version: 1.7.19
+  resolution: "@headlessui/react@npm:1.7.19"
+  dependencies:
+    "@tanstack/react-virtual": "npm:^3.0.0-beta.60"
+    client-only: "npm:^0.0.1"
+  peerDependencies:
+    react: ^16 || ^17 || ^18
+    react-dom: ^16 || ^17 || ^18
+  checksum: 10c0/c0ece0db6ca15092439177a5322de50b60fa5fd90354ae0f999b3e56abab0065ed54fa7b4b69994ec1bdc23adc6ae9919d7dd57f97922d0b9bb6515d27e3a7e5
+  languageName: node
+  linkType: hard
+
+"@hinkal/common@npm:0.3.1":
+  version: 0.3.1
+  resolution: "@hinkal/common@npm:0.3.1"
   dependencies:
     "@coral-xyz/anchor": "npm:^0.31.0"
     "@solana/spl-token": "npm:^0.4.14"
@@ -996,20 +1009,7 @@ __metadata:
       optional: true
     wagmi:
       optional: true
-  checksum: 10c0/9c81835ce85a9deebd949cefce83a6edda574dfaa2aaf3ce2c7eb9877b9889a509577e1e120cd460752a361b67fb6bb315e1ec3a612ac7341a5c199fa36289ee
-  languageName: node
-  linkType: hard
-
-"@headlessui/react@npm:^1.7.5":
-  version: 1.7.19
-  resolution: "@headlessui/react@npm:1.7.19"
-  dependencies:
-    "@tanstack/react-virtual": "npm:^3.0.0-beta.60"
-    client-only: "npm:^0.0.1"
-  peerDependencies:
-    react: ^16 || ^17 || ^18
-    react-dom: ^16 || ^17 || ^18
-  checksum: 10c0/c0ece0db6ca15092439177a5322de50b60fa5fd90354ae0f999b3e56abab0065ed54fa7b4b69994ec1bdc23adc6ae9919d7dd57f97922d0b9bb6515d27e3a7e5
+  checksum: 10c0/42cc4db2dfc6e0382a7b03d0b8581cdf2a39359d69474016ad8d9531a4ec54c2ff58efba69e3fcf55ac55008155007b3412308c51931ef1fec3320e6992bb07a
   languageName: node
   linkType: hard
 
@@ -9119,8 +9119,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "hinkal-demo-app@workspace:."
   dependencies:
-    "@gurge/sdk": "npm:0.3.150"
     "@headlessui/react": "npm:^1.7.5"
+    "@hinkal/common": "npm:0.3.1"
     "@tanstack/react-query": "npm:^5.0.0"
     "@tronweb3/tronwallet-abstract-adapter": "npm:^1.1.12"
     "@tronweb3/tronwallet-adapter-metamask-tron": "npm:^1.0.3"

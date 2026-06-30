@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { FeeStructure } from "@gurge/sdk";
+import { FeeStructure } from "@hinkal/common";
 import { useAppContext } from "../AppContext";
 import { getAmountInWei } from "../utils/amount.utils";
 import { waitForTransaction } from "../utils/waitForTransaction";

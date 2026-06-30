@@ -13,7 +13,7 @@ import { ToggleSwitch } from "../components/withdraw/ToggleSwitch";
 import { useAppContext } from "../AppContext";
 import { useWithdraw } from "../hooks/useWithdraw";
 import { Token } from "../types";
-import { ExternalActionId } from "@gurge/sdk";
+import { ExternalActionId } from "@hinkal/common";
 import { useFee } from "../hooks/useFee";
 import { FeeDisplay } from "../components/FeeDisplay";
 import { getShieldedBalanceWei } from "../utils/balance.utils";

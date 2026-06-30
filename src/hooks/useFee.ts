@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ExternalActionId, FeeStructure } from "@gurge/sdk";
+import { ExternalActionId, FeeStructure } from "@hinkal/common";
 import { useAppContext } from "../AppContext";
 import { Token } from "../types";
 

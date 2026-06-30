@@ -14,13 +14,13 @@ import walletconnectLogo from "../assets/walletconnectWalletLogo.png";
 import { Modal } from "./Modal";
 import { Spinner } from "./Spinner";
 import { useAppContext } from "../AppContext";
-import { prepareWagmiHinkal } from "@gurge/sdk/providers/prepareWagmiHinkal";
-import { prepareTronHinkal } from "@gurge/sdk/providers/prepareTronHinkal";
+import { prepareWagmiHinkal } from "@hinkal/common/providers/prepareWagmiHinkal";
+import { prepareTronHinkal } from "@hinkal/common/providers/prepareTronHinkal";
 import { TRON_CHAIN_ID } from "../constants/tron-chain.constants";
 import { Wallet, useWallet } from "@tronweb3/tronwallet-adapter-react-hooks";
 import { AdapterState } from "@tronweb3/tronwallet-abstract-adapter";
 import toast from "react-hot-toast";
-import { Hinkal } from "@gurge/sdk";
+import { Hinkal } from "@hinkal/common";
 
 interface ChooseWalletProps {
   isOpen: boolean;

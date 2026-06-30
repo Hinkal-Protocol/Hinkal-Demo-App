@@ -1,4 +1,4 @@
-import { ExternalActionId } from "@gurge/sdk";
+import { ExternalActionId } from "@hinkal/common";
 import { useEffect, useState } from "react";
 import { useAppContext } from "../AppContext";
 import { Token } from "../types";
@@ -33,7 +33,11 @@ export const useSwapPrice = ({
     const run = async () => {
       try {
         if (!hinkal || !inSwapToken || !outSwapToken || !chainId) return;
-        if (inSwapAmount.length === 0 || !inSwapAmount || Number(inSwapAmount) <= 0) {
+        if (
+          inSwapAmount.length === 0 ||
+          !inSwapAmount ||
+          Number(inSwapAmount) <= 0
+        ) {
           return;
         }
 

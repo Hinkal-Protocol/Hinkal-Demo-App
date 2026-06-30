@@ -2,7 +2,7 @@ import {
   Hinkal,
   PrivateBalancesState,
   TokenBalanceWithUsd,
-} from "@gurge/sdk";
+} from "@hinkal/common";
 import {
   Dispatch,
   FC,

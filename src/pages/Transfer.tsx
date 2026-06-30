@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { TokenAmountInput } from "../components/TokenAmountInput";
 import { Token } from "../types";
-import { ExternalActionId } from "@gurge/sdk";
+import { ExternalActionId } from "@hinkal/common";
 import { useTransfer } from "../hooks/useTransfer";
 import { useFee } from "../hooks/useFee";
 import { getShieldedBalanceWei } from "../utils/balance.utils";

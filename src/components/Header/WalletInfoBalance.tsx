@@ -1,4 +1,4 @@
-import { TokenBalance } from "@gurge/sdk";
+import { TokenBalance } from "@hinkal/common";
 import { getAmountInToken } from "../../utils/amount.utils";
 import { useAppContext } from "../../AppContext";
 import { findToken } from "../../utils/token.utils";

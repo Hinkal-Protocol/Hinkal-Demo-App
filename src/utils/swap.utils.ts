@@ -1,4 +1,4 @@
-import { EvmSwapPrices, ExternalActionId } from "@gurge/sdk";
+import { EvmSwapPrices, ExternalActionId } from "@hinkal/common";
 
 export type BestSwapQuote = {
   outSwapAmount: bigint;

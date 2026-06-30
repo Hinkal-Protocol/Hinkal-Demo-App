@@ -11,7 +11,7 @@ import { Spinner } from "../components/Spinner";
 import { SelectToken } from "../components/swap/SelectToken";
 import { SwapInputTokensButton } from "../components/swap/SwapInputTokensButton";
 import { Token } from "../types";
-import { ExternalActionId } from "@gurge/sdk";
+import { ExternalActionId } from "@hinkal/common";
 import { useSwapPrice } from "../hooks/useSwapPrice";
 import { useSwap } from "../hooks/useSwap";
 import { useAppContext } from "../AppContext";
@@ -96,11 +96,25 @@ export const Swap = () => {
       outSwapToken &&
       swapData &&
       externalActionId,
-    [inSwapAmount, inSwapToken, outSwapToken, outSwapAmountWei, swapData, externalActionId],
+    [
+      inSwapAmount,
+      inSwapToken,
+      outSwapToken,
+      outSwapAmountWei,
+      swapData,
+      externalActionId,
+    ],
   );
 
   const handleSwap = useCallback(async () => {
-    if (!inSwapToken || !outSwapToken || !outSwapAmountWei || !swapData || !externalActionId) return;
+    if (
+      !inSwapToken ||
+      !outSwapToken ||
+      !outSwapAmountWei ||
+      !swapData ||
+      !externalActionId
+    )
+      return;
     await swap(
       inSwapToken,
       outSwapToken,

@@ -1,4 +1,4 @@
-import { TokenBalanceWithUsd } from "@gurge/sdk";
+import { TokenBalanceWithUsd } from "@hinkal/common";
 import { Token } from "../types";
 
 export const getShieldedBalance = (
