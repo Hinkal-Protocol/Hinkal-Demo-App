@@ -1,15 +1,5 @@
 import { ScheduleDelayOption } from "../types";
 
-export const SCHEDULE_OPTIONS = [
-  "instantly",
-  "15m",
-  "30m",
-  "1h",
-  "24h",
-] as const;
-
-export type ScheduleOption = (typeof SCHEDULE_OPTIONS)[number];
-
 export const SCHEDULE_DELAY_OPTIONS: Partial<
   Record<ScheduleDelayOption, number | undefined>
 > = {

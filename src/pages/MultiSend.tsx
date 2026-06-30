@@ -11,7 +11,6 @@ import { SelectToken } from "../components/swap/SelectToken";
 import { ExternalActionId } from "@hinkal/common";
 import { useAppContext } from "../AppContext";
 import { useMultiSend } from "../hooks/useMultiSend";
-import { SCHEDULE_OPTIONS } from "../constants/schedule.constants";
 import { ButtonGroupWithLabel } from "../utils/buttonGroupWithLabel";
 import { RecipientInputRow } from "../utils/recipientInfoRow";
 import { zeroAddress } from "../constants";
@@ -20,6 +19,7 @@ import { useFee } from "../hooks/useFee";
 import { isSameTokenAddress } from "../utils/token.utils";
 
 const NON_NATIVE_GAS_TOKENS = ["USDC", "USDT", "DAI"];
+const SCHEDULE_DELAY_OPTIONS = Object.values(ScheduleDelayOption);
 
 export const MultiSend = () => {
   const { hinkal, chainId, erc20List } = useAppContext();
@@ -57,28 +57,29 @@ export const MultiSend = () => {
     tokenAddresses,
   );
 
-  const { multiSend, isProcessing } = useMultiSend({
-    onError: (err) => {
-      const raw = err instanceof Error ? err.message : "Unknown error";
+  const { multiSend, isDepositing, scheduleId, scheduleStatuses } =
+    useMultiSend({
+      onError: (err) => {
+        const raw = err instanceof Error ? err.message : "Unknown error";
 
-      let message = raw;
-      if (raw.includes("transfer amount exceeds balance")) {
-        message = "Insufficient balance";
-      } else if (raw.includes("execution reverted")) {
-        const match = raw.match(/reason="([^"]+)"/);
-        message = match ? match[1] : "Transaction reverted";
-      }
+        let message = raw;
+        if (raw.includes("transfer amount exceeds balance")) {
+          message = "Insufficient balance";
+        } else if (raw.includes("execution reverted")) {
+          const match = raw.match(/reason="([^"]+)"/);
+          message = match ? match[1] : "Transaction reverted";
+        }
 
-      toast.error(message, { id: message });
-    },
-    onSuccess: async () => {
-      toast.success("Multi send succeeded!");
-      setAddress1("");
-      setAmount1("");
-      setAddress2("");
-      setAmount2("");
-    },
-  });
+        toast.error(message, { id: message });
+      },
+      onSuccess: async () => {
+        toast.success("Deposit confirmed");
+        setAddress1("");
+        setAmount1("");
+        setAddress2("");
+        setAmount2("");
+      },
+    });
 
   useEffect(() => {
     setAddress1("");
@@ -148,8 +149,8 @@ export const MultiSend = () => {
       !amount1 ||
       !address2 ||
       !amount2 ||
-      isProcessing,
-    [hinkal, selectedToken, address1, amount1, address2, amount2, isProcessing],
+      isDepositing,
+    [hinkal, selectedToken, address1, amount1, address2, amount2, isDepositing],
   );
 
   return (
@@ -159,7 +160,7 @@ export const MultiSend = () => {
           <SelectToken
             swapToken={selectedToken}
             onTokenChange={(prev, cur) => setSelectedToken(cur)}
-            disabled={isProcessing}
+            disabled={isDepositing}
             tokenFilter={(token) =>
               allowedTokens.some((allowedToken) =>
                 isSameTokenAddress(
@@ -176,7 +177,7 @@ export const MultiSend = () => {
           amountValue={amount1}
           onAddressChange={(e) => setAddress1(e.target.value)}
           onAmountChange={(event) => setAmountHandler(event, setAmount1)}
-          disabled={isProcessing}
+          disabled={isDepositing}
         />
 
         <RecipientInputRow
@@ -184,17 +185,17 @@ export const MultiSend = () => {
           amountValue={amount2}
           onAddressChange={(e) => setAddress2(e.target.value)}
           onAmountChange={(event) => setAmountHandler(event, setAmount2)}
-          disabled={isProcessing}
+          disabled={isDepositing}
         />
 
         <ButtonGroupWithLabel
           label="Transaction Schedule"
-          options={SCHEDULE_OPTIONS}
+          options={SCHEDULE_DELAY_OPTIONS}
           selected={selectedScheduleDelay}
           onSelect={(option) =>
             setSelectedScheduleDelay(option as ScheduleDelayOption)
           }
-          disabled={isProcessing}
+          disabled={isDepositing}
         />
 
         {feeStructure !== undefined && selectedToken && (
@@ -220,9 +221,9 @@ export const MultiSend = () => {
                 : "bg-hinkal-blue-900 text-hinkal-gray-200 cursor-not-allowed"
             }`}
           >
-            {isProcessing ? (
+            {isDepositing ? (
               <div className="flex items-center justify-center gap-x-2">
-                <span>Sending</span> <Spinner />
+                <span>Depositing</span> <Spinner />
               </div>
             ) : (
               <span>Send</span>
@@ -230,6 +231,22 @@ export const MultiSend = () => {
           </button>
         </div>
       </form>
+
+      {scheduleId && (
+        <div className="w-[90%] mx-[5%] mt-2 p-3 rounded-lg bg-hinkal-blue-900 text-sm">
+          <p className="font-semibold mb-2">Scheduled sends</p>
+          {scheduleStatuses.length === 0 ? (
+            <p className="text-hinkal-gray-200">Loading status...</p>
+          ) : (
+            scheduleStatuses.map((tx, i) => (
+              <p key={i} className="text-hinkal-gray-200">
+                Send {i + 1}: {tx.status}
+                {tx.txHash ? ` (${tx.txHash.slice(0, 10)}...)` : ""}
+              </p>
+            ))
+          )}
+        </div>
+      )}
     </div>
   );
 };
