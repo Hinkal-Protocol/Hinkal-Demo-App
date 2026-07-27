@@ -1,8 +1,6 @@
-import { ExternalActionId } from "@hinkal/common";
 import { useEffect, useState } from "react";
 import { useAppContext } from "../AppContext";
 import { Token } from "../types";
-import { pickBestEvmSwapQuote } from "../utils/swap.utils";
 
 type UseSwapPriceParams = {
   inSwapAmount: string;
@@ -19,16 +17,14 @@ export const useSwapPrice = ({
   const [price, setPrice] = useState<bigint | undefined>(undefined);
   const [isPriceLoading, setIsPriceLoading] = useState<boolean>(false);
   const [swapData, setSwapData] = useState<string>("");
-  const [externalActionId, setExternalActionId] = useState<
-    ExternalActionId | undefined
-  >(undefined);
+
 
   useEffect(() => {
     let isSubscribed = true;
 
     setPrice(undefined);
     setSwapData("");
-    setExternalActionId(undefined);
+
 
     const run = async () => {
       try {
@@ -42,31 +38,24 @@ export const useSwapPrice = ({
         }
 
         setIsPriceLoading(true);
-        const quotes = await hinkal.getEvmSwapPrices(
+        const swapQuote = await hinkal.getEvmSwapPrices(
           chainId,
           inSwapAmount,
           inSwapToken.erc20TokenAddress,
           outSwapToken.erc20TokenAddress,
         );
-        const bestQuote = pickBestEvmSwapQuote(quotes);
 
-        if (!isSubscribed) return;
 
-        if (!bestQuote) {
-          setPrice(undefined);
-          setSwapData("");
-          setExternalActionId(undefined);
-          return;
-        }
+        if (!isSubscribed || !swapQuote) return;
 
-        setPrice(bestQuote.outSwapAmount);
-        setSwapData(bestQuote.swapData);
-        setExternalActionId(bestQuote.externalActionId);
+        setPrice(swapQuote.outSwapAmountValue);
+        setSwapData(swapQuote.lifiDataValue);
+
       } catch {
         if (!isSubscribed) return;
         setPrice(undefined);
         setSwapData("");
-        setExternalActionId(undefined);
+
       } finally {
         if (isSubscribed) setIsPriceLoading(false);
       }
@@ -79,5 +68,5 @@ export const useSwapPrice = ({
     };
   }, [inSwapToken, outSwapToken, inSwapAmount, hinkal, chainId]);
 
-  return { isPriceLoading, price, swapData, externalActionId };
+  return { isPriceLoading, price, swapData };
 };
