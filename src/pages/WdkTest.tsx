@@ -8,9 +8,7 @@ import {
   httpClient,
   setHinkalTronChainId,
 } from "@hinkal/common";
-import WalletManagerEvm from "@tetherto/wdk-wallet-evm";
-import WalletManagerSolana from "@tetherto/wdk-wallet-solana";
-import WalletManagerTron from "@tetherto/wdk-wallet-tron";
+import WalletManagerEvmHinkal from "@hinkal/wdk-wallet-evm";
 
 type WdkChain = "evm" | "solana" | "tron";
 
@@ -41,7 +39,13 @@ type SolanaHinkalBundle = {
 type PrivateSendAccount = {
   getAddress: () => Promise<string>;
   transferPrivate?: (options: PrivateSendParams) => Promise<{ hash: string }>;
-  privateSend?: (options: PrivateSendParams) => Promise<{ hash: string }>;
+  // Solana/Tron return { hash }; the EVM (Hinkal-wrapped) account schedules the
+  // send and returns { depositTxHash, scheduleId } instead.
+  privateSend?: (
+    options: PrivateSendParams,
+  ) => Promise<
+    { hash: string } | { depositTxHash: string; scheduleId: string }
+  >;
   withdrawStuckUtxos?: (options: {
     token: string;
   }) => Promise<{ hashes: string[] }>;
@@ -57,9 +61,9 @@ const CHAIN_DEFAULTS: Record<
   { rpcUrl: string; token: string; amount: string }
 > = {
   evm: {
-    rpcUrl: "https://mainnet.optimism.io",
-    token: "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85",
-    amount: "1000000",
+    rpcUrl: "https://mainnet.base.org",
+    token: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+    amount: "10000",
   },
   solana: {
     rpcUrl: "https://api.mainnet-beta.solana.com",
@@ -82,9 +86,7 @@ const configureTronChain = (rpcUrl: string) => {
   const isNile = TRON_NILE_RPC_HOSTS.some((host) =>
     rpcUrl.toLowerCase().includes(host),
   );
-  setHinkalTronChainId(
-    isNile ? chainIds.tronNile : chainIds.tronMainnet,
-  );
+  setHinkalTronChainId(isNile ? chainIds.tronNile : chainIds.tronMainnet);
 };
 
 const PRIVATE_SEND_METHOD: Record<WdkChain, string> = {
@@ -145,19 +147,10 @@ export const WdkTest = () => {
   const accountFor = async (): Promise<PrivateSendAccount> => {
     const trimmedSeed = seed.trim();
 
-    if (chain === "evm") {
-      const wallet = new WalletManagerEvm(trimmedSeed, { provider: rpcUrl });
-      return (await wallet.getAccount(0)) as PrivateSendAccount;
-    }
-
-    if (chain === "solana") {
-      const wallet = new WalletManagerSolana(trimmedSeed, { provider: rpcUrl });
-      return (await wallet.getAccount(0)) as PrivateSendAccount;
-    }
-
-    configureTronChain(rpcUrl);
-    const wallet = new WalletManagerTron(trimmedSeed, { provider: rpcUrl });
-    return (await wallet.getAccount(0)) as PrivateSendAccount;
+    const wallet = new WalletManagerEvmHinkal(trimmedSeed, {
+      provider: rpcUrl,
+    });
+    return (await wallet.getAccount(0)) as unknown as PrivateSendAccount;
   };
 
   const deriveAddress = async () => {
@@ -193,7 +186,11 @@ export const WdkTest = () => {
       put: base.put.bind(base),
       patch: base.patch.bind(base),
       delete: base.delete.bind(base),
-      post: async <T,>(url: string, data?: unknown, config?: unknown): Promise<T> => {
+      post: async <T,>(
+        url: string,
+        data?: unknown,
+        config?: unknown,
+      ): Promise<T> => {
         const relayer = isRelayerUrl(url);
         if (relayer) captured.push(`>>> POST ${url}\n${truncate(data)}`);
         try {
@@ -203,17 +200,26 @@ export const WdkTest = () => {
           return res;
         } catch (e) {
           // axios errors carry the relayer's response body in e.response.data
-          const ax = e as { response?: { status?: number; data?: unknown }; message?: string };
+          const ax = e as {
+            response?: { status?: number; data?: unknown };
+            message?: string;
+          };
           if (relayer) {
             captured.push(
-              `<<< ERROR ${url}\nstatus=${ax.response?.status}\nmessage=${ax.message}\ndata=${truncate(ax.response?.data)}`,
+              `<<< ERROR ${url}\nstatus=${ax.response?.status}\nmessage=${
+                ax.message
+              }\ndata=${truncate(ax.response?.data)}`,
             );
           }
           throw e;
         }
       },
     };
-    httpClient.setHttpClient(loggingClient as unknown as Parameters<typeof httpClient.setHttpClient>[0]);
+    httpClient.setHttpClient(
+      loggingClient as unknown as Parameters<
+        typeof httpClient.setHttpClient
+      >[0],
+    );
 
     try {
       if (chain === "tron") configureTronChain(rpcUrl);
@@ -224,12 +230,16 @@ export const WdkTest = () => {
         amount: BigInt(amount),
       });
       setStatus(
-        `OK: ${JSON.stringify(result)}\n\n=== RELAYER TRAFFIC ===\n${captured.join("\n\n") || "(none captured)"}`,
+        `OK: ${JSON.stringify(result)}\n\n=== RELAYER TRAFFIC ===\n${
+          captured.join("\n\n") || "(none captured)"
+        }`,
       );
     } catch (err) {
       const e = err as Error;
       setStatus(
-        `FAILED: ${e.message}\n\n=== RELAYER TRAFFIC ===\n${captured.join("\n\n") || "(none captured)"}\n\nSTACK:\n${e.stack ?? "(no stack)"}`,
+        `FAILED: ${e.message}\n\n=== RELAYER TRAFFIC ===\n${
+          captured.join("\n\n") || "(none captured)"
+        }\n\nSTACK:\n${e.stack ?? "(no stack)"}`,
       );
     } finally {
       httpClient.setHttpClient(base);
@@ -261,7 +271,11 @@ export const WdkTest = () => {
       );
     } catch (err) {
       const e = err as Error;
-      setStatus(`FAILED (WDK transfer): ${e.message}\n\nSTACK:\n${e.stack ?? "(no stack)"}`);
+      setStatus(
+        `FAILED (WDK transfer): ${e.message}\n\nSTACK:\n${
+          e.stack ?? "(no stack)"
+        }`,
+      );
     } finally {
       setBusy(false);
     }
@@ -287,10 +301,16 @@ export const WdkTest = () => {
       const lines = transactions.map((t) => {
         const sched = Number(t.scheduledTime);
         const drift = Number.isFinite(sched) ? sched - now : NaN;
-        return `${t.status} | scheduledTime=${t.scheduledTime} (${drift}s from now) | amount=${t.amount} | tx=${t.transactionHash ?? "-"}`;
+        return `${t.status} | scheduledTime=${
+          t.scheduledTime
+        } (${drift}s from now) | amount=${t.amount} | tx=${
+          t.transactionHash ?? "-"
+        }`;
       });
       setStatus(
-        `derivedEth=${derivedEth}\nscheduled (${transactions.length}):\n${lines.join("\n") || "(none)"}`,
+        `derivedEth=${derivedEth}\nscheduled (${transactions.length}):\n${
+          lines.join("\n") || "(none)"
+        }`,
       );
     } catch (err) {
       const e = err as Error;
@@ -348,21 +368,27 @@ export const WdkTest = () => {
 
       <div className="flex gap-2 flex-wrap">
         <button
-          className={`rounded px-3 py-1 ${chain === "evm" ? "bg-blue-600" : "bg-gray-600"}`}
+          className={`rounded px-3 py-1 ${
+            chain === "evm" ? "bg-blue-600" : "bg-gray-600"
+          }`}
           onClick={() => switchChain("evm")}
           disabled={busy}
         >
           EVM
         </button>
         <button
-          className={`rounded px-3 py-1 ${chain === "solana" ? "bg-blue-600" : "bg-gray-600"}`}
+          className={`rounded px-3 py-1 ${
+            chain === "solana" ? "bg-blue-600" : "bg-gray-600"
+          }`}
           onClick={() => switchChain("solana")}
           disabled={busy}
         >
           Solana
         </button>
         <button
-          className={`rounded px-3 py-1 ${chain === "tron" ? "bg-blue-600" : "bg-gray-600"}`}
+          className={`rounded px-3 py-1 ${
+            chain === "tron" ? "bg-blue-600" : "bg-gray-600"
+          }`}
           onClick={() => switchChain("tron")}
           disabled={busy}
         >
@@ -443,7 +469,7 @@ export const WdkTest = () => {
         onClick={recoverStuckUtxos}
         disabled={busy}
       >
-        Recover stuck UTXOs 
+        Recover stuck UTXOs
       </button>
 
       {status && (

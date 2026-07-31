@@ -19,6 +19,7 @@ export default defineConfig({
 
   resolve: {
     alias: {},
+    dedupe: ["@noble/curves", "@noble/hashes"],
   },
   server: {
     port: 4240,
