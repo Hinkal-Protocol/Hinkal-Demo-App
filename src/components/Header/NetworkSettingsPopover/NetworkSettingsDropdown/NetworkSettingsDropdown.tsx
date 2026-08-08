@@ -4,6 +4,7 @@ import { useAppContext } from "../../../../AppContext";
 import { SUPPORTED_CHAIN_IDS } from "../../../../constants/supported-chain-ids.constants";
 import { networkRegistry } from "../../../../constants/networkRegistry";
 import { isTronLike } from "../../../../constants/tron-chain.constants";
+import { isSolanaLike } from "../../../../constants/solana-chain.constants";
 
 interface NetworkSettingsDropdownProps {
   close: () => void;
@@ -14,13 +15,15 @@ export const NetworkSettingsDropdown = ({
 }: NetworkSettingsDropdownProps) => {
   const { hinkal, chainId, setChainId } = useAppContext();
 
-  const isTronConnection = useMemo(
-    () => !!chainId && isTronLike(chainId),
+  // Tron and Solana wallets cannot switch to an EVM chain, so pin the list to
+  // the connected network instead of offering networks the wallet can't reach.
+  const isSingleChainConnection = useMemo(
+    () => !!chainId && (isTronLike(chainId) || isSolanaLike(chainId)),
     [chainId],
   );
 
   const networkList = useMemo(() => {
-    if (isTronConnection) {
+    if (isSingleChainConnection) {
       return Object.values(networkRegistry).filter(
         (network) => network.chainId === chainId,
       );
@@ -28,9 +31,10 @@ export const NetworkSettingsDropdown = ({
     return Object.values(networkRegistry).filter(
       (network) =>
         SUPPORTED_CHAIN_IDS.includes(network.chainId) &&
-        !isTronLike(network.chainId),
+        !isTronLike(network.chainId) &&
+        !isSolanaLike(network.chainId),
     );
-  }, [isTronConnection, chainId]);
+  }, [isSingleChainConnection, chainId]);
 
   const switchNetwork = useCallback(
     async (targetChainId: number) => {
@@ -38,7 +42,13 @@ export const NetworkSettingsDropdown = ({
         const network = networkList.find(
           (net) => net.chainId === targetChainId,
         );
-        if (!network || isTronLike(targetChainId) || !hinkal) return;
+        if (
+          !network ||
+          isTronLike(targetChainId) ||
+          isSolanaLike(targetChainId) ||
+          !hinkal
+        )
+          return;
 
         await hinkal.switchNetwork(targetChainId);
         await hinkal.resetMerkle();

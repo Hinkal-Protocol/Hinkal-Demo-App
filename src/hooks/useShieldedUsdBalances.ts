@@ -13,7 +13,7 @@ export interface BalanceItem {
 
 /** Builds display rows from SDK private balances (usd values already included). */
 export const useShieldedUsdBalances = () => {
-  const { chainBalances, erc20List } = useAppContext();
+  const { chainBalances, erc20List, chainId } = useAppContext();
 
   const isLoading = chainBalances.some(
     (balance) => balance.isUsdValueLoading || balance.isBalanceLoading,
@@ -23,7 +23,7 @@ export const useShieldedUsdBalances = () => {
     return chainBalances
       .filter((balance) => balance.balance > 0n)
       .map((balance) => {
-        const token = findToken(erc20List, balance.erc20Address);
+        const token = findToken(erc20List, balance.erc20Address, chainId);
         if (!token) return null;
 
         return {
@@ -35,7 +35,7 @@ export const useShieldedUsdBalances = () => {
       })
       .filter((item): item is BalanceItem => item !== null)
       .sort((a, b) => b.usdValue - a.usdValue);
-  }, [chainBalances, erc20List]);
+  }, [chainBalances, erc20List, chainId]);
 
   const totalUsd = useMemo(
     () => items.reduce((sum, item) => sum + item.usdValue, 0),

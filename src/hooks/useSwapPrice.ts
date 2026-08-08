@@ -2,7 +2,11 @@ import { ExternalActionId } from "@hinkal/common";
 import { useEffect, useState } from "react";
 import { useAppContext } from "../AppContext";
 import { Token } from "../types";
-import { pickBestEvmSwapQuote } from "../utils/swap.utils";
+import {
+  pickBestEvmSwapQuote,
+  pickBestSolanaSwapQuote,
+} from "../utils/swap.utils";
+import { isSolanaLike } from "../constants/solana-chain.constants";
 
 type UseSwapPriceParams = {
   inSwapAmount: string;
@@ -42,13 +46,21 @@ export const useSwapPrice = ({
         }
 
         setIsPriceLoading(true);
-        const quotes = await hinkal.getEvmSwapPrices(
+
+        // Solana quotes come from OKX via a separate SDK endpoint; the EVM
+        // endpoint returns no route for Solana mints.
+        const quoteArgs = [
           chainId,
           inSwapAmount,
           inSwapToken.erc20TokenAddress,
           outSwapToken.erc20TokenAddress,
-        );
-        const bestQuote = pickBestEvmSwapQuote(quotes);
+        ] as const;
+
+        const bestQuote = isSolanaLike(chainId)
+          ? pickBestSolanaSwapQuote(
+              await hinkal.getSolanaSwapPrices(...quoteArgs)
+            )
+          : pickBestEvmSwapQuote(await hinkal.getEvmSwapPrices(...quoteArgs));
 
         if (!isSubscribed) return;
 

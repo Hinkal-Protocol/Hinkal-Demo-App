@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { ExternalActionId, FeeStructure } from "@hinkal/common";
 import { useAppContext } from "../AppContext";
-import { Token } from "../types";
+import { SolanaTransactionParams, Token } from "../types";
 
 export const useFee = (
   feeToken: Token | undefined,
   actionId: ExternalActionId,
   tokenAddresses: (string | undefined)[],
+  solanaTransactionParams?: SolanaTransactionParams,
 ) => {
   const { hinkal, chainId } = useAppContext();
   const [feeStructure, setFeeStructure] = useState<FeeStructure | undefined>(
@@ -19,6 +20,7 @@ export const useFee = (
 
     const fetch = async () => {
       if (!hinkal || !chainId || !feeToken) return;
+      if (feeToken.chainId !== chainId) return;
       try {
         setIsFeeLoading(true);
         const result = await hinkal.getFeeStructure(
@@ -28,6 +30,9 @@ export const useFee = (
             (address): address is string => address !== undefined,
           ),
           actionId,
+          undefined,
+          undefined,
+          solanaTransactionParams,
         );
         if (!isCancelled) setFeeStructure(result);
       } catch {
@@ -41,7 +46,14 @@ export const useFee = (
     return () => {
       isCancelled = true;
     };
-  }, [hinkal, chainId, feeToken, actionId, tokenAddresses]);
+  }, [
+    hinkal,
+    chainId,
+    feeToken,
+    actionId,
+    tokenAddresses,
+    solanaTransactionParams,
+  ]);
 
   return { feeStructure, isFeeLoading };
 };

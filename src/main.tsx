@@ -6,7 +6,7 @@ import { getWagmiConfig } from "./wagmi.config";
 import { AppContextProvider } from "./AppContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TronWalletProvider } from "./components/TronWalletProvider";
-
+import { SolanaWalletProvider } from "./components/SolanaWalletProvider";
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
@@ -14,9 +14,11 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <WagmiProvider config={getWagmiConfig()}>
       <QueryClientProvider client={queryClient}>
         <TronWalletProvider>
-          <AppContextProvider>
-            <App />
-          </AppContextProvider>
+          <SolanaWalletProvider>
+            <AppContextProvider>
+              <App />
+            </AppContextProvider>
+          </SolanaWalletProvider>
         </TronWalletProvider>
       </QueryClientProvider>
     </WagmiProvider>
