@@ -1,14 +1,14 @@
 import { TokenBalanceWithUsd } from "@hinkal/common";
 import { Token } from "../types";
+import { isSameTokenAddress } from "./token.utils";
 
 export const getShieldedBalance = (
   balances: TokenBalanceWithUsd[],
   token: Token | undefined,
 ) => {
   if (!token) return undefined;
-  const match = balances.find(
-    (b) =>
-      b.erc20Address.toLowerCase() === token.erc20TokenAddress.toLowerCase(),
+  const match = balances.find((b) =>
+    isSameTokenAddress(b.erc20Address, token.erc20TokenAddress, token.chainId),
   );
   return match;
 };

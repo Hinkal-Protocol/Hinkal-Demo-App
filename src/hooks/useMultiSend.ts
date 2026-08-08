@@ -4,7 +4,11 @@ import { useAppContext } from "../AppContext";
 import { getTxScheduleTime } from "../utils/getTxScheduleTime";
 import { ScheduleDelayOption, Token } from "../types";
 import { getAmountInWei } from "../utils/amount.utils";
-import { waitForTransaction } from "../utils/waitForTransaction";
+
+export interface MultiSendRecipient {
+  address: string;
+  amount: string;
+}
 
 interface ScheduleTxStatus {
   status: string;
@@ -22,7 +26,7 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
   const [isDepositing, setIsDepositing] = useState(false);
   const [scheduleId, setScheduleId] = useState<string | null>(null);
   const [scheduleStatuses, setScheduleStatuses] = useState<ScheduleTxStatus[]>(
-    [],
+    []
   );
 
   useEffect(() => {
@@ -40,7 +44,7 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
         setScheduleStatuses(data.transactions);
 
         const done = data.transactions.every(
-          (tx) => tx.status === "completed" || tx.status === "failed",
+          (tx) => tx.status === "completed" || tx.status === "failed"
         );
         if (done) clearInterval(intervalId);
       } catch (err) {
@@ -60,12 +64,9 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
   const multiSend = useCallback(
     async (
       token: Token,
-      address1: string,
-      amount1: string,
-      address2: string,
-      amount2: string,
+      recipients: MultiSendRecipient[],
       selectedScheduleDelay: ScheduleDelayOption,
-      feeStructure?: FeeStructure,
+      feeStructure?: FeeStructure
     ) => {
       if (!hinkal) throw new Error("Hinkal not initialized");
       if (!chainId) return;
@@ -75,25 +76,21 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
         setScheduleStatuses([]);
         setIsDepositing(true);
 
-        const amountsInBigInt = [
-          getAmountInWei(token, amount1),
-          getAmountInWei(token, amount2),
-        ];
         const txScheduleTime = getTxScheduleTime(selectedScheduleDelay);
 
-        const { depositTxHash, scheduleId: newScheduleId } =
-          await hinkal.depositAndWithdraw(
-            chainId,
-            token.erc20TokenAddress,
-            amountsInBigInt,
-            [address1, address2],
-            txScheduleTime,
-            feeStructure,
-          );
+        // Every recipient goes out in a single depositAndWithdraw, matching the
+        // pay app. The SDK confirms the deposit internally before returning, so
+        // there is no receipt to await here.
+        const { scheduleId: newScheduleId } = await hinkal.depositAndWithdraw(
+          chainId,
+          token.erc20TokenAddress,
+          recipients.map((r) => getAmountInWei(token, r.amount)),
+          recipients.map((r) => r.address),
+          txScheduleTime,
+          feeStructure
+        );
 
-        await waitForTransaction(chainId, depositTxHash);
-
-        setScheduleId(newScheduleId);
+        setScheduleId(newScheduleId ?? null);
         onSuccess();
       } catch (err) {
         onError(err as Error);
@@ -101,7 +98,7 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
         setIsDepositing(false);
       }
     },
-    [hinkal, chainId, chainId, onError, onSuccess],
+    [hinkal, chainId, onError, onSuccess]
   );
 
   return {

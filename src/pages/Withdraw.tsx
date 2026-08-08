@@ -18,9 +18,14 @@ import { useFee } from "../hooks/useFee";
 import { FeeDisplay } from "../components/FeeDisplay";
 import { getShieldedBalanceWei } from "../utils/balance.utils";
 import { getAmountInWei } from "../utils/amount.utils";
+import {
+  isSolanaLike,
+  resolveFeeOverride,
+} from "../constants/solana-chain.constants";
 
 export const Withdraw = () => {
   const { hinkal, chainId, chainBalances } = useAppContext();
+  const isSolana = isSolanaLike(chainId);
 
   const { withdraw, isProcessing } = useWithdraw({
     hinkal,
@@ -45,10 +50,22 @@ export const Withdraw = () => {
     return [selectedToken?.erc20TokenAddress];
   }, [selectedToken]);
 
+  const solanaTransactionParams = useMemo(
+    () =>
+      isSolana
+        ? {
+            mintTo: selectedToken?.erc20TokenAddress,
+            recipient: recipientAddress || undefined,
+          }
+        : undefined,
+    [isSolana, selectedToken, recipientAddress],
+  );
+
   const { isFeeLoading, feeStructure } = useFee(
     selectedToken,
     ExternalActionId.Transact,
     tokenAddresses,
+    solanaTransactionParams,
   );
 
   useEffect(() => {
@@ -78,7 +95,7 @@ export const Withdraw = () => {
       withdrawAmount,
       recipientAddress,
       isRelayerOff,
-      feeStructure,
+      resolveFeeOverride(chainId, feeStructure),
     );
   }, [
     withdraw,
@@ -86,6 +103,7 @@ export const Withdraw = () => {
     withdrawAmount,
     recipientAddress,
     isRelayerOff,
+    chainId,
     feeStructure,
   ]);
 

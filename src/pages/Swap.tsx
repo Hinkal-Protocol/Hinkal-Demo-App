@@ -19,6 +19,10 @@ import { getAmountInToken, getAmountInWei } from "../utils/amount.utils";
 import { useFee } from "../hooks/useFee";
 import { FeeDisplay } from "../components/FeeDisplay";
 import { getShieldedBalanceWei } from "../utils/balance.utils";
+import {
+  isSolanaLike,
+  resolveFeeOverride,
+} from "../constants/solana-chain.constants";
 
 export const Swap = () => {
   const { hinkal, chainId, chainBalances } = useAppContext();
@@ -62,10 +66,28 @@ export const Swap = () => {
     return [inSwapToken?.erc20TokenAddress, outSwapToken?.erc20TokenAddress];
   }, [inSwapToken, outSwapToken]);
 
+  const isSolana = isSolanaLike(chainId);
+
+  const defaultActionId = isSolana
+    ? ExternalActionId.Okx
+    : ExternalActionId.Lifi;
+
+  const solanaTransactionParams = useMemo(
+    () =>
+      isSolana
+        ? {
+            mintFrom: inSwapToken?.erc20TokenAddress,
+            mintTo: outSwapToken?.erc20TokenAddress,
+          }
+        : undefined,
+    [isSolana, inSwapToken, outSwapToken],
+  );
+
   const { isFeeLoading, feeStructure } = useFee(
-    inSwapToken,
-    externalActionId ?? ExternalActionId.Uniswap,
+    isSolana ? outSwapToken : inSwapToken,
+    externalActionId ?? defaultActionId,
     tokenAddresses,
+    solanaTransactionParams,
   );
 
   const { swap, isProcessing } = useSwap({
@@ -122,7 +144,7 @@ export const Swap = () => {
       outSwapAmountWei,
       swapData,
       externalActionId,
-      feeStructure,
+      resolveFeeOverride(chainId, feeStructure),
     );
   }, [
     swap,
@@ -133,6 +155,7 @@ export const Swap = () => {
     swapData,
     externalActionId,
     feeStructure,
+    chainId,
   ]);
 
   const setTokenAmountHandler = (
@@ -226,9 +249,9 @@ export const Swap = () => {
                   </div>
                 ) : (
                   <span>
-                    1 {outSwapToken?.symbol} ={" "}
-                    {(Number(inSwapAmount) / Number(outSwapAmount)).toFixed(6)}{" "}
-                    {inSwapToken?.symbol}
+                    1 {inSwapToken?.symbol} ={" "}
+                    {(Number(outSwapAmount) / Number(inSwapAmount)).toFixed(6)}{" "}
+                    {outSwapToken?.symbol}
                   </span>
                 )}
               </div>
@@ -239,7 +262,7 @@ export const Swap = () => {
       <FeeDisplay
         fee={feeStructure?.flatFee}
         isFeeLoading={isFeeLoading}
-        selectedToken={inSwapToken}
+        selectedToken={isSolana ? outSwapToken : inSwapToken}
       />
       <div
         onClick={() => setRelayerInfoShown((prev) => !prev)}

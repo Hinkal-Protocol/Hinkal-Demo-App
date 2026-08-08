@@ -13,12 +13,17 @@ import { ExternalActionId } from "@hinkal/common";
 import { useTransfer } from "../hooks/useTransfer";
 import { useFee } from "../hooks/useFee";
 import { getShieldedBalanceWei } from "../utils/balance.utils";
+import {
+  isSolanaLike,
+  resolveFeeOverride,
+} from "../constants/solana-chain.constants";
 import { FeeDisplay } from "../components/FeeDisplay";
 import { getAmountInWei } from "../utils/amount.utils";
 import { useAppContext } from "../AppContext";
 
 export const Transfer = () => {
   const { chainId, chainBalances } = useAppContext();
+  const isSolana = isSolanaLike(chainId);
 
   const { transfer, isProcessing } = useTransfer({
     onError: (err: Error) => {
@@ -41,10 +46,17 @@ export const Transfer = () => {
     return [selectedToken?.erc20TokenAddress];
   }, [selectedToken]);
 
+  const solanaTransactionParams = useMemo(
+    () =>
+      isSolana ? { mintTo: selectedToken?.erc20TokenAddress } : undefined,
+    [isSolana, selectedToken],
+  );
+
   const { isFeeLoading, feeStructure } = useFee(
     selectedToken,
     ExternalActionId.Transact,
     tokenAddresses,
+    solanaTransactionParams,
   );
 
   useEffect(() => {
@@ -68,8 +80,20 @@ export const Transfer = () => {
 
   const handleTransfer = useCallback(() => {
     if (!selectedToken) return;
-    transfer?.(selectedToken, transferAmount, transferAddress, feeStructure);
-  }, [selectedToken, transferAmount, transferAddress, transfer, feeStructure]);
+    transfer?.(
+      selectedToken,
+      transferAmount,
+      transferAddress,
+      resolveFeeOverride(chainId, feeStructure),
+    );
+  }, [
+    selectedToken,
+    transferAmount,
+    transferAddress,
+    transfer,
+    feeStructure,
+    chainId,
+  ]);
 
   /**
    * recipient address onChange handler

@@ -26,11 +26,13 @@ export const TokenAmountInput = ({
   setSelectedToken,
   withShieldedBalance = false,
 }: TokenAmountInputInterface) => {
-  const { erc20List, dataLoaded, chainBalances } = useAppContext();
+  const { erc20List, dataLoaded, chainBalances, chainId } = useAppContext();
 
   useEffect(() => {
-    if (erc20List.length > 0) setSelectedToken(erc20List[0]);
-  }, [erc20List, setSelectedToken]);
+    if (erc20List.length === 0) return;
+    if (selectedToken && selectedToken.chainId === chainId) return;
+    setSelectedToken(erc20List[0]);
+  }, [erc20List, setSelectedToken, selectedToken, chainId]);
 
   const shieldedBalanceDisplay = useMemo(() => {
     if (!selectedToken) return null;
