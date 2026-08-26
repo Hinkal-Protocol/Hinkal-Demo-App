@@ -975,9 +975,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hinkal/common@npm:0.3.8":
-  version: 0.3.8
-  resolution: "@hinkal/common@npm:0.3.8"
+"@hinkal/common@npm:0.3.9":
+  version: 0.3.9
+  resolution: "@hinkal/common@npm:0.3.9"
   dependencies:
     "@coral-xyz/anchor": "npm:0.32.1"
     "@noble/curves": "npm:1.9.7"
@@ -1004,14 +1004,14 @@ __metadata:
     tweetnacl: "npm:1.0.3"
     ua-parser-js: "npm:1.0.37"
   peerDependencies:
-    "@walletconnect/utils": ^2.17.2
+    "@walletconnect/utils": 2.23.9
     wagmi: 2.13.3
   peerDependenciesMeta:
     "@walletconnect/utils":
       optional: true
     wagmi:
       optional: true
-  checksum: 10c0/d88fe481dd2cb7a35fc138b58c0e0fb4cd8c1cea902396b59d007fc7c39b785bca116596b42d6d9cdf5a21fb8f7890bbdff7153f1ae920abe0738ca643e1ff39
+  checksum: 10c0/e53116176dbd6251573255a5fc92cf15313af0ab410923f7306c4ed0af6388adc5a50532f7ed18332c70c29a7da722130d10f4f072a32ab97cc8d775ddaad94f
   languageName: node
   linkType: hard
 
@@ -8222,7 +8222,7 @@ __metadata:
   resolution: "hinkal-demo-app@workspace:."
   dependencies:
     "@headlessui/react": "npm:^1.7.5"
-    "@hinkal/common": "npm:0.3.8"
+    "@hinkal/common": "npm:0.3.9"
     "@tanstack/react-query": "npm:^5.0.0"
     "@tronweb3/tronwallet-abstract-adapter": "npm:^1.1.12"
     "@tronweb3/tronwallet-adapter-metamask-tron": "npm:^1.0.3"
