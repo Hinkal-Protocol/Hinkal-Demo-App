@@ -975,9 +975,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hinkal/common@npm:0.3.7":
-  version: 0.3.7
-  resolution: "@hinkal/common@npm:0.3.7"
+"@hinkal/common@npm:0.3.8":
+  version: 0.3.8
+  resolution: "@hinkal/common@npm:0.3.8"
   dependencies:
     "@coral-xyz/anchor": "npm:0.32.1"
     "@noble/curves": "npm:1.9.7"
@@ -1011,7 +1011,7 @@ __metadata:
       optional: true
     wagmi:
       optional: true
-  checksum: 10c0/c23ceaed30629c88eb44b2f452768a5131c6e6cdca9e369195ede2c522a56f15f88becf98163590c9d3d58192c5aee6c90684d6d8ad227775c953995dd0cdf1b
+  checksum: 10c0/d88fe481dd2cb7a35fc138b58c0e0fb4cd8c1cea902396b59d007fc7c39b785bca116596b42d6d9cdf5a21fb8f7890bbdff7153f1ae920abe0738ca643e1ff39
   languageName: node
   linkType: hard
 
@@ -8222,7 +8222,7 @@ __metadata:
   resolution: "hinkal-demo-app@workspace:."
   dependencies:
     "@headlessui/react": "npm:^1.7.5"
-    "@hinkal/common": "npm:0.3.7"
+    "@hinkal/common": "npm:0.3.8"
     "@tanstack/react-query": "npm:^5.0.0"
     "@tronweb3/tronwallet-abstract-adapter": "npm:^1.1.12"
     "@tronweb3/tronwallet-adapter-metamask-tron": "npm:^1.0.3"
