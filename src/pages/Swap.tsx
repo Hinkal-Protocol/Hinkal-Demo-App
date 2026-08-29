@@ -51,7 +51,6 @@ export const Swap = () => {
     isPriceLoading,
     price: outSwapAmountWei,
     swapData,
-    externalActionId,
   } = useSwapPrice({
     inSwapAmount,
     inSwapToken,
@@ -62,9 +61,11 @@ export const Swap = () => {
     return [inSwapToken?.erc20TokenAddress, outSwapToken?.erc20TokenAddress];
   }, [inSwapToken, outSwapToken]);
 
+  const externalActionId = useMemo(() => ExternalActionId.Lifi, [swapData]);
+
   const { isFeeLoading, feeStructure } = useFee(
     inSwapToken,
-    externalActionId ?? ExternalActionId.Uniswap,
+    externalActionId,
     tokenAddresses,
   );
 
