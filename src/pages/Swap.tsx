@@ -64,7 +64,7 @@ export const Swap = () => {
 
   const { isFeeLoading, feeStructure } = useFee(
     inSwapToken,
-    externalActionId ?? ExternalActionId.Uniswap,
+    externalActionId ?? ExternalActionId.Lifi,
     tokenAddresses,
   );
 

@@ -74,6 +74,17 @@ export const WalletInfoDropDown = () => {
     }
   };
 
+  const handleCopyNullifyingKey = () => {
+    try {
+      if (!hinkal) return;
+      const nullifyingKey = hinkal.getNullifyingKey();
+      copyToClipboard(nullifyingKey);
+      toast.success("Nullifying key copied to clipboard");
+    } catch (err: any) {
+      toast.error(err?.message || "Failed to copy nullifying key");
+    }
+  };
+
   return (
     <div className="absolute min-w-max top-20 md:top-2 left-0 md:left-auto right-0 bg-hinkal-blue-900 rounded-xl shadow-metamask font-generalSans p-4 items-center max-content">
       <div className="flex items-center space-x-4">
@@ -111,6 +122,14 @@ export const WalletInfoDropDown = () => {
               <Copy />
             </div>
             <div className="pl-2 text-nowrap">Copy Private Address</div>
+          </div>
+        </button>
+        <button type="button" onClick={handleCopyNullifyingKey}>
+          <div className="flex items-center mt-2 text-white text-[14px] md:w-[9.5rem]">
+            <div className="flex justify-center items-center w-[25px] h-[25px]">
+              <Copy />
+            </div>
+            <div className="pl-2 text-nowrap">Copy Nullifying Key</div>
           </div>
         </button>
         <div>

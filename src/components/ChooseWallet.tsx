@@ -13,8 +13,12 @@ import metamaskLogo from "../assets/metamaskWalletLogo.png";
 import walletconnectLogo from "../assets/walletconnectWalletLogo.png";
 import { Modal } from "./Modal";
 import { Spinner } from "./Spinner";
+import { ToggleSwitch } from "./withdraw/ToggleSwitch";
 import { useAppContext } from "../AppContext";
-import { prepareWagmiHinkal } from "@hinkal/common/providers/prepareWagmiHinkal";
+import {
+  prepareWagmiHinkal,
+  prepareWagmiHinkalFromNullifyingKey,
+} from "@hinkal/common/providers/prepareWagmiHinkal";
 import { prepareTronHinkal } from "@hinkal/common/providers/prepareTronHinkal";
 import { TRON_CHAIN_ID } from "../constants/tron-chain.constants";
 import { Wallet, useWallet } from "@tronweb3/tronwallet-adapter-react-hooks";
@@ -42,6 +46,13 @@ export const ChooseWallet = ({
   const { setHinkal, setChainId, setDataLoaded } = useAppContext();
 
   const [connectingId, setConnectingId] = useState<string | null>(null);
+  const [readOnlyKey, setReadOnlyKey] = useState<string>("");
+  const [localMode, setLocalMode] = useState<boolean>(false);
+
+  const hinkalConfig = useMemo(
+    () => ({ generateProofRemotely: !localMode }),
+    [localMode],
+  );
 
   const tronWallets = useMemo(
     () => wallets.filter((w) => w.state !== AdapterState.NotFound),
@@ -61,10 +72,18 @@ export const ChooseWallet = ({
 
   const handleSelectConnector = useCallback(
     async (connector: Connector) => {
+      const trimmedReadOnlyKey = readOnlyKey.trim();
       try {
         setIsConnecting?.(true);
         setConnectingId(connector.id);
-        const hinkal = await prepareWagmiHinkal(connector, config);
+        const hinkal = trimmedReadOnlyKey
+          ? await prepareWagmiHinkalFromNullifyingKey(
+              connector,
+              config,
+              trimmedReadOnlyKey,
+              hinkalConfig,
+            )
+          : await prepareWagmiHinkal(connector, config, hinkalConfig);
         const providerAdapter = hinkal.getProviderAdapter();
         const chainId = providerAdapter.getChainId();
         if (!chainId) throw new Error("Chain id not found");
@@ -76,7 +95,7 @@ export const ChooseWallet = ({
         setIsConnecting?.(false);
       }
     },
-    [setIsConnecting, config, finalize],
+    [setIsConnecting, config, finalize, readOnlyKey, hinkalConfig],
   );
 
   const handleSelectTronAdapter = useCallback(
@@ -94,7 +113,7 @@ export const ChooseWallet = ({
             address,
             signerAdapter: walletItem.adapter,
           } as any,
-          { tronChainOverride: TRON_CHAIN_ID },
+          { ...hinkalConfig, tronChainOverride: TRON_CHAIN_ID },
         );
         finalize(hinkal, TRON_CHAIN_ID);
       } catch (err) {
@@ -104,7 +123,7 @@ export const ChooseWallet = ({
         setIsConnecting?.(false);
       }
     },
-    [finalize, setIsConnecting],
+    [finalize, setIsConnecting, hinkalConfig],
   );
 
   return (
@@ -117,6 +136,34 @@ export const ChooseWallet = ({
       xBtnStyleProps="text-black font-black"
     >
       <h1 className="font-[500] text-2xl p-5">Select Wallet</h1>
+      <div className="px-5 flex items-center justify-between gap-x-3">
+        <span className="text-sm font-medium">
+          Proof mode: {localMode ? "Local" : "Remote"}
+        </span>
+        <ToggleSwitch
+          isOff={!localMode}
+          setIsOff={() => setLocalMode((prev) => !prev)}
+        />
+      </div>
+      <div className="px-5 pt-3 flex flex-col gap-y-2">
+        <label htmlFor="readOnlyKey" className="text-sm font-medium">
+          Read-only nullifying key (optional)
+        </label>
+        <input
+          id="readOnlyKey"
+          type="text"
+          value={readOnlyKey}
+          onChange={(e) => setReadOnlyKey(e.target.value)}
+          placeholder="Paste an exported nullifying key to connect read-only"
+          className="border-[2.5px] border-[#f0f0f0] rounded-lg px-3 py-2 text-sm w-full"
+        />
+        {readOnlyKey.trim() && (
+          <p className="text-xs text-gray-500">
+            Connecting with this key skips wallet signing. The session can
+            view balances but cannot spend.
+          </p>
+        )}
+      </div>
       <div className="p-5 pb-10 flex flex-col items-center gap-y-5">
         {connectors
           .filter((connector) =>
