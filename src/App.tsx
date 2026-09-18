@@ -11,6 +11,7 @@ import { Swap } from "./pages/Swap";
 import { Withdraw } from "./pages/Withdraw";
 import { Transfer } from "./pages/Transfer";
 import { MultiSend } from "./pages/MultiSend";
+import { EmporiumTest } from "./pages/EmporiumTest";
 
 const App = () => {
   const [activeTab, setActiveTab] = useState(AppTab.Deposit);
@@ -33,6 +34,7 @@ const App = () => {
               {activeTab === AppTab.Withdraw && <Withdraw />}
               {activeTab === AppTab.Swap && <Swap />}
               {activeTab === AppTab.MultiSend && <MultiSend />}
+              {activeTab === AppTab.EmporiumTest && <EmporiumTest />}
             </section>
           </main>
           <Footer />

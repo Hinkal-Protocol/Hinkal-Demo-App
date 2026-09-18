@@ -62,6 +62,13 @@ export const NavigationBar = ({
             />
           </div>
         }
+        <div className={buttonClassName}>
+          <TabButton
+            isActive={activeTab === AppTab.EmporiumTest}
+            title="Emporium"
+            onClick={() => setActiveTab(AppTab.EmporiumTest)}
+          />
+        </div>
       </div>
     </div>
   );

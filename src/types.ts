@@ -4,6 +4,7 @@ export enum AppTab {
   Withdraw,
   Swap,
   MultiSend,
+  EmporiumTest,
 }
 
 export type Network = {
