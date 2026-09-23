@@ -60,10 +60,8 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
   const multiSend = useCallback(
     async (
       token: Token,
-      address1: string,
-      amount1: string,
-      address2: string,
-      amount2: string,
+      address: string,
+      amount: string,
       selectedScheduleDelay: ScheduleDelayOption,
       feeStructure?: FeeStructure,
     ) => {
@@ -75,10 +73,7 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
         setScheduleStatuses([]);
         setIsDepositing(true);
 
-        const amountsInBigInt = [
-          getAmountInWei(token, amount1),
-          getAmountInWei(token, amount2),
-        ];
+        const amountsInBigInt = [getAmountInWei(token, amount)];
         const txScheduleTime = getTxScheduleTime(selectedScheduleDelay);
 
         const { depositTxHash, scheduleId: newScheduleId } =
@@ -86,7 +81,7 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
             chainId,
             token.erc20TokenAddress,
             amountsInBigInt,
-            [address1, address2],
+            [address],
             txScheduleTime,
             feeStructure,
           );
