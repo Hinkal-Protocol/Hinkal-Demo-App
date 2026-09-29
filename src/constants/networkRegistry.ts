@@ -1,33 +1,31 @@
 import { Network } from "../types";
 import { chainIds } from "./chains.constants";
 
-export const ALCHEMY_API_KEY = "X4IiEZsSzGOrJq8tzq7Y3";
-
 export const networkRegistry: Record<number, Network> = {
   [chainIds.ethMainnet]: {
     name: "Ethereum",
     chainId: chainIds.ethMainnet,
-    fetchRpcUrl: `https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
+    fetchRpcUrl: "https://ethereum-rpc.publicnode.com",
   },
   [chainIds.arbMainnet]: {
     name: "Arbitrum",
     chainId: chainIds.arbMainnet,
-    fetchRpcUrl: `https://arb-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
+    fetchRpcUrl: "https://arb1.arbitrum.io/rpc",
   },
   [chainIds.optimism]: {
     name: "Optimism",
     chainId: chainIds.optimism,
-    fetchRpcUrl: `https://opt-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
+    fetchRpcUrl: "https://mainnet.optimism.io",
   },
   [chainIds.polygon]: {
     name: "Polygon",
     chainId: chainIds.polygon,
-    fetchRpcUrl: `https://polygon-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
+    fetchRpcUrl: "https://polygon.drpc.org",
   },
   [chainIds.base]: {
     name: "Base",
     chainId: chainIds.base,
-    fetchRpcUrl: `https://base-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
+    fetchRpcUrl: "https://mainnet.base.org",
   },
   [chainIds.arcMainnet]: {
     name: "Arc",
@@ -37,22 +35,21 @@ export const networkRegistry: Record<number, Network> = {
   [chainIds.arcTestnet]: {
     name: "Arc Testnet",
     chainId: chainIds.arcTestnet,
-    fetchRpcUrl: `https://arc-testnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
+    fetchRpcUrl: "https://rpc.testnet.arc.network",
   },
   [chainIds.solanaMainnet]: {
     name: "Solana",
     chainId: chainIds.solanaMainnet,
-    fetchRpcUrl:
-      "https://mainnet.helius-rpc.com/?api-key=54ad9ec9-dad6-41de-b961-e3e8ea7a7188",
+    fetchRpcUrl: "https://solana-rpc.publicnode.com",
   },
   [chainIds.tronNile]: {
     name: "Tron Nile",
     chainId: chainIds.tronNile,
-    fetchRpcUrl: `https://tron-testnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
+    fetchRpcUrl: "https://nile.trongrid.io/jsonrpc",
   },
   [chainIds.tronMainnet]: {
     name: "Tron",
     chainId: chainIds.tronMainnet,
-    fetchRpcUrl: `https://tron-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
+    fetchRpcUrl: "https://api.trongrid.io/jsonrpc",
   },
 };
