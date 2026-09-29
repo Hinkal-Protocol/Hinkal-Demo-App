@@ -1,3 +1,4 @@
+import arcMainnetRegistryJson from "./arcMainnetRegistry.json";
 import arcTestnetRegistryJson from "./arcTestnetRegistry.json";
 import ethMainnetRegistryJson from "./ethMainnetRegistry.json";
 import arbMainnetRegistryJson from "./arbMainnetRegistry.json";
@@ -17,8 +18,10 @@ const optimismRegistry = optimismRegistryJson.networkRegistry as Token[];
 const baseRegistry = baseRegistryJson.networkRegistry as Token[];
 const tronNileRegistry = tronNileRegistryJson.networkRegistry as Token[];
 const tronMainnetRegistry = tronMainnetRegistryJson.networkRegistry as Token[];
+const arcMainnetRegistry = arcMainnetRegistryJson.networkRegistry as Token[];
 const arcTestnetRegistry = arcTestnetRegistryJson.networkRegistry as Token[];
-const solanaMainnetRegistry = solanaMainnetRegistryJson.networkRegistry as Token[];
+const solanaMainnetRegistry =
+  solanaMainnetRegistryJson.networkRegistry as Token[];
 
 export const getTokenData = (chainId: number): Token[] => {
   switch (chainId) {
@@ -36,6 +39,9 @@ export const getTokenData = (chainId: number): Token[] => {
 
     case chainIds.base:
       return baseRegistry;
+
+    case chainIds.arcMainnet:
+      return arcMainnetRegistry;
 
     case chainIds.arcTestnet:
       return arcTestnetRegistry;
