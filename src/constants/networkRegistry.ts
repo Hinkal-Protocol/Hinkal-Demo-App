@@ -25,7 +25,7 @@ export const networkRegistry: Record<number, Network> = {
   [chainIds.base]: {
     name: "Base",
     chainId: chainIds.base,
-    fetchRpcUrl: "https://base-rpc.publicnode.com",
+    fetchRpcUrl: "https://mainnet.base.org",
   },
   [chainIds.arcMainnet]: {
     name: "Arc",
