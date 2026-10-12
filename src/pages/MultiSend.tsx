@@ -19,6 +19,8 @@ import { useFee } from "../hooks/useFee";
 import { isSameTokenAddress } from "../utils/token.utils";
 
 const NON_NATIVE_GAS_TOKENS = ["USDC", "USDT", "DAI"];
+const TEMPO_CHAIN_ID = 4217;
+const TEMPO_GAS_COST_TOKEN_SYMBOL_OPTIONS = ["pathUSD", "USDT0", "USDC.e"];
 const SCHEDULE_DELAY_OPTIONS = Object.values(ScheduleDelayOption);
 
 export const MultiSend = () => {
@@ -28,21 +30,23 @@ export const MultiSend = () => {
     const nativeToken = erc20List.find(
       (token) => token.erc20TokenAddress === zeroAddress,
     );
+    const tokenSymbols =
+      chainId === TEMPO_CHAIN_ID
+        ? TEMPO_GAS_COST_TOKEN_SYMBOL_OPTIONS
+        : NON_NATIVE_GAS_TOKENS;
     const stablecoins = erc20List.filter((token) =>
-      NON_NATIVE_GAS_TOKENS.includes(token.symbol),
+      tokenSymbols.includes(token.symbol),
     );
 
     return nativeToken ? [nativeToken, ...stablecoins] : stablecoins;
-  }, [erc20List]);
+  }, [erc20List, chainId]);
 
   const [selectedToken, setSelectedToken] = useState<Token | undefined>(
     undefined,
   );
 
-  const [address1, setAddress1] = useState<string>("");
-  const [amount1, setAmount1] = useState<string>("");
-  const [address2, setAddress2] = useState<string>("");
-  const [amount2, setAmount2] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [amount, setAmount] = useState<string>("");
 
   const [selectedScheduleDelay, setSelectedScheduleDelay] =
     useState<ScheduleDelayOption>(ScheduleDelayOption.INSTANTLY);
@@ -74,18 +78,14 @@ export const MultiSend = () => {
       },
       onSuccess: async () => {
         toast.success("Deposit confirmed");
-        setAddress1("");
-        setAmount1("");
-        setAddress2("");
-        setAmount2("");
+        setAddress("");
+        setAmount("");
       },
     });
 
   useEffect(() => {
-    setAddress1("");
-    setAmount1("");
-    setAddress2("");
-    setAmount2("");
+    setAddress("");
+    setAmount("");
   }, [chainId]);
 
   useEffect(() => {
@@ -119,20 +119,16 @@ export const MultiSend = () => {
     if (!selectedToken) return;
     await multiSend(
       selectedToken,
-      address1,
-      amount1,
-      address2,
-      amount2,
+      address,
+      amount,
       selectedScheduleDelay,
       feeStructure,
     );
   }, [
     multiSend,
     selectedToken,
-    address1,
-    amount1,
-    address2,
-    amount2,
+    address,
+    amount,
     selectedScheduleDelay,
     feeStructure,
   ]);
@@ -145,12 +141,10 @@ export const MultiSend = () => {
     () =>
       !hinkal ||
       !selectedToken ||
-      !address1 ||
-      !amount1 ||
-      !address2 ||
-      !amount2 ||
+      !address ||
+      !amount ||
       isDepositing,
-    [hinkal, selectedToken, address1, amount1, address2, amount2, isDepositing],
+    [hinkal, selectedToken, address, amount, isDepositing],
   );
 
   return (
@@ -173,18 +167,10 @@ export const MultiSend = () => {
         </div>
 
         <RecipientInputRow
-          addressValue={address1}
-          amountValue={amount1}
-          onAddressChange={(e) => setAddress1(e.target.value)}
-          onAmountChange={(event) => setAmountHandler(event, setAmount1)}
-          disabled={isDepositing}
-        />
-
-        <RecipientInputRow
-          addressValue={address2}
-          amountValue={amount2}
-          onAddressChange={(e) => setAddress2(e.target.value)}
-          onAmountChange={(event) => setAmountHandler(event, setAmount2)}
+          addressValue={address}
+          amountValue={amount}
+          onAddressChange={(e) => setAddress(e.target.value)}
+          onAmountChange={(event) => setAmountHandler(event, setAmount)}
           disabled={isDepositing}
         />
 

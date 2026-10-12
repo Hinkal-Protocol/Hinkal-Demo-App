@@ -1,4 +1,12 @@
-import { arbitrum, mainnet, optimism, polygon, base } from "wagmi/chains";
+import {
+  arbitrum,
+  mainnet,
+  optimism,
+  polygon,
+  base,
+  arc,
+  tempoMainnet,
+} from "wagmi/chains";
 
 export const SUPPORTED_CHAINS = [
   mainnet, // 1
@@ -6,6 +14,8 @@ export const SUPPORTED_CHAINS = [
   arbitrum, // 42161
   optimism, // 10
   base, // 8453
+  arc, // 5042
+  tempoMainnet, // 4217
 ] as const;
 
 export const SUPPORTED_CHAIN_IDS: number[] = SUPPORTED_CHAINS.map(

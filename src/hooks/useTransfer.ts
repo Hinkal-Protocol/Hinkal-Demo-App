@@ -39,7 +39,7 @@ export const useTransfer = ({
           [token.erc20TokenAddress],
           [-amountInBigInt],
           recipientAddress,
-          undefined,
+          token.erc20TokenAddress,
           feeStructure,
         );
 
