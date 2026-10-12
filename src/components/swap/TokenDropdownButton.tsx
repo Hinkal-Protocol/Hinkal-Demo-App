@@ -1,10 +1,11 @@
-import { ERC20Token } from "@hinkal/common";
 import { SetStateAction } from "react";
+import { Token } from "../../types";
+import { isSameTokenAddress } from "../../utils/token.utils";
 
 interface TokenDropdownProps {
-  swapToken?: ERC20Token;
-  token?: ERC20Token;
-  onTokenChange: (oldToken?: ERC20Token, newToken?: ERC20Token) => void;
+  swapToken?: Token;
+  token?: Token;
+  onTokenChange: (oldToken?: Token, newToken?: Token) => void;
   setIsTokenSelectShown: (param: SetStateAction<boolean>) => void;
 }
 
@@ -21,11 +22,13 @@ export const TokenDropdownButton = ({
       setIsTokenSelectShown(false);
     }}
     className={`flex itemes-center justify-center py-[7px] gap-x-2 px-3 border-[0.1px] border-[#ffffff] rounded-[20px] w-fit transition-all duration-300 hover:bg-[#343a3d7f]  ${
-      swapToken?.name === token?.name ? "border-[1px] border-blue-600 " : ""
+      isSameTokenAddress(swapToken?.erc20TokenAddress, token?.erc20TokenAddress)
+        ? "border-[1px] border-blue-600 "
+        : ""
     } `}
     key={token ? token.name + token.erc20TokenAddress + token.logoURI : null}
   >
-    {token && (
+    {token?.logoURI && (
       <img
         src={token.logoURI}
         alt=""

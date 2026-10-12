@@ -8,89 +8,84 @@ import {
 import toast from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
 import { SelectToken } from "../components/swap/SelectToken";
-import {
-  ERC20Token,
-  getERC20TokenBySymbol,
-  getERC20Token,
-  getErrorMessage,
-  ErrorCategory,
-  isTempo,
-  TEMPO_GAS_COST_TOKEN_SYMBOL_OPTIONS,
-} from "@hinkal/common";
+import { ExternalActionId } from "@hinkal/common";
 import { useAppContext } from "../AppContext";
 import { useMultiSend } from "../hooks/useMultiSend";
-import {
-  SCHEDULE_OPTIONS,
-  ScheduleOption,
-} from "../constants/schedule.constants";
 import { ButtonGroupWithLabel } from "../utils/buttonGroupWithLabel";
 import { RecipientInputRow } from "../utils/recipientInfoRow";
-import { BALANCE_REFRESH_DELAY_AFTER_TX } from "../constants/balance-refresh-delay.constants";
+import { zeroAddress } from "../constants";
+import { Token, ScheduleDelayOption } from "../types";
+import { useFee } from "../hooks/useFee";
+import { isSameTokenAddress } from "../utils/token.utils";
 
 const NON_NATIVE_GAS_TOKENS = ["USDC", "USDT", "DAI"];
-const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+const TEMPO_CHAIN_ID = 4217;
+const TEMPO_GAS_COST_TOKEN_SYMBOL_OPTIONS = ["pathUSD", "USDT0", "USDC.e"];
+const SCHEDULE_DELAY_OPTIONS = Object.values(ScheduleDelayOption);
 
 export const MultiSend = () => {
-  const { hinkal, refreshBalances, chainId } = useAppContext();
+  const { hinkal, chainId, erc20List } = useAppContext();
 
   const allowedTokens = useMemo(() => {
-    if (!chainId) return [];
-
-    const nativeToken = getERC20Token(ZERO_ADDRESS, chainId);
-
-    const tokenSymbols = isTempo(chainId)
-      ? TEMPO_GAS_COST_TOKEN_SYMBOL_OPTIONS
-      : NON_NATIVE_GAS_TOKENS;
-
-    const stablecoins = tokenSymbols
-      .map((symbol) => getERC20TokenBySymbol(symbol, chainId))
-      .filter((token): token is ERC20Token => token !== undefined);
+    const nativeToken = erc20List.find(
+      (token) => token.erc20TokenAddress === zeroAddress,
+    );
+    const tokenSymbols =
+      chainId === TEMPO_CHAIN_ID
+        ? TEMPO_GAS_COST_TOKEN_SYMBOL_OPTIONS
+        : NON_NATIVE_GAS_TOKENS;
+    const stablecoins = erc20List.filter((token) =>
+      tokenSymbols.includes(token.symbol),
+    );
 
     return nativeToken ? [nativeToken, ...stablecoins] : stablecoins;
-  }, [chainId]);
+  }, [erc20List, chainId]);
 
-  const [selectedToken, setSelectedToken] = useState<ERC20Token | undefined>(
+  const [selectedToken, setSelectedToken] = useState<Token | undefined>(
     undefined,
   );
-  const [totalAmount, setTotalAmount] = useState<string>("");
 
-  const [address1, setAddress1] = useState<string>("");
-  const [amount1, setAmount1] = useState<string>("");
-  const [address2, setAddress2] = useState<string>("");
-  const [amount2, setAmount2] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [amount, setAmount] = useState<string>("");
 
-  const [schedule, setSchedule] = useState<ScheduleOption>("instantly");
+  const [selectedScheduleDelay, setSelectedScheduleDelay] =
+    useState<ScheduleDelayOption>(ScheduleDelayOption.INSTANTLY);
 
-  const {
-    multiSend,
-    isDepositing,
-    scheduleId,
-    scheduleStatuses,
-    calculateFee,
-  } = useMultiSend({
-    onError: (err) => {
-      const message = getErrorMessage(err, ErrorCategory.DEPOSIT);
-      if (message !== "Multi send failed") {
-        toast.error(message);
-      }
-    },
-    onSuccess: async () => {
-      toast.success("Deposit confirmed");
-      setAddress1("");
-      setAmount1("");
-      setAddress2("");
-      setAmount2("");
-      setTotalAmount("");
-      await refreshBalances(BALANCE_REFRESH_DELAY_AFTER_TX);
-    },
-  });
+  const tokenAddresses = useMemo(() => {
+    return [selectedToken?.erc20TokenAddress];
+  }, [selectedToken]);
+
+  const { isFeeLoading, feeStructure } = useFee(
+    selectedToken,
+    ExternalActionId.Transact,
+    tokenAddresses,
+  );
+
+  const { multiSend, isDepositing, scheduleId, scheduleStatuses } =
+    useMultiSend({
+      onError: (err) => {
+        const raw = err instanceof Error ? err.message : "Unknown error";
+
+        let message = raw;
+        if (raw.includes("transfer amount exceeds balance")) {
+          message = "Insufficient balance";
+        } else if (raw.includes("execution reverted")) {
+          const match = raw.match(/reason="([^"]+)"/);
+          message = match ? match[1] : "Transaction reverted";
+        }
+
+        toast.error(message, { id: message });
+      },
+      onSuccess: async () => {
+        toast.success("Deposit confirmed");
+        setAddress("");
+        setAmount("");
+      },
+    });
 
   useEffect(() => {
-    setAddress1("");
-    setAmount1("");
-    setAddress2("");
-    setAmount2("");
-    setTotalAmount("");
+    setAddress("");
+    setAmount("");
   }, [chainId]);
 
   useEffect(() => {
@@ -100,19 +95,16 @@ export const MultiSend = () => {
     }
 
     if (selectedToken) {
-      const isTokenStillValid = allowedTokens.some(
-        (token) =>
-          token.erc20TokenAddress.toLowerCase() ===
-          selectedToken.erc20TokenAddress.toLowerCase(),
+      const isTokenStillValid = allowedTokens.some((token) =>
+        isSameTokenAddress(
+          token.erc20TokenAddress,
+          selectedToken.erc20TokenAddress,
+        ),
       );
 
       if (!isTokenStillValid) setSelectedToken(allowedTokens[0] || undefined);
     }
   }, [chainId, allowedTokens, selectedToken]);
-
-  useEffect(() => {
-    if (selectedToken) calculateFee(selectedToken);
-  }, [selectedToken, calculateFee]);
 
   const setAmountHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -127,20 +119,18 @@ export const MultiSend = () => {
     if (!selectedToken) return;
     await multiSend(
       selectedToken,
-      address1,
-      amount1,
-      address2,
-      amount2,
-      schedule,
+      address,
+      amount,
+      selectedScheduleDelay,
+      feeStructure,
     );
   }, [
     multiSend,
     selectedToken,
-    address1,
-    amount1,
-    address2,
-    amount2,
-    schedule,
+    address,
+    amount,
+    selectedScheduleDelay,
+    feeStructure,
   ]);
 
   const handleSubmit = (event: SyntheticEvent) => {
@@ -151,12 +141,10 @@ export const MultiSend = () => {
     () =>
       !hinkal ||
       !selectedToken ||
-      !address1 ||
-      !amount1 ||
-      !address2 ||
-      !amount2 ||
+      !address ||
+      !amount ||
       isDepositing,
-    [hinkal, selectedToken, address1, amount1, address2, amount2, isDepositing],
+    [hinkal, selectedToken, address, amount, isDepositing],
   );
 
   return (
@@ -168,38 +156,45 @@ export const MultiSend = () => {
             onTokenChange={(prev, cur) => setSelectedToken(cur)}
             disabled={isDepositing}
             tokenFilter={(token) =>
-              allowedTokens.some(
-                (allowedToken) =>
-                  allowedToken.erc20TokenAddress.toLowerCase() ===
-                  token.erc20TokenAddress.toLowerCase(),
+              allowedTokens.some((allowedToken) =>
+                isSameTokenAddress(
+                  allowedToken.erc20TokenAddress,
+                  token.erc20TokenAddress,
+                ),
               )
             }
           />
         </div>
 
         <RecipientInputRow
-          addressValue={address1}
-          amountValue={amount1}
-          onAddressChange={(e) => setAddress1(e.target.value)}
-          onAmountChange={(event) => setAmountHandler(event, setAmount1)}
-          disabled={isDepositing}
-        />
-
-        <RecipientInputRow
-          addressValue={address2}
-          amountValue={amount2}
-          onAddressChange={(e) => setAddress2(e.target.value)}
-          onAmountChange={(event) => setAmountHandler(event, setAmount2)}
+          addressValue={address}
+          amountValue={amount}
+          onAddressChange={(e) => setAddress(e.target.value)}
+          onAmountChange={(event) => setAmountHandler(event, setAmount)}
           disabled={isDepositing}
         />
 
         <ButtonGroupWithLabel
-          label="Schedule Transfer"
-          options={SCHEDULE_OPTIONS}
-          selected={schedule}
-          onSelect={(option) => setSchedule(option as ScheduleOption)}
+          label="Transaction Schedule"
+          options={SCHEDULE_DELAY_OPTIONS}
+          selected={selectedScheduleDelay}
+          onSelect={(option) =>
+            setSelectedScheduleDelay(option as ScheduleDelayOption)
+          }
           disabled={isDepositing}
         />
+
+        {feeStructure !== undefined && selectedToken && (
+          <div className="w-[90%] mx-auto mb-2 text-sm text-gray-400 text-right">
+            Fee:{" "}
+            {isFeeLoading
+              ? "Loading..."
+              : `${(
+                  Number(feeStructure.flatFee) /
+                  10 ** (selectedToken.decimals || 18)
+                ).toFixed(4)} ${selectedToken.symbol}`}
+          </div>
+        )}
 
         <div className="border-solid">
           <button

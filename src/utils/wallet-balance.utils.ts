@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { networkRegistry } from "@hinkal/common";
+import { networkRegistry } from "../constants/networkRegistry";
 
 const ERC20_ABI = [
   "function balanceOf(address owner) view returns (uint256)",

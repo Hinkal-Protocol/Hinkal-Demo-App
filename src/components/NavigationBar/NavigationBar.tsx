@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction, useMemo } from "react";
-import { isTronLike } from "@hinkal/common";
 import { AppTab } from "../../types";
 import { TabButton } from "./TabButton";
 import { useAppContext } from "../../AppContext";
+import { isTronLike } from "../../constants/tron-chain.constants";
 
 interface NavigationBarProps {
   activeTab: AppTab;
@@ -15,10 +15,14 @@ export const NavigationBar = ({
   activeTab,
   setActiveTab,
 }: NavigationBarProps) => {
-  const { chainId } = useAppContext();
+  const { hinkal, chainId } = useAppContext();
   const swapDisabled = useMemo(
     () => !!chainId && isTronLike(chainId),
     [chainId],
+  );
+  const receiveDisabled = useMemo(
+    () => !chainId || !hinkal || !hinkal.isReceiveVaultSupported(chainId),
+    [hinkal, chainId],
   );
   return (
     <div className="mt-[4%] xl:flex h-12 mb-4 text-[15px] font-semibold border-b border-hinkal-blue-200 block relative">
@@ -53,11 +57,22 @@ export const NavigationBar = ({
             disabledTooltip="Swap not available on Tron"
           />
         </div>
+        {
+          <div className={buttonClassName}>
+            <TabButton
+              isActive={activeTab === AppTab.MultiSend}
+              title="Multi Send"
+              onClick={() => setActiveTab(AppTab.MultiSend)}
+            />
+          </div>
+        }
         <div className={buttonClassName}>
           <TabButton
-            isActive={activeTab === AppTab.MultiSend}
-            title="Multi Send"
-            onClick={() => setActiveTab(AppTab.MultiSend)}
+            isActive={activeTab === AppTab.Receive}
+            title="Receive"
+            onClick={() => setActiveTab(AppTab.Receive)}
+            disabled={receiveDisabled}
+            disabledTooltip="Receive address not available on this network"
           />
         </div>
       </div>

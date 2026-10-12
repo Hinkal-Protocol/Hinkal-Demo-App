@@ -1,13 +1,13 @@
-import { ERC20Token } from "@hinkal/common";
 import { useState } from "react";
 import VectorDown from "../../assets/VectorDown.svg";
 import { TokenDropdown } from "./TokenDropdown";
+import { Token } from "../../types";
 
 interface SelectTokenProps {
-  swapToken?: ERC20Token;
-  onTokenChange: (prev?: ERC20Token, cur?: ERC20Token) => void;
+  swapToken?: Token;
+  onTokenChange: (prev?: Token, cur?: Token) => void;
   disabled?: boolean;
-  tokenFilter?: (arg: ERC20Token) => boolean;
+  tokenFilter?: (arg: Token) => boolean;
 }
 
 export const SelectToken = ({

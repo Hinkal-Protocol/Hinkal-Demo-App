@@ -1,8 +1,9 @@
 import { NetworkDropdownItem } from "./NetworkDropdownItem";
 import { useCallback, useMemo } from "react";
-import { isTronLike, networkRegistry } from "@hinkal/common";
 import { useAppContext } from "../../../../AppContext";
 import { SUPPORTED_CHAIN_IDS } from "../../../../constants/supported-chain-ids.constants";
+import { networkRegistry } from "../../../../constants/networkRegistry";
+import { isTronLike } from "../../../../constants/tron-chain.constants";
 
 interface NetworkSettingsDropdownProps {
   close: () => void;
@@ -11,7 +12,7 @@ interface NetworkSettingsDropdownProps {
 export const NetworkSettingsDropdown = ({
   close,
 }: NetworkSettingsDropdownProps) => {
-  const { hinkal, chainId, setChainId, refreshBalances } = useAppContext();
+  const { hinkal, chainId, setChainId } = useAppContext();
 
   const isTronConnection = useMemo(
     () => !!chainId && isTronLike(chainId),
@@ -37,18 +38,17 @@ export const NetworkSettingsDropdown = ({
         const network = networkList.find(
           (net) => net.chainId === targetChainId,
         );
-        if (!network || isTronLike(targetChainId)) return;
+        if (!network || isTronLike(targetChainId) || !hinkal) return;
 
-        await hinkal.switchNetwork(network);
+        await hinkal.switchNetwork(targetChainId);
+        await hinkal.resetMerkle();
         setChainId(network.chainId);
         close();
-        await hinkal.resetMerkle();
-        await refreshBalances();
       } catch (err) {
         console.error("Network switch failed:", err);
       }
     },
-    [networkList, hinkal, setChainId, close, refreshBalances],
+    [hinkal, setChainId, close, networkList],
   );
 
   return (

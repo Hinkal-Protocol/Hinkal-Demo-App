@@ -1,13 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import {
-  ERC20Token,
-  getAmountInWei,
-  ExternalActionId,
-  FeeStructure,
-  processGasEstimates,
-} from "@hinkal/common";
+import { FeeStructure } from "@hinkal/common";
 import { useAppContext } from "../AppContext";
-import { getTxScheduleTime, ScheduleOption } from "../constants/schedule.constants";
+import { getTxScheduleTime } from "../utils/getTxScheduleTime";
+import { ScheduleDelayOption, Token } from "../types";
+import { getAmountInWei } from "../utils/amount.utils";
+import { waitForTransaction } from "../utils/waitForTransaction";
 
 interface ScheduleTxStatus {
   status: string;
@@ -26,11 +23,6 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
   const [scheduleId, setScheduleId] = useState<string | null>(null);
   const [scheduleStatuses, setScheduleStatuses] = useState<ScheduleTxStatus[]>(
     [],
-  );
-  const [fee, setFee] = useState<bigint | null>(null);
-  const [isFeeLoading, setIsFeeLoading] = useState(false);
-  const [feeStructure, setFeeStructure] = useState<FeeStructure | undefined>(
-    undefined,
   );
 
   useEffect(() => {
@@ -65,49 +57,13 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
     };
   }, [scheduleId, hinkal]);
 
-  const calculateFee = useCallback(
-    async (token: ERC20Token) => {
-      if (!hinkal || !token || !chainId) return;
-
-      try {
-        setIsFeeLoading(true);
-
-        const { priceOfTransactionInToken } = await processGasEstimates(
-          chainId,
-          token,
-          ExternalActionId.Transact,
-          1,
-          undefined,
-          undefined,
-        );
-
-        if (priceOfTransactionInToken !== undefined) {
-          setFee(priceOfTransactionInToken * 2n);
-          setFeeStructure({
-            variableRate: 0n,
-            feeToken: token.erc20TokenAddress,
-            flatFee: priceOfTransactionInToken,
-          });
-        }
-      } catch (err) {
-        console.error("Error calculating fee:", err);
-        setFee(null);
-        setFeeStructure(undefined);
-      } finally {
-        setIsFeeLoading(false);
-      }
-    },
-    [hinkal, chainId],
-  );
-
   const multiSend = useCallback(
     async (
-      token: ERC20Token,
-      address1: string,
-      amount1: string,
-      address2: string,
-      amount2: string,
-      schedule: ScheduleOption,
+      token: Token,
+      address: string,
+      amount: string,
+      selectedScheduleDelay: ScheduleDelayOption,
+      feeStructure?: FeeStructure,
     ) => {
       if (!hinkal) throw new Error("Hinkal not initialized");
       if (!chainId) return;
@@ -117,18 +73,20 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
         setScheduleStatuses([]);
         setIsDepositing(true);
 
-        const txScheduleTime = getTxScheduleTime(schedule);
+        const amountsInBigInt = [getAmountInWei(token, amount)];
+        const txScheduleTime = getTxScheduleTime(selectedScheduleDelay);
 
         const { depositTxHash, scheduleId: newScheduleId } =
-          await hinkal.depositAndWithdrawExtended(
-            token,
-            [getAmountInWei(token, amount1), getAmountInWei(token, amount2)],
-            [address1, address2],
+          await hinkal.depositAndWithdraw(
+            chainId,
+            token.erc20TokenAddress,
+            amountsInBigInt,
+            [address],
             txScheduleTime,
             feeStructure,
           );
 
-        await hinkal.waitForTransaction(chainId, depositTxHash);
+        await waitForTransaction(chainId, depositTxHash);
 
         setScheduleId(newScheduleId);
         onSuccess();
@@ -138,7 +96,7 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
         setIsDepositing(false);
       }
     },
-    [hinkal, chainId, feeStructure, onError, onSuccess],
+    [hinkal, chainId, chainId, onError, onSuccess],
   );
 
   return {
@@ -146,8 +104,5 @@ export const useMultiSend = ({ onError, onSuccess }: UseMultiSendProps) => {
     isDepositing,
     scheduleId,
     scheduleStatuses,
-    fee,
-    isFeeLoading,
-    calculateFee,
   };
 };
