@@ -1,0 +1,37 @@
+{
+  "networkRegistry": [
+    {
+      "chainId": 4217,
+      "erc20TokenAddress": "0x20c0000000000000000000000000000000000000",
+      "name": "PathUSD",
+      "symbol": "pathUSD",
+      "decimals": 6,
+      "logoURI": "https://esm.sh/gh/tempoxyz/tempo-apps/apps/tokenlist/data/4217/icons/0x20c0000000000000000000000000000000000000.svg",
+      "allowanceStorageOffset": 10,
+      "isVyper": false,
+      "balanceStorageOffset": 9
+    },
+    {
+      "chainId": 4217,
+      "erc20TokenAddress": "0x20c000000000000000000000b9537d11c60e8b50",
+      "name": "Bridged USDC (Stargate)",
+      "symbol": "USDC.e",
+      "decimals": 6,
+      "logoURI": "https://esm.sh/gh/tempoxyz/tempo-apps/apps/tokenlist/data/4217/icons/0x20c000000000000000000000b9537d11c60e8b50.svg",
+      "allowanceStorageOffset": 10,
+      "isVyper": false,
+      "balanceStorageOffset": 9
+    },
+    {
+      "chainId": 4217,
+      "erc20TokenAddress": "0x20c00000000000000000000014f22ca97301eb73",
+      "name": "USDT0",
+      "symbol": "USDT0",
+      "decimals": 6,
+      "logoURI": "https://esm.sh/gh/tempoxyz/tempo-apps/apps/tokenlist/data/4217/icons/0x20c00000000000000000000014f22ca97301eb73.svg",
+      "allowanceStorageOffset": 10,
+      "isVyper": false,
+      "balanceStorageOffset": 9
+    }
+  ]
+}

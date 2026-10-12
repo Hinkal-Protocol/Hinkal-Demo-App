@@ -12,7 +12,10 @@ import { TokenAmountInput } from "../components/TokenAmountInput";
 import { useAppContext } from "../AppContext";
 import { getAmountInToken, getAmountInWei } from "../utils/amount.utils";
 import { getPublicBalanceByTokenAddress } from "../utils/getPublicBalanceByToken";
+import { getSolanaPublicBalance } from "../utils/getSolanaPublicBalance";
 import { waitForTransaction } from "../utils/waitForTransaction";
+import { isSolanaLike } from "../constants/solana-chain.constants";
+import { getPublicAddress } from "../utils/getPublicAddress";
 
 export const Deposit = () => {
   const { hinkal, chainId } = useAppContext();
@@ -33,12 +36,20 @@ export const Deposit = () => {
         return;
       }
 
-      const ethAddress = await hinkal.getEthereumAddress();
-      const balance = await getPublicBalanceByTokenAddress(
-        chainId,
-        ethAddress,
-        selectedToken.erc20TokenAddress,
-      );
+      const address = await getPublicAddress(hinkal, chainId);
+      if (!address) {
+        if (!isCancelled) setPublicBalance(null);
+        return;
+      }
+
+      // Solana public balances come from the Solana RPC, not an ERC20 call.
+      const balance = isSolanaLike(chainId)
+        ? await getSolanaPublicBalance(address, selectedToken.erc20TokenAddress)
+        : await getPublicBalanceByTokenAddress(
+            chainId,
+            address,
+            selectedToken.erc20TokenAddress,
+          );
       if (!isCancelled) setPublicBalance(balance);
     };
     fetch();
@@ -65,14 +76,24 @@ export const Deposit = () => {
       setIsProcessing(true);
       const amountInWei = getAmountInWei(selectedToken, depositAmount);
 
-      const result = await hinkal.deposit(
-        chainId,
-        [selectedToken.erc20TokenAddress],
-        [amountInWei],
-      );
+      if (isSolanaLike(chainId)) {
+        // Solana deposits take a single mint and are broadcast by the SDK,
+        // which returns the signature directly — no EVM receipt to await.
+        await hinkal.depositSolana(
+          chainId,
+          selectedToken.erc20TokenAddress,
+          amountInWei,
+        );
+      } else {
+        const result = await hinkal.deposit(
+          chainId,
+          [selectedToken.erc20TokenAddress],
+          [amountInWei],
+        );
 
-      if (result && typeof result === "object" && "hash" in result)
-        await waitForTransaction(chainId, result.hash);
+        if (result && typeof result === "object" && "hash" in result)
+          await waitForTransaction(chainId, result.hash);
+      }
 
       toast.success(
         "Deposit successful! Balance will update in several seconds",

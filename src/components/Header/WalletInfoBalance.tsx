@@ -9,10 +9,10 @@ interface WalletInfoBalanceProps {
 }
 
 export const WalletInfoBalance = ({ tokenBalance }: WalletInfoBalanceProps) => {
-  const { erc20List } = useAppContext();
+  const { erc20List, chainId } = useAppContext();
   const token = useMemo(
-    () => findToken(erc20List, tokenBalance.erc20Address),
-    [erc20List, tokenBalance.erc20Address],
+    () => findToken(erc20List, tokenBalance.erc20Address, chainId),
+    [erc20List, tokenBalance.erc20Address, chainId],
   );
 
   if (!token) return null;

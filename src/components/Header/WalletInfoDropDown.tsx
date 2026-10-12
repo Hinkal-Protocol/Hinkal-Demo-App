@@ -7,17 +7,23 @@ import { copyToClipboard } from "../../utils/copyToClipboard";
 import { reloadPage } from "../../utils/pageReload";
 import { WalletInfoBalance } from "./WalletInfoBalance";
 import { useAppContext } from "../../AppContext";
-import { zeroAddress } from "../../constants";
+import { getNativeTokenAddress } from "../../constants";
 import { findToken } from "../../utils/token.utils";
+import { getPublicAddress } from "../../utils/getPublicAddress";
 
-const filterTokenBalances = (tokenBalances: TokenBalance[]) => {
+const filterTokenBalances = (
+  tokenBalances: TokenBalance[],
+  chainId: number | undefined,
+) => {
   const nonZeroBalances = [...tokenBalances]
     .sort((a, b) => (a.erc20Address < b.erc20Address ? -1 : 1))
     .filter((tokenBalance) => tokenBalance.balance !== 0n);
-  if (nonZeroBalances.length === 0)
+  if (nonZeroBalances.length === 0) {
+    const nativeAddress = getNativeTokenAddress(chainId);
     return tokenBalances.filter(
-      (tokenBalance) => tokenBalance.erc20Address === zeroAddress,
+      (tokenBalance) => tokenBalance.erc20Address === nativeAddress,
     );
+  }
   return nonZeroBalances;
 };
 
@@ -26,8 +32,8 @@ export const WalletInfoDropDown = () => {
     useAppContext();
 
   const nativeToken = useMemo(
-    () => findToken(erc20List, zeroAddress),
-    [erc20List],
+    () => findToken(erc20List, getNativeTokenAddress(chainId), chainId),
+    [erc20List, chainId],
   );
 
   const displayBalances = useMemo((): TokenBalance[] => {
@@ -43,13 +49,13 @@ export const WalletInfoDropDown = () => {
       ];
     }
 
-    return filterTokenBalances(chainBalances);
+    return filterTokenBalances(chainBalances, chainId);
   }, [chainBalances, nativeToken, chainId]);
 
   const handleCopyPublicAddress = async () => {
     try {
       if (!hinkal) return;
-      const publicAddress = await hinkal.getEthereumAddress();
+      const publicAddress = await getPublicAddress(hinkal, chainId);
       if (!publicAddress) {
         toast.error("No public address found");
         return;

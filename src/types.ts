@@ -29,3 +29,11 @@ export type Token = {
   decimals: number;
   logoURI?: string;
 };
+
+export type SolanaTransactionParams = {
+  mintFrom?: string;
+  mintTo?: string;
+  recipient?: string;
+  nullifierCount?: number;
+  rootInsertCount?: number;
+};

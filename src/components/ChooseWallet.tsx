@@ -20,9 +20,14 @@ import {
   prepareWagmiHinkalFromNullifyingKey,
 } from "@hinkal/common/providers/prepareWagmiHinkal";
 import { prepareTronHinkal } from "@hinkal/common/providers/prepareTronHinkal";
+import { prepareSolanaHinkal } from "@hinkal/common/providers/prepareSolanaHinkal";
 import { TRON_CHAIN_ID } from "../constants/tron-chain.constants";
 import { Wallet, useWallet } from "@tronweb3/tronwallet-adapter-react-hooks";
 import { AdapterState } from "@tronweb3/tronwallet-abstract-adapter";
+import { useWallet as useSolanaWallet } from "@solana/wallet-adapter-react";
+import type { Adapter as SolanaAdapter } from "@solana/wallet-adapter-base";
+import { WalletReadyState } from "@solana/wallet-adapter-base";
+import { chainIds } from "../constants/chains.constants";
 import toast from "react-hot-toast";
 import { Hinkal } from "@hinkal/common";
 
@@ -42,6 +47,8 @@ export const ChooseWallet = ({
   const connectors = useConnectors();
   const config = useConfig();
   const { wallets } = useWallet();
+  const { wallets: solanaWallets, select: selectSolanaWallet } =
+    useSolanaWallet();
 
   const { setHinkal, setChainId, setDataLoaded } = useAppContext();
 
@@ -56,7 +63,19 @@ export const ChooseWallet = ({
 
   const tronWallets = useMemo(
     () => wallets.filter((w) => w.state !== AdapterState.NotFound),
-    [wallets],
+    [wallets]
+  );
+
+  const solanaAdapters = useMemo(
+    () =>
+      solanaWallets
+        .map((w) => w.adapter)
+        .filter(
+          (adapter) =>
+            adapter.readyState === WalletReadyState.Installed ||
+            adapter.readyState === WalletReadyState.Loadable
+        ),
+    [solanaWallets]
   );
 
   const finalize = useCallback(
@@ -67,7 +86,7 @@ export const ChooseWallet = ({
       setDataLoaded(true);
       onHide();
     },
-    [setHinkal, setShieldedAddress, setChainId, setDataLoaded, onHide],
+    [setHinkal, setShieldedAddress, setChainId, setDataLoaded, onHide]
   );
 
   const handleSelectConnector = useCallback(
@@ -126,6 +145,60 @@ export const ChooseWallet = ({
     [finalize, setIsConnecting, hinkalConfig],
   );
 
+  const handleSelectSolanaAdapter = useCallback(
+    async (adapter: SolanaAdapter) => {
+      const solanaId = `solana-${adapter.name}`;
+      try {
+        setIsConnecting?.(true);
+        setConnectingId(solanaId);
+
+        if (!adapter.connected) await adapter.connect();
+        const { publicKey } = adapter;
+        if (!publicKey) throw new Error("Solana public key not available");
+
+        if (!("signTransaction" in adapter) || !("signMessage" in adapter)) {
+          throw new Error(
+            `${adapter.name} does not support message/transaction signing`
+          );
+        }
+
+        const signerAdapter = adapter as SolanaAdapter & {
+          signTransaction: (tx: unknown) => Promise<unknown>;
+          signAllTransactions: (txs: unknown[]) => Promise<unknown[]>;
+          signMessage: (message: Uint8Array) => Promise<Uint8Array>;
+        };
+
+        const hinkal = await prepareSolanaHinkal(
+          {
+            publicKey,
+            adapter,
+            signTransaction: (tx: unknown) => signerAdapter.signTransaction(tx),
+            signAllTransactions: (txs: unknown[]) =>
+              signerAdapter.signAllTransactions(txs),
+            signMessage: async (message: Uint8Array) => ({
+              signature: await signerAdapter.signMessage(message),
+              publicKey,
+            }),
+          } as any,
+          undefined,
+          hinkalConfig
+        );
+
+        // Keep the wallet-adapter context in sync with the adapter we connected.
+        selectSolanaWallet(adapter.name);
+        finalize(hinkal, chainIds.solanaMainnet);
+      } catch (err) {
+        toast.error(
+          `Solana wallet connection failed: ${err || "Unknown error"}`
+        );
+      } finally {
+        setConnectingId(null);
+        setIsConnecting?.(false);
+      }
+    },
+    [finalize, setIsConnecting, selectSolanaWallet, hinkalConfig],
+  );
+
   return (
     <Modal
       xBtn
@@ -167,7 +240,7 @@ export const ChooseWallet = ({
       <div className="p-5 pb-10 flex flex-col items-center gap-y-5">
         {connectors
           .filter((connector) =>
-            isMobile ? connector.name === "WalletConnect" : true,
+            isMobile ? connector.name === "WalletConnect" : true
           )
           .map((connector) => (
             <button
@@ -226,6 +299,33 @@ export const ChooseWallet = ({
                   )}
                   <span>{walletItem.adapter.name} (Tron)</span>
                   {connectingId === tronId && <Spinner />}
+                </button>
+              );
+            })}
+          </>
+        )}
+
+        {solanaAdapters.length > 0 && (
+          <>
+            {solanaAdapters.map((adapter) => {
+              const solanaId = `solana-${adapter.name}`;
+              return (
+                <button
+                  className="bg-modal px-4 py-2 min-w-[180px] w-[80%] rounded-lg border-[2.5px] border-[#f0f0f0] hover:border-[#9c9c9c] font-bold duration-150 flex items-center justify-center gap-x-3"
+                  type="button"
+                  disabled={!!connectingId}
+                  key={solanaId}
+                  onClick={() => handleSelectSolanaAdapter(adapter)}
+                >
+                  {adapter.icon && (
+                    <img
+                      src={adapter.icon}
+                      alt="Logo"
+                      className="w-[26px] h-[26px]"
+                    />
+                  )}
+                  <span>{adapter.name} (Solana)</span>
+                  {connectingId === solanaId && <Spinner />}
                 </button>
               );
             })}

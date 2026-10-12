@@ -33,6 +33,9 @@ export const useWithdraw = ({
       if (!chainId) {
         throw new Error("Chain ID not available");
       }
+      if (token.chainId !== chainId) {
+        throw new Error("Selected token does not belong to the active chain");
+      }
 
       try {
         setIsProcessing(true);

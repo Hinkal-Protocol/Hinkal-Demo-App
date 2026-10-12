@@ -47,8 +47,10 @@ export const TokenAmountInput = ({
   >(null);
 
   useEffect(() => {
-    if (erc20List.length > 0) setSelectedToken(erc20List[0]);
-  }, [erc20List, setSelectedToken]);
+    if (erc20List.length === 0) return;
+    if (selectedToken && selectedToken.chainId === chainId) return;
+    setSelectedToken(erc20List[0]);
+  }, [erc20List, setSelectedToken, selectedToken, chainId]);
 
   const isNative =
     selectedToken?.erc20TokenAddress.toLowerCase() === zeroAddress;

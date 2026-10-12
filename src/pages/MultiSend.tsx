@@ -10,25 +10,32 @@ import { Spinner } from "../components/Spinner";
 import { SelectToken } from "../components/swap/SelectToken";
 import { ExternalActionId } from "@hinkal/common";
 import { useAppContext } from "../AppContext";
-import { useMultiSend } from "../hooks/useMultiSend";
+import { MultiSendRecipient, useMultiSend } from "../hooks/useMultiSend";
 import { ButtonGroupWithLabel } from "../utils/buttonGroupWithLabel";
 import { RecipientInputRow } from "../utils/recipientInfoRow";
-import { zeroAddress } from "../constants";
+import { getNativeTokenAddress } from "../constants";
 import { Token, ScheduleDelayOption } from "../types";
 import { useFee } from "../hooks/useFee";
 import { isSameTokenAddress } from "../utils/token.utils";
+import {
+  isSolanaLike,
+  resolveFeeOverride,
+} from "../constants/solana-chain.constants";
 
 const NON_NATIVE_GAS_TOKENS = ["USDC", "USDT", "DAI"];
 const TEMPO_CHAIN_ID = 4217;
 const TEMPO_GAS_COST_TOKEN_SYMBOL_OPTIONS = ["pathUSD", "USDT0", "USDC.e"];
 const SCHEDULE_DELAY_OPTIONS = Object.values(ScheduleDelayOption);
 
+const emptyRecipient = (): MultiSendRecipient => ({ address: "", amount: "" });
+
 export const MultiSend = () => {
   const { hinkal, chainId, erc20List } = useAppContext();
+  const isSolana = isSolanaLike(chainId);
 
   const allowedTokens = useMemo(() => {
     const nativeToken = erc20List.find(
-      (token) => token.erc20TokenAddress === zeroAddress,
+      (token) => token.erc20TokenAddress === getNativeTokenAddress(chainId)
     );
     const tokenSymbols =
       chainId === TEMPO_CHAIN_ID
@@ -42,23 +49,56 @@ export const MultiSend = () => {
   }, [erc20List, chainId]);
 
   const [selectedToken, setSelectedToken] = useState<Token | undefined>(
-    undefined,
+    undefined
   );
 
-  const [address, setAddress] = useState<string>("");
-  const [amount, setAmount] = useState<string>("");
+  const [recipients, setRecipients] = useState<MultiSendRecipient[]>([
+    emptyRecipient(),
+  ]);
 
   const [selectedScheduleDelay, setSelectedScheduleDelay] =
     useState<ScheduleDelayOption>(ScheduleDelayOption.INSTANTLY);
+
+  const updateRecipient = useCallback(
+    (index: number, field: keyof MultiSendRecipient, value: string) => {
+      setRecipients((prev) =>
+        prev.map((r, i) => (i === index ? { ...r, [field]: value } : r))
+      );
+    },
+    []
+  );
+
+  const addRecipient = useCallback(
+    () => setRecipients((prev) => [...prev, emptyRecipient()]),
+    []
+  );
+
+  const removeRecipient = useCallback(
+    (index: number) =>
+      setRecipients((prev) => prev.filter((_, i) => i !== index)),
+    []
+  );
 
   const tokenAddresses = useMemo(() => {
     return [selectedToken?.erc20TokenAddress];
   }, [selectedToken]);
 
+  const solanaTransactionParams = useMemo(
+    () =>
+      isSolana
+        ? {
+            mintTo: selectedToken?.erc20TokenAddress,
+            recipient: recipients[0]?.address || undefined,
+          }
+        : undefined,
+    [isSolana, selectedToken, recipients]
+  );
+
   const { isFeeLoading, feeStructure } = useFee(
     selectedToken,
     ExternalActionId.Transact,
     tokenAddresses,
+    solanaTransactionParams
   );
 
   const { multiSend, isDepositing, scheduleId, scheduleStatuses } =
@@ -78,14 +118,12 @@ export const MultiSend = () => {
       },
       onSuccess: async () => {
         toast.success("Deposit confirmed");
-        setAddress("");
-        setAmount("");
+        setRecipients([emptyRecipient()]);
       },
     });
 
   useEffect(() => {
-    setAddress("");
-    setAmount("");
+    setRecipients([emptyRecipient()]);
   }, [chainId]);
 
   useEffect(() => {
@@ -99,38 +137,38 @@ export const MultiSend = () => {
         isSameTokenAddress(
           token.erc20TokenAddress,
           selectedToken.erc20TokenAddress,
-        ),
+          chainId
+        )
       );
 
       if (!isTokenStillValid) setSelectedToken(allowedTokens[0] || undefined);
     }
   }, [chainId, allowedTokens, selectedToken]);
 
-  const setAmountHandler = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    setValue: (value: string) => void,
-  ) => {
-    if (/^[0-9]*[.]?[0-9]*$/.test(event.target.value)) {
-      setValue(event.target.value);
-    }
-  };
+  const handleAmountChange = useCallback(
+    (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
+      if (/^[0-9]*[.]?[0-9]*$/.test(event.target.value)) {
+        updateRecipient(index, "amount", event.target.value);
+      }
+    },
+    [updateRecipient]
+  );
 
   const handleMultiSend = useCallback(async () => {
     if (!selectedToken) return;
     await multiSend(
       selectedToken,
-      address,
-      amount,
+      recipients,
       selectedScheduleDelay,
-      feeStructure,
+      resolveFeeOverride(chainId, feeStructure)
     );
   }, [
     multiSend,
     selectedToken,
-    address,
-    amount,
+    recipients,
     selectedScheduleDelay,
     feeStructure,
+    chainId,
   ]);
 
   const handleSubmit = (event: SyntheticEvent) => {
@@ -141,10 +179,10 @@ export const MultiSend = () => {
     () =>
       !hinkal ||
       !selectedToken ||
-      !address ||
-      !amount ||
+      recipients.length === 0 ||
+      recipients.some((r) => !r.address || !r.amount) ||
       isDepositing,
-    [hinkal, selectedToken, address, amount, isDepositing],
+    [hinkal, selectedToken, recipients, isDepositing]
   );
 
   return (
@@ -160,19 +198,42 @@ export const MultiSend = () => {
                 isSameTokenAddress(
                   allowedToken.erc20TokenAddress,
                   token.erc20TokenAddress,
-                ),
+                  token.chainId
+                )
               )
             }
           />
         </div>
 
-        <RecipientInputRow
-          addressValue={address}
-          amountValue={amount}
-          onAddressChange={(e) => setAddress(e.target.value)}
-          onAmountChange={(event) => setAmountHandler(event, setAmount)}
-          disabled={isDepositing}
-        />
+        {recipients.map((recipient, index) => (
+          <RecipientInputRow
+            // Rows have no stable id; index is the identity here.
+            // eslint-disable-next-line react/no-array-index-key
+            key={index}
+            addressValue={recipient.address}
+            amountValue={recipient.amount}
+            onAddressChange={(e) =>
+              updateRecipient(index, "address", e.target.value)
+            }
+            onAmountChange={(event) => handleAmountChange(index, event)}
+            disabled={isDepositing}
+            onRemove={
+              recipients.length > 1 ? () => removeRecipient(index) : undefined
+            }
+            removeLabel={`Remove recipient ${index + 1}`}
+          />
+        ))}
+
+        <div className="w-[96%] mx-auto mb-4 px-3">
+          <button
+            type="button"
+            onClick={addRecipient}
+            disabled={isDepositing}
+            className="text-[13px] text-primary hover:text-hinkal-purple-200 transition-all duration-300 disabled:cursor-not-allowed disabled:text-hinkal-gray-200"
+          >
+            + Add recipient
+          </button>
+        </div>
 
         <ButtonGroupWithLabel
           label="Transaction Schedule"

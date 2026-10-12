@@ -12,11 +12,6 @@ export const networkRegistry: Record<number, Network> = {
     chainId: chainIds.arbMainnet,
     fetchRpcUrl: "https://arb1.arbitrum.io/rpc",
   },
-  [chainIds.optimism]: {
-    name: "Optimism",
-    chainId: chainIds.optimism,
-    fetchRpcUrl: "https://mainnet.optimism.io",
-  },
   [chainIds.polygon]: {
     name: "Polygon",
     chainId: chainIds.polygon,
@@ -31,6 +26,16 @@ export const networkRegistry: Record<number, Network> = {
     name: "Arc",
     chainId: chainIds.arcMainnet,
     fetchRpcUrl: "https://rpc.mainnet.arc.io",
+  },
+  [chainIds.bnbMainnet]: {
+    name: "BNB Chain",
+    chainId: chainIds.bnbMainnet,
+    fetchRpcUrl: "https://bsc-rpc.publicnode.com",
+  },
+  [chainIds.tempo]: {
+    name: "Tempo",
+    chainId: chainIds.tempo,
+    fetchRpcUrl: "https://rpc.tempo.xyz",
   },
   [chainIds.arcTestnet]: {
     name: "Arc Testnet",

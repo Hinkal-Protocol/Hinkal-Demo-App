@@ -22,7 +22,11 @@ export const TokenDropdownButton = ({
       setIsTokenSelectShown(false);
     }}
     className={`flex itemes-center justify-center py-[7px] gap-x-2 px-3 border-[0.1px] border-[#ffffff] rounded-[20px] w-fit transition-all duration-300 hover:bg-[#343a3d7f]  ${
-      isSameTokenAddress(swapToken?.erc20TokenAddress, token?.erc20TokenAddress)
+      isSameTokenAddress(
+        swapToken?.erc20TokenAddress,
+        token?.erc20TokenAddress,
+        token?.chainId,
+      )
         ? "border-[1px] border-blue-600 "
         : ""
     } `}
