@@ -168,48 +168,21 @@ export const ChooseWallet = ({
           signMessage: (message: Uint8Array) => Promise<Uint8Array>;
         };
 
-        const hinkal = await prepareSolanaHinkal({
-          publicKey,
-          adapter,
-          // TEMP DIAGNOSTICS — surfaces the wallet's real rejection, which the
-          // adapter otherwise buries inside WalletSignTransactionError.
-          signTransaction: async (tx: unknown) => {
-            const anyTx = tx as {
-              instructions?: { data?: Uint8Array }[];
-              serialize?: (o?: unknown) => Uint8Array;
-            };
-            /* eslint-disable no-console */
-            console.group("[sign] signTransaction");
-            console.log("instructions:", anyTx.instructions?.length);
-            console.log(
-              "instruction data sizes:",
-              anyTx.instructions?.map((i) => i.data?.length)
-            );
-            try {
-              const size = anyTx.serialize?.({
-                requireAllSignatures: false,
-                verifySignatures: false,
-              })?.length;
-              console.log("serialized tx bytes:", size, "(limit 1232)");
-            } catch (e) {
-              console.log("serialize failed:", e);
-            }
-            console.groupEnd();
-            try {
-              return await signerAdapter.signTransaction(tx);
-            } catch (e) {
-              console.error("[sign] wallet rejected:", e);
-              throw e;
-            }
-            /* eslint-enable no-console */
-          },
-          signAllTransactions: (txs: unknown[]) =>
-            signerAdapter.signAllTransactions(txs),
-          signMessage: async (message: Uint8Array) => ({
-            signature: await signerAdapter.signMessage(message),
+        const hinkal = await prepareSolanaHinkal(
+          {
             publicKey,
-          }),
-        } as any, undefined, hinkalConfig);
+            adapter,
+            signTransaction: (tx: unknown) => signerAdapter.signTransaction(tx),
+            signAllTransactions: (txs: unknown[]) =>
+              signerAdapter.signAllTransactions(txs),
+            signMessage: async (message: Uint8Array) => ({
+              signature: await signerAdapter.signMessage(message),
+              publicKey,
+            }),
+          } as any,
+          undefined,
+          hinkalConfig
+        );
 
         // Keep the wallet-adapter context in sync with the adapter we connected.
         selectSolanaWallet(adapter.name);
