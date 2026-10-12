@@ -103,6 +103,7 @@ export const Deposit = () => {
           setTokenAmount={setDepositAmount}
           selectedToken={selectedToken}
           setSelectedToken={setSelectedToken}
+          withWalletBalance
         />
         {publicBalanceDisplay !== null && (
           <p className="text-gray-200 text-[12px] pl-[5%] mt-4">
