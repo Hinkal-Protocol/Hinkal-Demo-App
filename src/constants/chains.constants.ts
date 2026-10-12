@@ -10,6 +10,7 @@ export const chainIds = {
   base: 8453,
   bnbMainnet: 56,
   tempo: 4217,
+  arcMainnet: 5042,
   arcTestnet: 5042002,
   tronNile: 3448148188,
   tronMainnet: 728126428,

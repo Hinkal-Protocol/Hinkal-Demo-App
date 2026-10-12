@@ -15,10 +15,14 @@ export const NavigationBar = ({
   activeTab,
   setActiveTab,
 }: NavigationBarProps) => {
-  const { chainId } = useAppContext();
+  const { hinkal, chainId } = useAppContext();
   const swapDisabled = useMemo(
     () => !!chainId && isTronLike(chainId),
     [chainId],
+  );
+  const receiveDisabled = useMemo(
+    () => !chainId || !hinkal || !hinkal.isReceiveVaultSupported(chainId),
+    [hinkal, chainId],
   );
   return (
     <div className="mt-[4%] xl:flex h-12 mb-4 text-[15px] font-semibold border-b border-hinkal-blue-200 block relative">
@@ -62,6 +66,15 @@ export const NavigationBar = ({
             />
           </div>
         }
+        <div className={buttonClassName}>
+          <TabButton
+            isActive={activeTab === AppTab.Receive}
+            title="Receive"
+            onClick={() => setActiveTab(AppTab.Receive)}
+            disabled={receiveDisabled}
+            disabledTooltip="Receive address not available on this network"
+          />
+        </div>
       </div>
     </div>
   );

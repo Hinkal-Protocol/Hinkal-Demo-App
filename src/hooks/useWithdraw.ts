@@ -42,13 +42,15 @@ export const useWithdraw = ({
 
         const amountInWei = getAmountInWei(token, amount);
 
+        // Pay the fee in the transacted token itself; works on every chain,
+        // including tempo which has no native gas token.
         const tx = await hinkal.withdraw(
           chainId,
           [token.erc20TokenAddress],
           [-amountInWei],
           recipientAddress,
           isRelayerOff,
-          undefined,
+          token.erc20TokenAddress,
           feeStructure,
         );
 

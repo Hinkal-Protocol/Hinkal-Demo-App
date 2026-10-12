@@ -51,8 +51,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.5",
-    "@hinkal/common": "file:/Users/sabaaa1/Desktop/Hinkal/Hinkal-Protocol/dist/libs/shared/sdk",
-    "@hinkal/wdk-wallet-evm": "file:/private/tmp/claude-501/-Users-sabaaa1-Desktop-Hinkal-wdk-wdk-wallet-evm-hinkal/c97fb7e4-5a18-4462-8d7d-52dc336bd06a/scratchpad/hinkal-wdk-wallet-evm-0.0.4.tgz",
+    "@hinkal/common": "0.3.16",
     "@solana/spl-token": "0.4.15",
     "@solana/wallet-adapter-base": "0.9.27",
     "@solana/wallet-adapter-react": "0.15.39",

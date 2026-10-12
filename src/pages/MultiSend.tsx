@@ -23,6 +23,8 @@ import {
 } from "../constants/solana-chain.constants";
 
 const NON_NATIVE_GAS_TOKENS = ["USDC", "USDT", "DAI"];
+const TEMPO_CHAIN_ID = 4217;
+const TEMPO_GAS_COST_TOKEN_SYMBOL_OPTIONS = ["pathUSD", "USDT0", "USDC.e"];
 const SCHEDULE_DELAY_OPTIONS = Object.values(ScheduleDelayOption);
 
 const emptyRecipient = (): MultiSendRecipient => ({ address: "", amount: "" });
@@ -35,8 +37,12 @@ export const MultiSend = () => {
     const nativeToken = erc20List.find(
       (token) => token.erc20TokenAddress === getNativeTokenAddress(chainId)
     );
+    const tokenSymbols =
+      chainId === TEMPO_CHAIN_ID
+        ? TEMPO_GAS_COST_TOKEN_SYMBOL_OPTIONS
+        : NON_NATIVE_GAS_TOKENS;
     const stablecoins = erc20List.filter((token) =>
-      NON_NATIVE_GAS_TOKENS.includes(token.symbol)
+      tokenSymbols.includes(token.symbol),
     );
 
     return nativeToken ? [nativeToken, ...stablecoins] : stablecoins;

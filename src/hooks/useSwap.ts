@@ -41,7 +41,7 @@ export const useSwap = ({ onError, onSuccess }: UseSwapOptions = {}) => {
           [-amountInWei, expectedAmountOut],
           externalActionId,
           swapData,
-          undefined,
+          tokenIn.erc20TokenAddress,
           feeStructure,
         );
 
@@ -49,6 +49,7 @@ export const useSwap = ({ onError, onSuccess }: UseSwapOptions = {}) => {
 
         onSuccess?.();
       } catch (err) {
+        console.error("hinkal.swap failed:", err);
         const error = err instanceof Error ? err : new Error("Swap failed");
         onError?.(error);
       } finally {
