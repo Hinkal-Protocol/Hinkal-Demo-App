@@ -12,6 +12,8 @@ import { Withdraw } from "./pages/Withdraw";
 import { Transfer } from "./pages/Transfer";
 import { MultiSend } from "./pages/MultiSend";
 import { Receive } from "./pages/Receive";
+import { Bridge } from "./pages/Bridge";
+import { Recover } from "./pages/Recover";
 
 const App = () => {
   const [activeTab, setActiveTab] = useState(AppTab.Deposit);
@@ -35,6 +37,8 @@ const App = () => {
               {activeTab === AppTab.Swap && <Swap />}
               {activeTab === AppTab.MultiSend && <MultiSend />}
               {activeTab === AppTab.Receive && <Receive />}
+              {activeTab === AppTab.Bridge && <Bridge />}
+              {activeTab === AppTab.Recover && <Recover />}
             </section>
           </main>
           <Footer />

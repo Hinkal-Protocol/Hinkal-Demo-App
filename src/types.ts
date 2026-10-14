@@ -5,6 +5,8 @@ export enum AppTab {
   Swap,
   MultiSend,
   Receive,
+  Bridge,
+  Recover,
 }
 
 export type Network = {

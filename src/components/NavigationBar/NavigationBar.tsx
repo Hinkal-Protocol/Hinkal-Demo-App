@@ -68,6 +68,20 @@ export const NavigationBar = ({
         }
         <div className={buttonClassName}>
           <TabButton
+            isActive={activeTab === AppTab.Bridge}
+            title="Bridge"
+            onClick={() => setActiveTab(AppTab.Bridge)}
+          />
+        </div>
+        <div className={buttonClassName}>
+          <TabButton
+            isActive={activeTab === AppTab.Recover}
+            title="Recover"
+            onClick={() => setActiveTab(AppTab.Recover)}
+          />
+        </div>
+        <div className={buttonClassName}>
+          <TabButton
             isActive={activeTab === AppTab.Receive}
             title="Receive"
             onClick={() => setActiveTab(AppTab.Receive)}
