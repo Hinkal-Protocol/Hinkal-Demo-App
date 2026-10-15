@@ -18,10 +18,10 @@ const dedupedSolanaPackages = [
   "@solana/spl-token",
   "@solana/wallet-adapter-base",
   "@solana/wallet-adapter-react",
-  // Anchor and its borsh/buffer-layout stack build the instruction data, so
-  // they must be a single instance too.
+  // Anchor and its buffer-layout stack build the instruction data, so
+  // they must be a single instance too. borsh is no longer hoisted; it
+  // resolves through the single anchor copy.
   "@coral-xyz/anchor",
-  "@coral-xyz/borsh",
   "buffer-layout",
 ];
 

@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.5",
-    "@hinkal/common": "0.3.16",
+    "@hinkal/common": "0.3.17",
     "@solana/spl-token": "0.4.15",
     "@solana/wallet-adapter-base": "0.9.27",
     "@solana/wallet-adapter-react": "0.15.39",
