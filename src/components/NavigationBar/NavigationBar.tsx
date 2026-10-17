@@ -75,6 +75,20 @@ export const NavigationBar = ({
             disabledTooltip="Receive address not available on this network"
           />
         </div>
+        <div className={buttonClassName}>
+          <TabButton
+            isActive={activeTab === AppTab.PrivateBridge}
+            title="Private Bridge"
+            onClick={() => setActiveTab(AppTab.PrivateBridge)}
+          />
+        </div>
+        <div className={buttonClassName}>
+          <TabButton
+            isActive={activeTab === AppTab.DepositAddress}
+            title="Deposit Address"
+            onClick={() => setActiveTab(AppTab.DepositAddress)}
+          />
+        </div>
       </div>
     </div>
   );

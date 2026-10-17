@@ -5,6 +5,8 @@ export enum AppTab {
   Swap,
   MultiSend,
   Receive,
+  PrivateBridge,
+  DepositAddress,
 }
 
 export type Network = {
